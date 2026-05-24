@@ -69,17 +69,21 @@ public class BattleScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Screenshot 2026-05-21 212932.png"))); // NOI18N
         jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, 380, 230));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 260, 160));
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Ethan.png"))); // NOI18N
         jLabel2.setText("jLabel2");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 70, 60));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 70, 60));
 
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Shawn.png"))); // NOI18N
         jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 80, 60));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 80, 70));
 
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Dwight.png"))); // NOI18N
         jLabel4.setText("jLabel4");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 70, 60));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 70, 60));
 
         ManaBarHydra.setValue(100);
         ManaBarHydra.setStringPainted(true);
@@ -120,7 +124,7 @@ public class BattleScreen extends javax.swing.JFrame {
         ChatBox.setRows(5);
         jScrollPane1.setViewportView(ChatBox);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 240, 110));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 0, 190, 360));
 
         turnIndicator.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         turnIndicator.setForeground(new java.awt.Color(255, 51, 51));
@@ -138,8 +142,9 @@ public class BattleScreen extends javax.swing.JFrame {
         jButton1.setText("Potions:");
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 400, 70, 30));
 
+        BackGround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Roomss.png"))); // NOI18N
         BackGround.setText("jLabel5");
-        getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 810, 360));
+        getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 810, 370));
 
         jButton2.setText("Skill1");
 
