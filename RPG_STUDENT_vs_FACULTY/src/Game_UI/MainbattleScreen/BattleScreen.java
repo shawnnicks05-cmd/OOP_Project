@@ -179,6 +179,7 @@ public class BattleScreen extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 480, 290, -1));
 
         jButton5.setText("Attack");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 440, 100, 30));
 
         jButton6.setText("Defend");
@@ -214,6 +215,10 @@ public class BattleScreen extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

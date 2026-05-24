@@ -52,7 +52,6 @@ public class Menu extends javax.swing.JFrame {
         Start.setBackground(new java.awt.Color(255, 204, 204));
         Start.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         Start.setText("Start Game");
-        Start.setActionCommand("Start Game");
         jPanel1.add(Start);
 
         Load.setBackground(new java.awt.Color(255, 204, 204));
@@ -74,7 +73,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\Acer\\OneDrive\\Pictures\\Screenshots\\Schoolss.png")); // NOI18N
         jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, -30, 1000, 630));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -30, 940, 630));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
