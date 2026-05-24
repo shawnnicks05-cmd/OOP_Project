@@ -66,7 +66,8 @@ abstract class Character {
         
         return 1.0; // Normal damage scaling
     }
- 
+    
+    abstract void Displayskills();
     abstract double getPassiveValue();
     abstract void useSkills();
     abstract void displayStats();

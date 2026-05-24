@@ -10,11 +10,13 @@ package Game_Logic;
  */
 class CharacterShawn extends Character {
     
-    public CharacterShawn(String name) {
+    public CharacterShawn(String name,String role, String damageType, String bestStat) {
         
-        super(name, "Magic", "Intelligence");
+        super(name, "Support/Buffer", "Mental / Tactical Damage","Intelligence");
     }
 
+    
+    
     @Override
     double getPassiveValue() {
         
