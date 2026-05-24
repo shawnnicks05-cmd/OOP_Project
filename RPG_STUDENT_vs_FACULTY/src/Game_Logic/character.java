@@ -37,6 +37,9 @@ abstract class Character {
     protected boolean isSilenced = false;
     protected boolean isConfused = false;
     
+    //skill effect
+    protected double skillCooldown;
+    protected double accuracy;
     
     
    
@@ -67,8 +70,12 @@ abstract class Character {
         return 1.0; // Normal damage scaling
     }
     
-    abstract void Displayskills();
-    abstract double getPassiveValue();
-    abstract void useSkills();
-    abstract void displayStats();
+    public abstract void displayskills();
+    public abstract double[] getPassiveValue();
+    public abstract String useSkills(int skillNumber,String[] enemyBosses);   
+    public abstract void displayStats();
+    public abstract void basicAttack();
+    public abstract void defend();
+    public abstract String[] getSkillname();
+    public abstract String[] getPassivename();
 }
