@@ -31,8 +31,6 @@ public class Menu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         Start = new javax.swing.JButton();
-        Load = new javax.swing.JButton();
-        Team = new javax.swing.JButton();
         Quit = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
@@ -45,24 +43,14 @@ public class Menu extends javax.swing.JFrame {
         jLabel1.setText("STUDENTS VS FACULTY");
         jLabel1.setFocusable(false);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 440, 80));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 440, 80));
 
-        jPanel1.setLayout(new java.awt.GridLayout(4, 1));
+        jPanel1.setLayout(new java.awt.GridLayout(2, 1));
 
         Start.setBackground(new java.awt.Color(255, 204, 204));
         Start.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         Start.setText("Start Game");
         jPanel1.add(Start);
-
-        Load.setBackground(new java.awt.Color(255, 204, 204));
-        Load.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        Load.setText("Load Game'");
-        jPanel1.add(Load);
-
-        Team.setBackground(new java.awt.Color(255, 204, 204));
-        Team.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        Team.setText("Team\n");
-        jPanel1.add(Team);
 
         Quit.setBackground(new java.awt.Color(255, 204, 204));
         Quit.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
@@ -70,11 +58,11 @@ public class Menu extends javax.swing.JFrame {
         Quit.addActionListener(this::QuitActionPerformed);
         jPanel1.add(Quit);
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 330, 200, 170));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, 210, 100));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/MENU.png"))); // NOI18N
         jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-50, -30, 1260, 800));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 0, 1280, 800));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -109,10 +97,8 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Load;
     private javax.swing.JButton Quit;
     private javax.swing.JButton Start;
-    private javax.swing.JButton Team;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
