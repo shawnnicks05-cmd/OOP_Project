@@ -121,7 +121,7 @@ public class CharacterDwight extends GameCharacter {
         return new String[]{
             "--PASSIVE--\n",
             "Clean Interface: Increasing team's morale by 7 every 5 rounds",
-            "Code Optimization: Increasing critical damage and crit rate by 20% and 15%"
+            "Code Optimization: Increasing critical damage and crit rate by 20% and \n15%"
         };
     }
 

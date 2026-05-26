@@ -49,6 +49,7 @@ public class CharacterSelections extends javax.swing.JFrame {
         jtxtDescription = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtxtparty = new javax.swing.JTextArea();
+        jbtnstart = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -102,9 +103,14 @@ public class CharacterSelections extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtxtDescription);
 
+        jtxtparty.setEditable(false);
         jtxtparty.setColumns(20);
         jtxtparty.setRows(5);
+        jtxtparty.setFocusable(false);
         jScrollPane2.setViewportView(jtxtparty);
+
+        jbtnstart.setText("START GAME");
+        jbtnstart.addActionListener(this::jbtnstartActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -122,7 +128,10 @@ public class CharacterSelections extends javax.swing.JFrame {
                                 .addComponent(jtxtrole, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(184, 184, 184)
-                        .addComponent(jlblname, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jlblname, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(132, 132, 132)
+                        .addComponent(jbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -141,11 +150,9 @@ public class CharacterSelections extends javax.swing.JFrame {
                         .addGap(261, 261, 261))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jbtnOmar)
-                        .addGap(751, 751, 751))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(132, 132, 132)
-                .addComponent(jbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(252, 252, 252))
+                        .addGap(198, 198, 198)
+                        .addComponent(jbtnstart, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(311, 311, 311))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,25 +169,28 @@ public class CharacterSelections extends javax.swing.JFrame {
                         .addComponent(jlblname, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(238, 238, 238))
+                        .addGap(18, 18, 18))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jbtnstart, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jbtnShawn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jbtnEthan, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(61, 61, 61)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jbtnPrincess, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jbtnDwight, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jScrollPane2))
-                        .addGap(18, 18, 18)
-                        .addComponent(jbtnOmar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jbtnShawn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jbtnEthan, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(61, 61, 61)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jbtnPrincess, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jbtnDwight, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jScrollPane2))
+                                .addGap(18, 18, 18)
+                                .addComponent(jbtnOmar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(122, 122, 122)))
+                .addComponent(jbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(238, 238, 238))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1460, 680));
@@ -204,10 +214,7 @@ public class CharacterSelections extends javax.swing.JFrame {
 
     // Now this method uses the class-level 'parties' variable
                                      
-    if (currentSelection.isEmpty()) {
-        jtxtparty.setText("Please select a character first!");
-        return;
-    }
+    
 
     // Add to the list (this is what you will pass to the Battleground)
     partyMembers.add(currentSelection);
@@ -334,6 +341,21 @@ if (parties == 0) {
        currentSelection = name;
     }//GEN-LAST:event_jbtnOmarActionPerformed
 
+    private void jbtnstartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnstartActionPerformed
+        BattleScreen nextJframe = new BattleScreen();
+        
+        if (currentSelection.isEmpty()) {
+         jtxtparty.setText("You Should choose 3 parties to Start the Game!");
+        return;
+        }
+        
+        if(parties == 3)
+        {
+            nextJframe.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_jbtnstartActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -370,6 +392,7 @@ if (parties == 0) {
     private javax.swing.JButton jbtnOmar;
     private javax.swing.JButton jbtnPrincess;
     private javax.swing.JButton jbtnShawn;
+    private javax.swing.JButton jbtnstart;
     private javax.swing.JLabel jlabelImage;
     private javax.swing.JLabel jlblname;
     private javax.swing.JTextArea jtxtDescription;
