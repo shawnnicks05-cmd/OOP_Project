@@ -6,33 +6,34 @@ import java.util.Random;
 
 /**
  * Level 1 Boss: Hydra of Academics
- * Multi-Headed Composite Boss made of Miro, Cuizon, and Leeroy as its three heads
+ * Multi-Headed Composite Boss made of Maru, Joveh, and Lerui as its three heads
  * @author user
  */
 public class Hydra extends GameBoss {
 
-    private GameBoss miroHead;
-    private GameBoss cuizonHead;
-    private GameBoss leeroyHead;
+    private GameBoss maruHead;
+    private GameBoss jovehHead;
+    private GameBoss leruiHead;
     private Random rand = new Random();
 
     public Hydra() {
         super("Hydra", "Multi-Headed Academic Monster", "Easy-Medium", "Mental / Psychological");
-        this.miroHead = new Miro();
-        this.cuizonHead = new Cuizon();
-        this.leeroyHead = new Leeroy();
+        this.maruHead = new Maru();
+        this.jovehHead = new Joveh();
+        this.leruiHead = new Lerui();
 
-        this.hpBoss = 100;
-        this.maxHp = 100;
-        this.mana = 80;
-        this.maxMana = 80;
+        // Combined health metrics for the ultimate composite boss entity
+        this.hpBoss = 300; 
+        this.maxHp = 300;
+        this.mana = 100;
+        this.maxMana = 100;
         this.rage = 0;
         this.defence = 12;
     }
 
     @Override
     public String[] getSkillname() {
-        return new String[] {"Miro Head", "Cuizon Head", "Leeroy Head"};
+        return new String[] {"Maru's Strategic Move", "Joveh's Speed Blitz", "Lerui's Heavy Slam"};
     }
 
     @Override
@@ -43,12 +44,12 @@ public class Hydra extends GameBoss {
     @Override
     public String[] displayBossStats() {
         return new String[]{
-            "Hp: " + this.hpBoss + "/" + this.maxHp,
+            "Main Body HP: " + this.hpBoss + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Rage: " + this.rage + "%",
-            "Miro Head HP: " + this.miroHead.getHp() + "/" + this.miroHead.getHp(),
-            "Cuizon Head HP: " + this.cuizonHead.getHp() + "/" + this.cuizonHead.getHp(),
-            "Leeroy Head HP: " + this.leeroyHead.getHp() + "/" + this.leeroyHead.getHp()
+            "[Head 1] Maru HP: " + this.maruHead.getHp() + "/" + this.maruHead.getMaxHp(),
+            "[Head 2] Joveh HP: " + this.jovehHead.getHp() + "/" + this.jovehHead.getMaxHp(),
+            "[Head 3] Lerui HP: " + this.leruiHead.getHp() + "/" + this.leruiHead.getMaxHp()
         };
     }
 
@@ -61,68 +62,69 @@ public class Hydra extends GameBoss {
     public String basicAttack(ArrayList<GameCharacter> partyStudents) {
         if (partyStudents.isEmpty()) return this.name + " has no targets to attack.";
 
-        GameCharacter chosenTarget = null;
-        for (GameCharacter student : partyStudents) {
-            if (student.getPosition().equalsIgnoreCase("Front") && student.getHp() > 0) {
-                chosenTarget = student;
-                break;
+        // Pick a random living head to perform the basic attack strategy!
+        int activeHead = rand.nextInt(3) + 1;
+        this.addRage(11);
+
+        switch (activeHead) {
+            case 1 -> {
+                return "[MARU HEAD BASIC] " + this.maruHead.basicAttack(partyStudents);
+            }
+            case 2 -> {
+                return "[JOVEH HEAD BASIC] " + this.jovehHead.basicAttack(partyStudents);
+            }
+            default -> {
+                return "[LERUI HEAD BASIC] " + this.leruiHead.basicAttack(partyStudents);
             }
         }
-
-        if (chosenTarget == null) {
-            for (GameCharacter student : partyStudents) {
-                if (student.getHp() > 0) {
-                    chosenTarget = student;
-                    break;
-                }
-            }
-        }
-
-        if (chosenTarget != null) {
-            int baseDamage = 18;
-            chosenTarget.takeDamage(baseDamage);
-            this.addRage(11);
-
-            String rageAlert = this.isEnragedDoTActive() ? " \n[WARN] Hydra is ENRAGED! Stress DoT active!" : "";
-            return this.name + " attacks with all three heads on " + chosenTarget.getName() + " for " + baseDamage + " damage!" + rageAlert;
-        }
-
-        return this.name + " has no targets to attack.";
     }
 
     @Override
     public String useSkills(int skillNumber, ArrayList<GameCharacter> partyStudents) {
         if (partyStudents.isEmpty()) return this.name + " has no targets left.";
+        
+        // Randomly select skill slot 1, 2, or 3 belonging to the internal sub-bosses
+        int randomSkillSelection = rand.nextInt(3) + 1; 
 
         switch (skillNumber) {
-            case 1 -> { // Miro Head attack
-                String result = this.miroHead.basicAttack(partyStudents);
+            case 1 -> { // Maru Head attack sequence
                 this.addRage(12);
-                return "[MIRO HEAD] " + result;
+                return "[MARU HEAD SKILL] " + this.maruHead.useSkills(randomSkillSelection, partyStudents);
             }
-            case 2 -> { // Cuizon Head attack
-                String result = this.cuizonHead.basicAttack(partyStudents);
+            case 2 -> { // Joveh Head attack sequence
                 this.addRage(13);
-                return "[CUIZON HEAD] " + result;
+                return "[JOVEH HEAD SKILL] " + this.jovehHead.useSkills(randomSkillSelection, partyStudents);
             }
-            case 3 -> { // Leeroy Head attack
-                String result = this.leeroyHead.basicAttack(partyStudents);
+            case 3 -> { // Lerui Head attack sequence
                 this.addRage(14);
-                return "[LEEROY HEAD] " + result;
+                return "[LERUI HEAD SKILL] " + this.leruiHead.useSkills(randomSkillSelection, partyStudents);
             }
             default -> { return this.name + " hesitates..."; }
         }
     }
 
+    /**
+     * Allocates targeted damage directly to sub-boss components and 
+     * syncs structural health changes back to the main layout frame tracker.
+     */
     public void damageHead(String headName, int damage) {
         switch (headName.toLowerCase()) {
-            case "miro" -> this.miroHead.takeDamage(damage);
-            case "cuizon" -> this.cuizonHead.takeDamage(damage);
-            case "leeroy" -> this.leeroyHead.takeDamage(damage);
+            case "maru" -> {
+                this.maruHead.takeDamage(damage);
+                this.hpBoss = Math.max(0, this.hpBoss - damage);
+            }
+            case "joveh" -> {
+                this.jovehHead.takeDamage(damage);
+                this.hpBoss = Math.max(0, this.hpBoss - damage);
+            }
+            case "lerui" -> {
+                this.leruiHead.takeDamage(damage);
+                this.hpBoss = Math.max(0, this.hpBoss - damage);
+            }
         }
     }
 
-    public GameBoss getMiroHead() { return this.miroHead; }
-    public GameBoss getCuizonHead() { return this.cuizonHead; }
-    public GameBoss getLeeroyHead() { return this.leeroyHead; }
+    public GameBoss getMaruHead() { return this.maruHead; }
+    public GameBoss getJovehHead() { return this.jovehHead; }
+    public GameBoss getLeruiHead() { return this.leruiHead; }
 }

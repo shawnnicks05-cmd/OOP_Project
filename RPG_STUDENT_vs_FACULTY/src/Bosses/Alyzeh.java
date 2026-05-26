@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Hard Mode Couple Boss: Tan (Part 1)
+ * Hard Mode Couple Boss: Alyzeh (Part 1)
  * @author user
  */
-public class Tan extends GameBoss {
+public class Alyzeh extends GameBoss {
 
     private boolean hasPartner = false;
 
-    public Tan() {
-        super("Tan", "Dual Faculty Bosses", "EXTREME", "Synchronized Ultimate / Multi-Element Trauma");
+    public Alyzeh() {
+        super("Alyzeh", "Dual Faculty Bosses", "EXTREME", "Synchronized Ultimate / Multi-Element Trauma");
         this.hpBoss = 150;
         this.maxHp = 150;
         this.mana = 120;
@@ -38,7 +38,7 @@ public class Tan extends GameBoss {
             "Hp: " + this.hpBoss + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Rage: " + this.rage + "%",
-            "Classification: Dual Faculty Boss (Tan)"
+            "Classification: Dual Faculty Boss (Alyzeh)"
         };
     }
 

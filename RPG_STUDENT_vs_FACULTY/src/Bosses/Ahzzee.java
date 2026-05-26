@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Random Boss: Ahdzz - Tech Boss
+ * Random Boss: Ahzzee - Tech Boss
  * @author user
  */
-public class Ahdzz extends GameBoss {
+public class Ahzzee extends GameBoss {
 
-    public Ahdzz() {
-        super("Ahdzz", "Tech Boss", "Random", "Digital / System Damage");
+    public Ahzzee () {
+        super("Ahzzee ", "Tech Boss", "Random", "Digital / System Damage");
         this.hpBoss = 95;
         this.maxHp = 95;
         this.mana = 80;

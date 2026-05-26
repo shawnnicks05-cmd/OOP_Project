@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Level 6 Boss: Petralba - Final Faculty Guardian
+ * Level 6 Boss: LaPetralbey - Final Faculty Guardian
  * @author user
  */
-public class Petralba extends GameBoss {
+public class LaPetralbey extends GameBoss {
 
-    public Petralba() {
-        super("Petralba", "Final Faculty Guardian", "Very Hard", "Cosmic Academic / Catastrophic Damage");
+    public LaPetralbey() {
+        super("Petralbey", "Final Faculty Guardian", "Very Hard", "Cosmic Academic / Catastrophic Damage");
         this.hpBoss = 140;
         this.maxHp = 140;
         this.mana = 120;

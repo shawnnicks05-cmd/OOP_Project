@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Random Boss: Gudio - Defensive Tank Boss
+ * Random Boss: Ghuardio - Defensive Tank Boss
  * @author user
  */
-public class Gudio extends GameBoss {
+public class Ghuardio extends GameBoss {
 
-    public Gudio() {
-        super("Gudio", "Defensive Tank Boss", "Random", "Blunt Heavy / Block Barrier Damage");
+    public Ghuardio() {
+        super("Ghuardio", "Defensive Tank Boss", "Random", "Blunt Heavy / Block Barrier Damage");
         this.hpBoss = 125;
         this.maxHp = 125;
         this.mana = 70;

@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Hard Mode Couple Boss: Bayucot (Part 2)
+ * Hard Mode Couple Boss: Bharkyot (Part 2)
  * @author user
  */
-public class Bayucot extends GameBoss {
+public class Bharkyot extends GameBoss {
 
     private boolean hasPartner = false;
 
-    public Bayucot() {
-        super("Bayucot", "Dual Faculty Bosses", "EXTREME", "Synchronized Ultimate / Multi-Element Trauma");
+    public Bharkyot() {
+        super("Bharkyot", "Dual Faculty Bosses", "EXTREME", "Synchronized Ultimate / Multi-Element Trauma");
         this.hpBoss = 150;
         this.maxHp = 150;
         this.mana = 120;
@@ -38,7 +38,7 @@ public class Bayucot extends GameBoss {
             "Hp: " + this.hpBoss + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Rage: " + this.rage + "%",
-            "Classification: Dual Faculty Boss (Bayucot)"
+            "Classification: Dual Faculty Boss (Bharkyot)"
         };
     }
 

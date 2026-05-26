@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Random Boss: Timothy - Balanced Fighter
+ * Random Boss: Timotheh - Balanced Fighter
  * @author user
  */
-public class Timothy extends GameBoss {
+public class Timotheh extends GameBoss {
 
-    public Timothy() {
-        super("Timothy", "Balanced Fighter", "Random", "Adaptive / Physical Strike");
+    public Timotheh() {
+        super("Timotheh", "Balanced Fighter", "Random", "Adaptive / Physical Strike");
         this.hpBoss = 100;
         this.maxHp = 100;
         this.mana = 75;
@@ -55,7 +55,7 @@ public class Timothy extends GameBoss {
         target.takeDamage(baseDamage);
         this.addRage(12);
 
-        String rageAlert = this.isEnragedDoTActive() ? "[WARN] Timothy paces aggressively! Rapid-fire pop questions active!" : "";
+        String rageAlert = this.isEnragedDoTActive() ? "[WARN] Timotheh paces aggressively! Rapid-fire pop questions active!" : "";
         return this.name + " strikes " + target.getName() + " with adaptive precision for " + baseDamage + " damage! " + rageAlert;
     }
 

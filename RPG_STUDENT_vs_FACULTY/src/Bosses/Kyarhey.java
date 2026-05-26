@@ -5,29 +5,29 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Random Boss: Patzki - Tactical Debuffer
+ * Random Boss: Kyarhey - Trickster Boss
  * @author user
  */
-public class Patzki extends GameBoss {
+public class Kyarhey extends GameBoss {
 
-    public Patzki() {
-        super("Patzki", "Tactical Debuffer", "Random", "Corrosive / Ink Damage");
-        this.hpBoss = 88;
-        this.maxHp = 88;
-        this.mana = 78;
-        this.maxMana = 78;
+    public Kyarhey() {
+        super("Kyarhey", "Trickster Boss", "Random", "Chaos / Randomized Damage");
+        this.hpBoss = 85;
+        this.maxHp = 85;
+        this.mana = 70;
+        this.maxMana = 70;
         this.rage = 0;
-        this.defence = 11;
+        this.defence = 9;
     }
 
     @Override
     public String[] getSkillname() {
-        return new String[] {"Correction Mark", "Heavy Requirement"};
+        return new String[] {"Mood Shift", "Confusing Question"};
     }
 
     @Override
     public String[] getPassivename() {
-        return new String[] {"Sharp Eye"};
+        return new String[] {"Unpredictable"};
     }
 
     @Override
@@ -36,13 +36,13 @@ public class Patzki extends GameBoss {
             "Hp: " + this.hpBoss + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Rage: " + this.rage + "%",
-            "Classification: Tactical Debuffer"
+            "Classification: Trickster Boss"
         };
     }
 
     @Override
     public int defend() {
-        return this.defence + 21;
+        return this.defence + 18;
     }
 
     @Override
@@ -51,12 +51,12 @@ public class Patzki extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 17;
+        int baseDamage = 15 + rand.nextInt(10);
         target.takeDamage(baseDamage);
         this.addRage(11);
 
-        String rageAlert = this.isEnragedDoTActive() ? "[WARN] Red pen bleeds through! Un-cleansable DoT active!" : "";
-        return this.name + " marks " + target.getName() + " with an ink stain for " + baseDamage + " damage! " + rageAlert;
+        String rageAlert = this.isEnragedDoTActive() ? "[WARN] Chaos aura shifts into overdrive! Element-swapping DoT active!" : "";
+        return this.name + " strikes " + target.getName() + " with unpredictable chaos for " + baseDamage + " damage! " + rageAlert;
     }
 
     @Override
@@ -67,25 +67,25 @@ public class Patzki extends GameBoss {
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
 
         switch (skillNumber) {
-            case 1 -> { // Correction Mark
+            case 1 -> { // Mood Shift
                 if (this.mana >= 35) {
                     this.mana -= 35;
                     this.addRage(15);
-                    return this.name + " places a [Correction Mark] on " + target.getName() + "!\nReduces attack power!";
+                    return this.name + " shifts her mood with [Mood Shift]!\nBattle effects change randomly!";
                 }
-                return this.name + " attempted [Correction Mark] but lacks Mana!";
+                return this.name + " attempted [Mood Shift] but lacks Mana!";
             }
-            case 2 -> { // Heavy Requirement
+            case 2 -> { // Confusing Question
                 if (this.mana >= 40) {
                     this.mana -= 40;
                     this.addRage(17);
-                    int damage = 28;
+                    int damage = 32;
                     target.takeDamage(damage);
-                    return this.name + " imposes a [Heavy Requirement] on " + target.getName() + "!\nApplies stamina drain and deals " + damage + " damage!";
+                    return this.name + " asks a [Confusing Question] to " + target.getName() + "!\nCauses confusion and deals " + damage + " damage!";
                 }
-                return this.name + " attempted [Heavy Requirement] but lacks Mana!";
+                return this.name + " attempted [Confusing Question] but lacks Mana!";
             }
-            default -> { return this.name + " scribbles furiously..."; }
+            default -> { return this.name + " giggles mischievously..."; }
         }
     }
 }

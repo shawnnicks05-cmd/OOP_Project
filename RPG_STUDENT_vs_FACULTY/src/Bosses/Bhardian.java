@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Random Boss: Bandalan - Aggressive Faculty
+ * Random Boss: Bhardian - Aggressive Faculty
  * @author user
  */
-public class Bandalan extends GameBoss {
+public class Bhardian extends GameBoss {
 
-    public Bandalan() {
-        super("Bandalan", "Aggressive Faculty", "Random", "Brutal / Crushing Morale");
+    public Bhardian() {
+        super("Bhardian", "Aggressive Faculty", "Random", "Brutal / Crushing Morale");
         this.hpBoss = 110;
         this.maxHp = 110;
         this.mana = 80;
