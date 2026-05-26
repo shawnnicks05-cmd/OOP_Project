@@ -139,5 +139,5 @@ public class CharacterEthan extends GameCharacter {
             "Role: Scanner / Precision DPS"
         };
     }
-    @Override public void displayskills() {}
+    @Override public void displayskills() {} 
 }

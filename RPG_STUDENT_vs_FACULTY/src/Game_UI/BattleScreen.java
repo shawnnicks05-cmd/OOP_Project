@@ -40,9 +40,7 @@ public class BattleScreen extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         ChatBox = new javax.swing.JTextArea();
         turnIndicator = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         MoraleMeter = new javax.swing.JProgressBar();
-        jButton1 = new javax.swing.JButton();
         BackGround = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
@@ -54,6 +52,12 @@ public class BattleScreen extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jButton12 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        jButton14 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -73,13 +77,12 @@ public class BattleScreen extends javax.swing.JFrame {
         jLabel1.setText("jLabel1");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, 260, 160));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Ethan.png"))); // NOI18N
         jLabel2.setText("jLabel2");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 70, 60));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 70, 60));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Shawn.png"))); // NOI18N
         jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 80, 70));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 80, 70));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Dwight.png"))); // NOI18N
         jLabel4.setText("jLabel4");
@@ -87,7 +90,7 @@ public class BattleScreen extends javax.swing.JFrame {
 
         ManaBarHydra.setValue(100);
         ManaBarHydra.setStringPainted(true);
-        getContentPane().add(ManaBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 420, 180, 20));
+        getContentPane().add(ManaBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 420, 180, 20));
 
         HPBarStudents.setBackground(new java.awt.Color(255, 255, 255));
         HPBarStudents.setFont(new java.awt.Font("Segoe UI Black", 0, 10)); // NOI18N
@@ -106,16 +109,16 @@ public class BattleScreen extends javax.swing.JFrame {
                 super.paintDeterminate(g, c);
             }
         });
-        getContentPane().add(HPBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 180, 20));
+        getContentPane().add(HPBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 400, 180, 20));
 
         HPBarHydra.setForeground(new java.awt.Color(51, 255, 51));
         HPBarHydra.setValue(100);
         HPBarHydra.setStringPainted(true);
-        getContentPane().add(HPBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 400, 200, 20));
+        getContentPane().add(HPBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 400, 200, 20));
 
         ManaBarStudents.setValue(100);
         ManaBarStudents.setStringPainted(true);
-        getContentPane().add(ManaBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 180, 20));
+        getContentPane().add(ManaBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 420, 180, 20));
 
         jScrollPane1.setBackground(new java.awt.Color(0, 153, 0));
 
@@ -124,27 +127,21 @@ public class BattleScreen extends javax.swing.JFrame {
         ChatBox.setRows(5);
         jScrollPane1.setViewportView(ChatBox);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 10, 190, 390));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 0, 180, 380));
 
         turnIndicator.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         turnIndicator.setForeground(new java.awt.Color(255, 51, 51));
         turnIndicator.setText("Shawn's Turn");
-        getContentPane().add(turnIndicator, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 380, 80, -1));
+        getContentPane().add(turnIndicator, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 390, 80, -1));
         turnIndicator.getAccessibleContext().setAccessibleName("");
-
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 1220, 240));
 
         MoraleMeter.setForeground(new java.awt.Color(255, 153, 0));
         MoraleMeter.setValue(50);
         MoraleMeter.setStringPainted(true);
-        getContentPane().add(MoraleMeter, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 170, 20));
-
-        jButton1.setText("Potions:");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 400, 70, 30));
+        getContentPane().add(MoraleMeter, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 440, 170, 20));
 
         BackGround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Roomss.png"))); // NOI18N
-        BackGround.setText("jLabel5");
-        getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1630, 390));
+        getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 380));
 
         jButton2.setText("Skill1");
 
@@ -161,9 +158,9 @@ public class BattleScreen extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jButton4)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,41 +170,88 @@ public class BattleScreen extends javax.swing.JFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 480, 290, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 490, 270, 100));
 
         jButton5.setText("Attack");
         jButton5.addActionListener(this::jButton5ActionPerformed);
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 440, 100, 30));
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 410, 100, 30));
 
         jButton6.setText("Defend");
-        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 480, 100, 30));
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 100, 30));
 
         jButton7.setText("Skills1");
         jButton7.addActionListener(this::jButton7ActionPerformed);
-        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 490, 90, 50));
+        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 490, 90, 50));
 
         jButton8.setText("Skills2");
         jButton8.setToolTipText("");
-        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 490, 100, 50));
+        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 490, 100, 50));
 
         jButton9.setText("Skills3");
-        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 490, 90, 50));
+        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 490, 90, 50));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 330, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 470, 330, -1));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 470, 330, -1));
+
+        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/revive.png"))); // NOI18N
+        jButton12.addActionListener(this::jButton12ActionPerformed);
+
+        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/health.png"))); // NOI18N
+        jButton13.addActionListener(this::jButton13ActionPerformed);
+
+        jButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/mana.png"))); // NOI18N
+        jButton14.addActionListener(this::jButton14ActionPerformed);
+
+        jButton1.setText("Potions:");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton14, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                            .addComponent(jButton12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jButton1)))
+                .addGap(0, 14, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton12)
+                .addContainerGap(7, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, 100, 210));
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/bro.png"))); // NOI18N
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 1210, 240));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -219,6 +263,18 @@ public class BattleScreen extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton14ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -254,6 +310,9 @@ public class BattleScreen extends javax.swing.JFrame {
     private javax.swing.JProgressBar ManaBarStudents;
     private javax.swing.JProgressBar MoraleMeter;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -266,11 +325,12 @@ public class BattleScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel turnIndicator;
     // End of variables declaration//GEN-END:variables
 }
