@@ -71,7 +71,7 @@ public class BattleScreen extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Screenshot 2026-05-21 212932.png"))); // NOI18N
         jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 260, 160));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, 260, 160));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Ethan.png"))); // NOI18N
         jLabel2.setText("jLabel2");
@@ -87,7 +87,7 @@ public class BattleScreen extends javax.swing.JFrame {
 
         ManaBarHydra.setValue(100);
         ManaBarHydra.setStringPainted(true);
-        getContentPane().add(ManaBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 410, 180, 20));
+        getContentPane().add(ManaBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 420, 180, 20));
 
         HPBarStudents.setBackground(new java.awt.Color(255, 255, 255));
         HPBarStudents.setFont(new java.awt.Font("Segoe UI Black", 0, 10)); // NOI18N
@@ -111,7 +111,7 @@ public class BattleScreen extends javax.swing.JFrame {
         HPBarHydra.setForeground(new java.awt.Color(51, 255, 51));
         HPBarHydra.setValue(100);
         HPBarHydra.setStringPainted(true);
-        getContentPane().add(HPBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, 200, 20));
+        getContentPane().add(HPBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 400, 200, 20));
 
         ManaBarStudents.setValue(100);
         ManaBarStudents.setStringPainted(true);
@@ -124,7 +124,7 @@ public class BattleScreen extends javax.swing.JFrame {
         ChatBox.setRows(5);
         jScrollPane1.setViewportView(ChatBox);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 0, 190, 360));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 10, 190, 390));
 
         turnIndicator.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         turnIndicator.setForeground(new java.awt.Color(255, 51, 51));
@@ -132,7 +132,7 @@ public class BattleScreen extends javax.swing.JFrame {
         getContentPane().add(turnIndicator, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 380, 80, -1));
         turnIndicator.getAccessibleContext().setAccessibleName("");
 
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 800, 240));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 1220, 240));
 
         MoraleMeter.setForeground(new java.awt.Color(255, 153, 0));
         MoraleMeter.setValue(50);
@@ -144,7 +144,7 @@ public class BattleScreen extends javax.swing.JFrame {
 
         BackGround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Roomss.png"))); // NOI18N
         BackGround.setText("jLabel5");
-        getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 810, 370));
+        getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1630, 390));
 
         jButton2.setText("Skill1");
 
