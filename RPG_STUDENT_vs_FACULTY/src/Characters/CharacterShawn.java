@@ -1,17 +1,25 @@
 package Characters;
 
-import javax.swing.JOptionPane;
+import Bosses.GameBoss;
+import java.util.ArrayList;
 
-// Make the class public so your UI screens can see it
-public class CharacterShawn extends GameCharacter{
+/**
+ * Concrete Support/Buffer Student Class: Shawn
+ * @author user
+ */
+public class CharacterShawn extends GameCharacter {
     
-    public CharacterShawn(String name, String role, String damageType, String bestStat) {
-        super(name, "Support/Buffer", "Mental / Tactical Damage", "Intelligence");
+    // Cleaned up constructor: Removed unused parameters since Shawn has fixed base metrics
+    public CharacterShawn() {
+        super("Shawn", "Support/Buffer", "Mental / Tactical Damage", "Intelligence");
         this.maxHp = 100;
         this.hp = 100;
         this.mana = 100;
         this.maxMana = 100;
         this.morale = 100;
+        
+        // Default positioning rule for your turn grid setup
+        this.position = "Above"; 
     }
     
     @Override
@@ -20,112 +28,92 @@ public class CharacterShawn extends GameCharacter{
     }
     
     @Override
-    public String useSkills(int skillNumber, String[] enemyBosses) {
-        String targetBoss = "";
-        
-        if (skillNumber == 1) {
-            int choice = JOptionPane.showOptionDialog(
-                null, 
-                "Where do you want to attack?",      
-                "Select Target Boss",                
-                JOptionPane.DEFAULT_OPTION, 
-                JOptionPane.QUESTION_MESSAGE, 
-                null, 
-                enemyBosses,                        
-                enemyBosses[0]                      
-            );
-
-            if (choice == JOptionPane.CLOSED_OPTION) {
-                return this.name + " cancelled their action.";
-            }
-            
-            targetBoss = enemyBosses[choice]; 
+    public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
+        if (skillNumber < 1 || skillNumber > 3) {
+            return "Unknown skill selected.";
         }
         
-
+        // Fallback target: Look for the first active boss object in the system layer
+        GameBoss targetBoss = null;
+        if (!activeBosses.isEmpty()) {
+            targetBoss = activeBosses.get(0);
+        }
+        
         switch(skillNumber) {
-            case 1 -> {
-                if (mana >= 25) {
-                    mana -= 25;
-                    return this.name + " unleashes a BrainStorm Burst directly at " + targetBoss + "! Deals 40 Mental Damage.";
+            case 1 -> { // 🧠 BrainStorm Burst (Offensive Single-Target Skill)
+                if (targetBoss == null) return this.name + " finds no active boss to attack.";
+                
+                if (this.mana >= 25) {
+                    this.mana -= 25;
+                    
+                    int baseDamage = 40;
+                    // Apply class modifier multipliers based on your parent's type chart!
+                    double modifier = calculateDamageModifier(targetBoss.getClassification());
+                    int finalDamage = (int) (baseDamage * modifier);
+                    
+                    targetBoss.takeDamage(finalDamage);
+                    
+                    String modifierAlert = modifier > 1.0 ? " [COUNTER BONUS!]" : "";
+                    return this.name + " unleashes a BrainStorm Burst directly at " + targetBoss.getName() + "!" + 
+                           "\nDeals " + finalDamage + " Mental Damage." + modifierAlert;
                 } else {
                     return "No Mana!";
                 }
             }
-            case 2 -> {
-                if (mana >= 30) {
-                    mana -= 30;
+            case 2 -> { // 📚 Group Study (Team-wide Buff)
+                if (this.mana >= 30) {
+                    this.mana -= 30;
+                    // In your engine layer, loop through party and add morale values here!
                     return this.name + " initiates a Group Study! The entire party's morale is boosted.";
                 } else {
                     return "No Mana!";
                 }
             }
-            case 3 -> {
-                if (mana >= 40) {
-                    mana -= 40;
-                    return this.name + ": Stay Focused Team! Increasing Team's Morale";
+            case 3 -> { // ⏳ Deadline Focus (Urgency Buff)
+                if (this.mana >= 40) {
+                    this.mana -= 40;
+                    return this.name + ": 'Stay Focused Team!' Increasing the entire team's Haste and Morale!";
                 } else {
                     return "No Mana!";
                 }
             }
-            default -> {
-                return "Unknown skill selected.";
-            }
+            default -> { return "Unknown skill selected."; }
         }
     }
 
     @Override
-    public int basicAttack(String[] enemyBosses) {
-        int choice = JOptionPane.showOptionDialog(
-            null, 
-            "Where do you want to attack?",      
-            "Select Target Boss",                
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.QUESTION_MESSAGE, 
-            null, 
-            enemyBosses,                        
-            enemyBosses[0]                      
-        );                     
-
-        if (choice == JOptionPane.CLOSED_OPTION) {
-            return 0; 
+    public String basicAttack(ArrayList<GameBoss> activeBosses) {
+        if (activeBosses.isEmpty()) {
+            return this.name + " checks the chalkboard but finds no active threats.";
         }
         
-        return 30; 
+        // Instantly grabs the front active boss entity
+        GameBoss target = activeBosses.get(0);
+        int baseDamage = 30;
+        
+        target.takeDamage(baseDamage);
+        
+        return this.name + " throws a crude piece of feedback notes at " + target.getName() + " for " + baseDamage + " damage!";
     }
 
     @Override
-    public int defend(String[] enemyBosses) {
-        int choice = JOptionPane.showOptionDialog(
-            null,
-            "Brace for which boss's incoming attack?", // Fixed description text to match defending
-            "Select Threat to Defend",
-            JOptionPane.DEFAULT_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            enemyBosses,
-            enemyBosses[0]
-        );
-    
-        if (choice == JOptionPane.CLOSED_OPTION) {
-            return 0;
-        }
-        
-        return 40; // Returns defensive value 
+    public String defend() {
+        // Prepare defensive parameters
+        return this.name + " opens their course syllabus and braces for impact! Defenses temporarily raised.";
     }
         
     @Override
     public String[] getPassivename() {
         return new String[]{
             "Enhance Intelligence to all by 2%",
-            "Increases team critical Thinking by 3%",
-            "Bonuses accuracy by 3% and lessing cooldown by 10secs"
+            "Increases team critical thinking by 3%",
+            "Bonuses accuracy by 3%"
         };
     }
     
     @Override
     public double[] getPassiveValue() {
-        // Balanced to 3 slots to match getPassivename() perfectly
+        // Balanced to exactly 3 slots to prevent array index corruption loops
         return new double[] { 0.02, 0.03, 0.03 }; 
     }
 
@@ -138,7 +126,4 @@ public class CharacterShawn extends GameCharacter{
             "Role: Support/Buffer"
         };
     }
-
-    // Keeping these abstract matches clean and accounted for
-    @Override public void displayskills() {}
 }

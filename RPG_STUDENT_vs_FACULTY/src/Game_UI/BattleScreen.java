@@ -4,11 +4,13 @@
  */
 package Game_UI;
 
+import GameEngine.IBattleScreenUI;
+
 /**
  *
  * @author Acer
  */
-public class BattleScreen extends javax.swing.JFrame {
+public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BattleScreen.class.getName());
 
@@ -219,6 +221,77 @@ public class BattleScreen extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    @Override
+    public void setHPBarBoss(int percentage) {
+        HPBarHydra.setValue(percentage);
+    }
+
+    @Override
+    public void setManaBarBoss(int value) {
+        ManaBarHydra.setValue(value);
+    }
+
+    @Override
+    public void setHPBarStudents(int percentage) {
+        HPBarStudents.setValue(percentage);
+    }
+
+    @Override
+    public void setManaBarStudents(int percentage) {
+        ManaBarStudents.setValue(percentage);
+    }
+
+    @Override
+    public void setRageMeter(int percentage) {
+        MoraleMeter.setValue(percentage);
+    }
+
+    @Override
+    public void setTurnIndicator(String text) {
+        turnIndicator.setText(text);
+    }
+
+    @Override
+    public void updateStatusDisplay(String text) {
+        // Can display in status label if needed
+    }
+
+    @Override
+    public void appendToChatBox(String message) {
+        ChatBox.append(message);
+    }
+
+    @Override
+    public void clearChatBox() {
+        ChatBox.setText("");
+    }
+
+    @Override
+    public void updateSkillButtons(String[] skillNames) {
+        if (skillNames.length > 0) jButton7.setText(skillNames[0]);
+        if (skillNames.length > 1) jButton8.setText(skillNames[1]);
+        if (skillNames.length > 2) jButton9.setText(skillNames[2]);
+    }
+
+    @Override
+    public void setActionButtonsEnabled(boolean enabled) {
+        jButton5.setEnabled(enabled);
+        jButton6.setEnabled(enabled);
+        jButton7.setEnabled(enabled);
+        jButton8.setEnabled(enabled);
+        jButton9.setEnabled(enabled);
+    }
+
+    @Override
+    public void setBossImage(String imagePath) {
+        // Implementation for boss image if needed
+    }
+
+    @Override
+    public void setPartyDisplay(String[] studentNames) {
+        // Implementation for party display if needed
+    }
 
     /**
      * @param args the command line arguments

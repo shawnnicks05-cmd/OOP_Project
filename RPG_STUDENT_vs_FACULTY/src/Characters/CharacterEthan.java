@@ -1,75 +1,79 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Characters;
 
-import javax.swing.JOptionPane;
+import Bosses.GameBoss;
+import java.util.ArrayList;
 
 /**
- *
+ * Concrete Scanner / Precision DPS Student Class: Ethan
  * @author user
  */
 public class CharacterEthan extends GameCharacter {
     
-    public CharacterEthan(String name, String role, String damageType, String bestStat) {
-        super(name, "Scanner / Precision DPS", "Precision Damage", "Analysis");
+    public CharacterEthan() {
+        super("Ethan", "Scanner / Precision DPS", "Precision Damage", "Analysis");
         this.maxHp = 100;
         this.hp = 100;
         this.mana = 100;
         this.maxMana = 100;
         this.morale = 100;
+        
+        // Default tactical positioning on your turn system grid
+        this.position = "Front"; 
     }
+    
     @Override
     public String[] getSkillname() {
         return new String[] {"Statistical Strike", "Trend Prediction", "Data Leak"};
     } 
     
     @Override
-    public String useSkills(int skillNumber, String[] enemyBosses) {
-        String targetBoss = "";
-        
-        if (skillNumber == 1) {
-            int choice = JOptionPane.showOptionDialog(
-                null, 
-                "Where do you want to attack?",      
-                "Select Target Boss",                
-                JOptionPane.DEFAULT_OPTION, 
-                JOptionPane.QUESTION_MESSAGE, 
-                null, 
-                enemyBosses,                        
-                enemyBosses[0]                      
-            );
-
-            if (choice == JOptionPane.CLOSED_OPTION) {
-                return this.name + " cancelled their action.";
-            }
-            
-            targetBoss = enemyBosses[choice]; 
+    public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
+        if (skillNumber < 1 || skillNumber > 3) {
+            return "Unknown skill selected.";
         }
         
-
+        GameBoss targetBoss = null;
+        if (!activeBosses.isEmpty()) {
+            targetBoss = activeBosses.get(0);
+        }
+        
         switch(skillNumber) {
-            case 1 -> {
-                if (mana >= 25) {
-                    mana -= 25;
-                    return this.name + " Attacking at a High single-target damage " + targetBoss + "! Deals 40 Precision Damage.";
+            case 1 -> { // 🎯 Statistical Strike (High Precision Single-Target Nuke)
+                if (targetBoss == null) return this.name + " finds no active boss to analyze and strike.";
+                
+                if (this.mana >= 25) {
+                    this.mana -= 25;
+                    
+                    int baseDamage = 40;
+                    // Processes system-wide counters (e.g., Precision Damage vs Quizzes)
+                    double modifier = calculateDamageModifier(targetBoss.getClassification());
+                    int finalDamage = (int) (baseDamage * modifier);
+                    
+                    targetBoss.takeDamage(finalDamage);
+                    
+                    String modifierAlert = modifier > 1.0 ? " [CRITICAL WEAKNESS EXPLOITED!]" : "";
+                    return this.name + " executes a high single-target Statistical Strike at " + targetBoss.getName() + "!" +
+                           "\nDeals " + finalDamage + " Precision Damage." + modifierAlert;
                 } else {
                     return "No Mana!";
                 }
             }
-            case 2 -> {
-                if (mana >= 30) {
-                    mana -= 30;
-                    return this.name + " Dodges the next enemy attack";
+            case 2 -> { // 🔮 Trend Prediction (Self Evasion Buff)
+                if (this.mana >= 30) {
+                    this.mana -= 30;
+                    // Engine level can check this flag during boss turn calculations to force a miss
+                    return this.name + " maps out data patterns with [Trend Prediction] and will dodge the next incoming attack!";
                 } else {
                     return "No Mana!";
                 }
             }
-            case 3 -> {
-                if (mana >= 40) {
-                    mana -= 40;
-                    return this.name + ":  enemy defense  Lowered";
+            case 3 -> { // 🔓 Data Leak (Enemy Defense Debuff)
+                if (targetBoss == null) return this.name + " finds no mainframe to breach.";
+                
+                if (this.mana >= 40) {
+                    this.mana -= 40;
+                    // Engine layer can utilize this feedback to amplify subsequent team damage output
+                    return this.name + " uncovers a [Data Leak] on " + targetBoss.getName() + "! Target defenses are severely lowered.";
                 } else {
                     return "No Mana!";
                 }
@@ -79,57 +83,44 @@ public class CharacterEthan extends GameCharacter {
             }
         }
     }
-    @Override
-    public int basicAttack(String[] enemyBosses) {
-        int choice = JOptionPane.showOptionDialog(
-            null, 
-            "Where do you want to attack?",      
-            "Select Target Boss",                
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.QUESTION_MESSAGE, 
-            null, 
-            enemyBosses,                        
-            enemyBosses[0]                      
-        );                     
 
-        if (choice == JOptionPane.CLOSED_OPTION) {
-            return 0; 
-        }
-        
-        return 50; 
-    }
     @Override
-    public int defend(String[] enemyBosses) {
-        int choice = JOptionPane.showOptionDialog(
-            null,
-            "Brace for which boss's incoming attack?", // Fixed description text to match defending
-            "Select Threat to Defend",
-            JOptionPane.DEFAULT_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            enemyBosses,
-            enemyBosses[0]
-        );
-    
-        if (choice == JOptionPane.CLOSED_OPTION) {
-            return 0;
+    public String basicAttack(ArrayList<GameBoss> activeBosses) {
+        if (activeBosses.isEmpty()) {
+            return this.name + " calibrates his scopes, but there are no targets to acquire.";
         }
         
-        return 35; // Returns defensive value 
+        GameBoss target = activeBosses.get(0);
+        int baseDamage = 50; 
+        
+        double modifier = calculateDamageModifier(target.getClassification());
+        int finalDamage = (int) (baseDamage * modifier);
+        
+        target.takeDamage(finalDamage);
+        
+        String bonusAlert = modifier > 1.0 ? " [TARGETED COUNTER HIT!]" : "";
+        return this.name + " fires a calculated analytical point straight at " + target.getName() + " for " + finalDamage + " damage!" + bonusAlert;
+    }
+
+    @Override
+    public String defend() {
+        return this.name + " scans enemy attack vectors! Bracing tightly and mitigating up to 35 incoming damage points.";
     }
     
     @Override
     public String[] getPassivename() {
         return new String[]{
-            "Weekens Detection by 3%",
+            "Weakens Detection by 3%",
             "Reveals enemy weak points increasing critical damage by 20%"
         };
     }
+
     @Override
     public double[] getPassiveValue() {
-        // Balanced to 3 slots to match getPassivename() perfectly
-        return new double[] { 3.0, 20.0}; 
+        // Cleaned up to safe system decimals (3% and 20%) to match 1:1 with string mapping array
+        return new double[] { 0.03, 0.20 }; 
     }
+
     @Override
     public String[] displayStats() {
         return new String[] {
@@ -139,5 +130,4 @@ public class CharacterEthan extends GameCharacter {
             "Role: Scanner / Precision DPS"
         };
     }
-    @Override public void displayskills() {}
 }
