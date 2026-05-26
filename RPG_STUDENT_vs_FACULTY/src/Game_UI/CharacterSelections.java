@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Game_UI;
+import Characters.*;
+import javax.swing.ImageIcon;
+import java.util.ArrayList;
+
 
 /**
  *
@@ -18,7 +22,9 @@ public class CharacterSelections extends javax.swing.JFrame {
     public CharacterSelections() {
         initComponents();
     }
-
+    private int parties = 0;
+    private String currentSelection = "";
+    private ArrayList<String> partyMembers = new ArrayList<>();
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,58 +35,76 @@ public class CharacterSelections extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        jlabelImage = new javax.swing.JLabel();
+        jlblname = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        jbtnEthan = new javax.swing.JButton();
+        jbtnDwight = new javax.swing.JButton();
+        jbtnShawn = new javax.swing.JButton();
+        jbtnPrincess = new javax.swing.JButton();
+        jbtnOmar = new javax.swing.JButton();
+        jtxtrole = new javax.swing.JTextField();
+        jbtnAdd = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton6 = new javax.swing.JButton();
+        jtxtDescription = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtxtparty = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
-        jLabel2.setFont(new java.awt.Font("Segoe Print", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel2.setText("Ethan");
+        jlabelImage.setFocusable(false);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/EthanChar.png"))); // NOI18N
-        jLabel1.setText("jLabel1");
+        jlblname.setFont(new java.awt.Font("Segoe Print", 0, 24)); // NOI18N
+        jlblname.setForeground(new java.awt.Color(255, 0, 0));
+        jlblname.setText("Ethan");
 
         jLabel3.setFont(new java.awt.Font("Segoe Script", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 0, 51));
         jLabel3.setText("CHARACTERS:");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Ethan.png"))); // NOI18N
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jbtnEthan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Ethan.png"))); // NOI18N
+        jbtnEthan.addActionListener(this::jbtnEthanActionPerformed);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Dwights.png"))); // NOI18N
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        jbtnDwight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Dwights.png"))); // NOI18N
+        jbtnDwight.addActionListener(this::jbtnDwightActionPerformed);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Shawn.png"))); // NOI18N
+        jbtnShawn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Shawn.png"))); // NOI18N
+        jbtnShawn.addActionListener(this::jbtnShawnActionPerformed);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Camachos.png"))); // NOI18N
-        jButton4.addActionListener(this::jButton4ActionPerformed);
+        jbtnPrincess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Camachos.png"))); // NOI18N
+        jbtnPrincess.addActionListener(this::jbtnPrincessActionPerformed);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Omars.png"))); // NOI18N
+        jbtnOmar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Omars.png"))); // NOI18N
+        jbtnOmar.addActionListener(this::jbtnOmarActionPerformed);
 
-        jTextField1.setFont(new java.awt.Font("HelveticaNeueLTW06-97BlkCnObl", 0, 24)); // NOI18N
-        jTextField1.setText("Data Analyst");
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        jtxtrole.setEditable(false);
+        jtxtrole.setFont(new java.awt.Font("HelveticaNeueLTW06-97BlkCnObl", 0, 24)); // NOI18N
+        jtxtrole.setFocusable(false);
+        jtxtrole.addActionListener(this::jtxtroleActionPerformed);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jbtnAdd.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jbtnAdd.setText("ADD TO PARTY");
+        jbtnAdd.addActionListener(this::jbtnAddActionPerformed);
 
-        jButton6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jButton6.setText("ADD TO PARTY");
+        jtxtDescription.setEditable(false);
+        jtxtDescription.setColumns(20);
+        jtxtDescription.setRows(5);
+        jtxtDescription.setFocusable(false);
+        jtxtDescription.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jtxtDescriptionInputMethodTextChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtxtDescription);
+
+        jtxtparty.setColumns(20);
+        jtxtparty.setRows(5);
+        jScrollPane2.setViewportView(jtxtparty);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -89,41 +113,39 @@ public class CharacterSelections extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(162, 162, 162)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(74, 74, 74)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(80, 80, 80)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(38, 38, 38)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jlabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(79, 79, 79)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jtxtrole, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(110, 110, 110)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(722, Short.MAX_VALUE))
+                        .addGap(184, 184, 184)
+                        .addComponent(jlblname, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jbtnDwight, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jbtnEthan, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(36, 36, 36)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jbtnPrincess, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jbtnShawn, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(82, 82, 82)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(261, 261, 261))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jbtnOmar)
+                        .addGap(751, 751, 751))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(132, 132, 132)
+                .addComponent(jbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(252, 252, 252))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,53 +154,185 @@ public class CharacterSelections extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)))
+                            .addComponent(jlabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(94, 94, 94)
+                                .addComponent(jtxtrole, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jlblname, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(238, 238, 238))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                        .addGap(26, 26, 26)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(177, 177, 177)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jbtnShawn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jbtnEthan, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(61, 61, 61)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jbtnPrincess, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jbtnDwight, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane2))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(250, 250, 250))
+                        .addComponent(jbtnOmar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, -70, -1, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1460, 680));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddActionPerformed
+        
+       
+    // 1. Check if a character is selected
+    if (currentSelection.isEmpty()) {
+        jtxtparty.setText("Please select a character first!");
+        return;
+    }
+    
+    // 2. Get existing text to append new info
+    
+    // 3. Logic to append based on party count
+    // Define this at the top of your class, outside any methods
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    // Now this method uses the class-level 'parties' variable
+                                     
+    if (currentSelection.isEmpty()) {
+        jtxtparty.setText("Please select a character first!");
+        return;
+    }
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    // Add to the list (this is what you will pass to the Battleground)
+    partyMembers.add(currentSelection);
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    // Get existing text so it doesn't get deleted
+    String existingText = jtxtparty.getText();
+    
+    // Logic to append
+    // 3. Logic to append based on party count
+if (parties == 0) {
+    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [Front]\n");
+    parties++;
+} else if (parties == 1) {
+    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [Middle]\n");
+    parties++;
+} else if (parties == 2) {
+    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [Back]\n(Party Full!)");
+    parties++;
+} else {
+    jtxtparty.setText(existingText + "\nParty is already full!");
+}
+
+ 
+     
+    }//GEN-LAST:event_jbtnAddActionPerformed
+
+    private void jtxtroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtroleActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jtxtroleActionPerformed
+
+    private void jbtnPrincessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPrincessActionPerformed
+        // TODO add your handling code here:
+        CharacterPrincess princess = new CharacterPrincess();
+        String[] stats = princess.displayStats();
+        String name = princess.getName();
+        ImageIcon Icon = new ImageIcon("src/assets/Camachos.png");
+        String[] skills = princess.getSkillname();
+        String[] passive = princess.getPassivename();
+        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
+        String role = princess.getRole();
+        jtxtrole.setText(String.join("\n",role));
+        jlblname.setText(String.join("\n",name));
+        jtxtDescription.setText(combined);
+
+        jtxtDescription.setEditable(false);
+        jlabelImage.setIcon(Icon);
+        currentSelection = name;
+    }//GEN-LAST:event_jbtnPrincessActionPerformed
+
+    private void jbtnDwightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDwightActionPerformed
+        // TODO add your handling code here:
+        CharacterDwight dwight = new CharacterDwight();
+        String[] stats = dwight.displayStats();
+        String name = dwight.getName();
+        ImageIcon Icon = new ImageIcon("src/assets/Dwights.png");
+        String[] skills = dwight.getSkillname();
+        String[] passive = dwight.getPassivename();
+        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
+        String role = dwight.getRole();
+        jtxtrole.setText(String.join("\n",role));
+        jlblname.setText(String.join("\n",name));
+        jtxtDescription.setText(combined);
+
+        jtxtDescription.setEditable(false);
+        jlabelImage.setIcon(Icon);
+        currentSelection = name;
+    }//GEN-LAST:event_jbtnDwightActionPerformed
+
+    private void jbtnEthanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEthanActionPerformed
+        CharacterEthan ethan = new CharacterEthan();
+        String[] stats = ethan.displayStats();
+        String name = ethan.getName();
+        ImageIcon Icon = new ImageIcon("src/assets/Ethan.png");
+        String[] skills = ethan.getSkillname();
+        String[] passive = ethan.getPassivename();
+        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
+        String role = ethan.getRole();
+        jtxtrole.setText(String.join("\n",role));
+        jlblname.setText(String.join("\n",name));
+        jtxtDescription.setText(combined);
+        jtxtDescription.setEditable(false);
+        jlabelImage.setIcon(Icon);
+        currentSelection = name;
+    
+    }//GEN-LAST:event_jbtnEthanActionPerformed
+
+    private void jtxtDescriptionInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jtxtDescriptionInputMethodTextChanged
+        
+    }//GEN-LAST:event_jtxtDescriptionInputMethodTextChanged
+
+    private void jbtnShawnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnShawnActionPerformed
+        CharacterShawn shawn = new CharacterShawn();
+        String[] stats = shawn.displayStats();
+        String name = shawn.getName();
+        ImageIcon Icon = new ImageIcon("src/assets/Shawn.png");
+        String[] skills = shawn.getSkillname();
+        String[] passive = shawn.getPassivename();
+        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
+        String role = shawn.getRole();
+        jtxtrole.setText(String.join("\n",role));
+        jlblname.setText(String.join("\n",name));
+        jtxtDescription.setText(combined);
+
+        jtxtDescription.setEditable(false);
+        jlabelImage.setIcon(Icon);
+        currentSelection = name;
+    }//GEN-LAST:event_jbtnShawnActionPerformed
+
+    private void jbtnOmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnOmarActionPerformed
+        CharacterOmar omar = new CharacterOmar();
+        String[] stats = omar.displayStats();
+        String name = omar.getName();
+        ImageIcon Icon = new ImageIcon("src/assets/Omars.png");
+        String[] skills = omar.getSkillname();
+        String[] passive = omar.getPassivename();
+        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
+        String role = omar.getRole();
+        jtxtrole.setText(String.join("\n",role));
+        jlblname.setText(String.join("\n",name));
+        jtxtDescription.setText(combined);
+        
+        jtxtDescription.setEditable(false);
+        jlabelImage.setIcon(Icon);
+       currentSelection = name;
+    }//GEN-LAST:event_jbtnOmarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -206,18 +360,20 @@ public class CharacterSelections extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton jbtnAdd;
+    private javax.swing.JButton jbtnDwight;
+    private javax.swing.JButton jbtnEthan;
+    private javax.swing.JButton jbtnOmar;
+    private javax.swing.JButton jbtnPrincess;
+    private javax.swing.JButton jbtnShawn;
+    private javax.swing.JLabel jlabelImage;
+    private javax.swing.JLabel jlblname;
+    private javax.swing.JTextArea jtxtDescription;
+    private javax.swing.JTextArea jtxtparty;
+    private javax.swing.JTextField jtxtrole;
     // End of variables declaration//GEN-END:variables
 }

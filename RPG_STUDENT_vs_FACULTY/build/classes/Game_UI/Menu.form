@@ -42,7 +42,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="400" y="250" width="440" height="80"/>
+          <AbsoluteConstraints x="320" y="240" width="630" height="80"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -68,6 +68,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Start Game"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="StartActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Quit">
           <Properties>

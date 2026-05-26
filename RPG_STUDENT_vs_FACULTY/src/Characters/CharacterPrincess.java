@@ -21,10 +21,19 @@ public class CharacterPrincess extends GameCharacter {
         // Default positioning rule for your grid layout (e.g., Back row support)
         this.position = "Below"; 
     }
-    
+    @Override
+    public String getRole()
+    {
+        return role;
+    }
+    @Override
+    public String getName()
+    {
+        return name;
+    }
     @Override
     public String[] getSkillname() {
-        return new String[] {"Citation Heal", "Research Link", "Verified Facts"};
+        return new String[] {"--SKILLS--\n","Citation Heal","Restores HP and mana.\n", "Research Link","Boosts ally intelligence.\n", "Verified Facts","Cancels enemy confusion attacks."};
     }
      
     @Override
@@ -107,6 +116,7 @@ public class CharacterPrincess extends GameCharacter {
     @Override
     public String[] getPassivename() {
         return new String[]{
+            "--PASSIVE--\n",
             "Reliable Source: Increasing all secondary team stats by 40%",
             "Misinformation Block: Overshield team morale by 40%"
         };
@@ -121,6 +131,7 @@ public class CharacterPrincess extends GameCharacter {
     @Override
     public String[] displayStats() {
         return new String[] {
+            "--STATS--\n",
             "HP: " + this.hp + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Morale: " + this.morale + "%",

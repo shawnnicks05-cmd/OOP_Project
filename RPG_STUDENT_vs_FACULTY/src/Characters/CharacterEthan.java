@@ -21,10 +21,7 @@ public class CharacterEthan extends GameCharacter {
         this.position = "Front"; 
     }
     
-    @Override
-    public String[] getSkillname() {
-        return new String[] {"Statistical Strike", "Trend Prediction", "Data Leak"};
-    } 
+    
     
     @Override
     public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
@@ -108,22 +105,37 @@ public class CharacterEthan extends GameCharacter {
     }
     
     @Override
-    public String[] getPassivename() {
-        return new String[]{
-            "Weakens Detection by 3%",
-            "Reveals enemy weak points increasing critical damage by 20%"
-        };
+    public String getRole()
+    {
+        return role;
     }
-
+    @Override
+    public String getName()
+    {
+        return name;
+    }
+    @Override
+    public String[] getSkillname() {
+        return new String[] {"--SKILLS--\n","Statistical Strike","High single-target damage.\n", "Trend Prediction","Dodges the next enemy attack.\n", "Data Leak","Lowers enemy defense."};
+    } 
+    
     @Override
     public double[] getPassiveValue() {
         // Cleaned up to safe system decimals (3% and 20%) to match 1:1 with string mapping array
         return new double[] { 0.03, 0.20 }; 
     }
-
+    @Override
+    public String[] getPassivename() {
+        return new String[]{
+            "--PASSIVE--",
+            "Weakens Detection by 3%",
+            "Reveals enemy weak points increasing critical damage by 20%"
+        };
+    }
     @Override
     public String[] displayStats() {
         return new String[] {
+            "--STATS--\n",
             "HP: " + this.hp + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Morale: " + this.morale + "%",

@@ -24,9 +24,18 @@ public class CharacterOmar extends GameCharacter {
     
     @Override
     public String[] getSkillname() {
-        return new String[] {"Information Overflow", "Explain Again", "Smart Response"};
+        return new String[] {"--SKILLS--\n","Information Overflow","Massive AOE knowledge attack.\n", "Explain Again","Restores ally focus and stamina.\n", "Smart Response","Copies enemy ability temporarily."};
     }
-    
+    @Override
+    public String getRole()
+    {
+        return role;
+    }
+    @Override
+    public String getName()
+    {
+        return name;
+    }
     @Override
     public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
         if (skillNumber < 1 || skillNumber > 3) {
@@ -107,6 +116,7 @@ public class CharacterOmar extends GameCharacter {
     @Override
     public String[] getPassivename() {
         return new String[]{
+            "--PASSIVE--\n",
             "Instant Answer: Increasing team's morale by 30% every 4 rounds",
             "Counter Question: Instantly counter questions, increasing team intelligence by 40%"
         };
@@ -121,6 +131,7 @@ public class CharacterOmar extends GameCharacter {
     @Override
     public String[] displayStats() {
         return new String[] {
+            "--STATS--\n",
             "HP: " + this.hp + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Morale: " + this.morale + "%",
