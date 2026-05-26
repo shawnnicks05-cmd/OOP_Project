@@ -4,25 +4,28 @@
  */
 package Characters;
 
+import Bosses.GameBoss;
+import java.util.ArrayList;
+
 /**
- *
+ * Core Abstract Blueprint for all Student Characters.
  * @author user
  */
-abstract class GameCharacter {
+public abstract class GameCharacter {
     
     protected String name;
     protected String role;
     protected String damageType;
     protected String bestStat;
     
-    //Primary attributes
+    // Primary attributes
     protected int intelligence;
     protected int analysis;
     protected int creativity;
     protected int wisdom;
     protected int knowledge;
    
-    //Secondary combat
+    // Main Stats
     protected int maxHp;
     protected int hp;
     protected int maxMana;
@@ -31,51 +34,86 @@ abstract class GameCharacter {
     protected int stamina;
     protected int morale;
     
-    //status effect
+    // Status effects
     protected boolean isPanicked = false;
     protected boolean isStress = false;
     protected boolean isSilenced = false;
     protected boolean isConfused = false;
     
-    //skill effect
+    // Skill metrics
     protected double skillCooldown;
     protected double accuracy;
     
+    // Character row grid position ("Front", "Above", "Below")
+    protected String position;
     
-   
-    
-    
-    
-    public GameCharacter(String name,String role, String damageType, String bestStat) {
+    public GameCharacter(String name, String role, String damageType, String bestStat) {
         this.name = name;
+        this.role = role;
         this.damageType = damageType;
         this.bestStat = bestStat;
-        this.role = role;
+    }
+    
+    // --- SAFE GETTERS & SETTERS ---
+    public int getHp() {
+        return this.hp; // Clean, simple text-safe reading loop
+    }
+    
+    public String getPosition() {
+        return this.position;
+    }
+    
+    public void setPosition(String position) {
+        this.position = position;
     }
 
-    
     public String getName() { return name; }
     public String getDamageType() { return damageType; }
     public String getBestStat() { return bestStat; }
-    public String getRole(){
-        return role;
+    public String getRole() { return role; }
+    public int getMaxHp() { return maxHp; }
+
+    public int getAttack() {
+        return intelligence + knowledge / 2;
     }
+
+    // --- DAMAGE EVALUATION LOGIC CHART ---
     public double calculateDamageModifier(String enemyTargetType) {
         if (this.damageType.equals("Knowledge") && enemyTargetType.equalsIgnoreCase("Exams")) return 1.5;
         if (this.damageType.equals("Precision") && enemyTargetType.equalsIgnoreCase("Quizzes")) return 1.5;
         if (this.damageType.equals("Tech") && enemyTargetType.equalsIgnoreCase("Projects")) return 1.5;
         if (this.damageType.equals("Tactical") && enemyTargetType.equalsIgnoreCase("Activities")) return 1.5;
         if (this.damageType.equals("Support Energy") && (enemyTargetType.equalsIgnoreCase("Stress") || enemyTargetType.equalsIgnoreCase("Panic"))) return 2.0;
-        
-        return 1.0; // Normal damage scaling
+        return 1.0; 
     }
     
-    public abstract void displayskills();
+    // --- HEALTH RESOURCE PROCESSOR ---
+    public void takeDamage(int ammount) {
+        this.hp -= ammount;
+        
+        // Prevent negative values safely, without testing upper limit cap here
+        if (this.hp < 0) {
+            this.hp = 0;
+        }
+    }
+    
+    public void heal(int ammount) {
+        this.hp += ammount;
+        // Cap healing strictly to your character's explicit maximum health setting
+        if (this.hp > this.maxHp) {
+            this.hp = this.maxHp;
+        }
+    }
+    
+    
+    // --- THE ABSTRACT CONTRACT FOR SUBCLASSES ---
     public abstract double[] getPassiveValue();
-    public abstract String useSkills(int skillNumber,String[] enemyBosses);   
     public abstract String[] displayStats();
-    public abstract int defend(String[] enemyBosses);
-    public abstract int basicAttack(String[] enemyBosses);
     public abstract String[] getSkillname();
     public abstract String[] getPassivename();
+    
+    // Aligned to pass an ArrayList of active Boss targets and return String responses for UI Logs!
+    public abstract String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses);   
+    public abstract String basicAttack(ArrayList<GameBoss> activeBosses);
+    public abstract String defend(); 
 }

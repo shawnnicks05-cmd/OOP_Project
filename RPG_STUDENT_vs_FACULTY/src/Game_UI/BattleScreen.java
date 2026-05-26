@@ -4,11 +4,13 @@
  */
 package Game_UI;
 
+import GameEngine.IBattleScreenUI;
+
 /**
  *
  * @author Acer
  */
-public class BattleScreen extends javax.swing.JFrame {
+public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BattleScreen.class.getName());
 
@@ -160,7 +162,7 @@ public class BattleScreen extends javax.swing.JFrame {
                 .addComponent(jButton3)
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,7 +199,7 @@ public class BattleScreen extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 330, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,7 +234,7 @@ public class BattleScreen extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jButton1)))
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,6 +266,77 @@ public class BattleScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
+
+    @Override
+    public void setHPBarBoss(int percentage) {
+        HPBarHydra.setValue(percentage);
+    }
+
+    @Override
+    public void setManaBarBoss(int value) {
+        ManaBarHydra.setValue(value);
+    }
+
+    @Override
+    public void setHPBarStudents(int percentage) {
+        HPBarStudents.setValue(percentage);
+    }
+
+    @Override
+    public void setManaBarStudents(int percentage) {
+        ManaBarStudents.setValue(percentage);
+    }
+
+    @Override
+    public void setRageMeter(int percentage) {
+        MoraleMeter.setValue(percentage);
+    }
+
+    @Override
+    public void setTurnIndicator(String text) {
+        turnIndicator.setText(text);
+    }
+
+    @Override
+    public void updateStatusDisplay(String text) {
+        // Can display in status label if needed
+    }
+
+    @Override
+    public void appendToChatBox(String message) {
+        ChatBox.append(message);
+    }
+
+    @Override
+    public void clearChatBox() {
+        ChatBox.setText("");
+    }
+
+    @Override
+    public void updateSkillButtons(String[] skillNames) {
+        if (skillNames.length > 0) jButton7.setText(skillNames[0]);
+        if (skillNames.length > 1) jButton8.setText(skillNames[1]);
+        if (skillNames.length > 2) jButton9.setText(skillNames[2]);
+    }
+
+    @Override
+    public void setActionButtonsEnabled(boolean enabled) {
+        jButton5.setEnabled(enabled);
+        jButton6.setEnabled(enabled);
+        jButton7.setEnabled(enabled);
+        jButton8.setEnabled(enabled);
+        jButton9.setEnabled(enabled);
+    }
+
+    @Override
+    public void setBossImage(String imagePath) {
+        // Implementation for boss image if needed
+    }
+
+    @Override
+    public void setPartyDisplay(String[] studentNames) {
+        // Implementation for party display if needed
+    }
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton12ActionPerformed
@@ -275,6 +348,7 @@ public class BattleScreen extends javax.swing.JFrame {
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton14ActionPerformed
+
 
     /**
      * @param args the command line arguments

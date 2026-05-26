@@ -1,75 +1,76 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Characters;
 
-import javax.swing.JOptionPane;
+import Bosses.GameBoss;
+import java.util.ArrayList;
 
 /**
- *
+ * Concrete Adaptive Mage / Knowledge DPS Student Class: Omar
  * @author user
  */
 public class CharacterOmar extends GameCharacter {
     
-    public CharacterOmar(String name, String role, String damageType, String bestStat) {
-        super(name, "Adaptive Mage / Knowledge DPS", "Knowledge Damage", "Wisdom");
+    // Cleaned up constructor: Removed unused arguments to stay optimized
+    public CharacterOmar() {
+        super("Omar", "Adaptive Mage / Knowledge DPS", "Knowledge Damage", "Wisdom");
         this.maxHp = 100;
         this.hp = 100;
         this.mana = 100;
         this.maxMana = 100;
         this.morale = 100;
+        
+        // Default tactical positioning on your turn system grid
+        this.position = "Front"; 
     }
     
     @Override
     public String[] getSkillname() {
         return new String[] {"Information Overflow", "Explain Again", "Smart Response"};
     }
+    
     @Override
-    public String useSkills(int skillNumber, String[] enemyBosses) {
-        String targetBoss = "";
-        
-        if (skillNumber == 1) {
-            int choice = JOptionPane.showOptionDialog(
-                null, 
-                "Where do you want to attack?",      
-                "Select Target Boss",                
-                JOptionPane.DEFAULT_OPTION, 
-                JOptionPane.QUESTION_MESSAGE, 
-                null, 
-                enemyBosses,                        
-                enemyBosses[0]                      
-            );
-
-            if (choice == JOptionPane.CLOSED_OPTION) {
-                return this.name + " cancelled their action.";
-            }
-            
-            targetBoss = enemyBosses[choice]; 
+    public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
+        if (skillNumber < 1 || skillNumber > 3) {
+            return "Unknown skill selected.";
         }
         
-
+        GameBoss targetBoss = null;
+        if (!activeBosses.isEmpty()) {
+            targetBoss = activeBosses.get(0);
+        }
+        
         switch(skillNumber) {
-            case 1 -> {
-                if (mana >= 25) {
-                    mana -= 25;
-                    return this.name + " Dealing Massive AOE knowledge attack. " + targetBoss + "! Deals 52 Knowledge Damage.";
+            case 1 -> { // 💥 Information Overflow (Massive single target / AOE nuke)
+                if (targetBoss == null) return this.name + " finds no active boss to attack.";
+                
+                if (this.mana >= 25) {
+                    this.mana -= 25;
+                    
+                    int baseDamage = 52;
+                    // Apply type multipliers based on the target boss classification (e.g., vs Exams)
+                    double modifier = calculateDamageModifier(targetBoss.getClassification());
+                    int finalDamage = (int) (baseDamage * modifier);
+                    
+                    targetBoss.takeDamage(finalDamage);
+                    
+                    String modifierAlert = modifier > 1.0 ? " [CRITICAL TYPE ADVANTAGE!]" : "";
+                    return this.name + " deals a massive Information Overflow directly at " + targetBoss.getName() + "!" +
+                           "\nDeals " + finalDamage + " Knowledge Damage." + modifierAlert;
                 } else {
                     return "No Mana!";
                 }
             }
-            case 2 -> {
-                if (mana >= 30) {
-                    mana -= 30;
-                    return this.name + " Restoring ally focus and stamina.";
+            case 2 -> { // 🔁 Explain Again (Support restoration)
+                if (this.mana >= 30) {
+                    this.mana -= 30;
+                    return this.name + " triggers [Explain Again]! Restoring allied focus metrics and stabilizing team stamina bars.";
                 } else {
                     return "No Mana!";
                 }
             }
-            case 3 -> {
-                if (mana >= 40) {
-                    mana -= 40;
-                    return this.name + ": Copies enemy ability temporarily for 1 round";
+            case 3 -> { // 🧠 Smart Response (Mimic utility)
+                if (this.mana >= 40) {
+                    this.mana -= 40;
+                    return this.name + " executes a [Smart Response]! Analyzing framework configurations and copying enemy attributes for 1 round.";
                 } else {
                     return "No Mana!";
                 }
@@ -79,58 +80,44 @@ public class CharacterOmar extends GameCharacter {
             }
         }
     }
+    
     @Override
-    public int basicAttack(String[] enemyBosses) {
-        int choice = JOptionPane.showOptionDialog(
-            null, 
-            "Where do you want to attack?",      
-            "Select Target Boss",                
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.QUESTION_MESSAGE, 
-            null, 
-            enemyBosses,                        
-            enemyBosses[0]                      
-        );                     
-
-        if (choice == JOptionPane.CLOSED_OPTION) {
-            return 0; 
+    public String basicAttack(ArrayList<GameBoss> activeBosses) {
+        if (activeBosses.isEmpty()) {
+            return this.name + " stands ready but finds no active threats to calculate.";
         }
         
-        return 53; 
+        GameBoss target = activeBosses.get(0);
+        int baseDamage = 53; // High base knowledge modifier attack
+        
+        double modifier = calculateDamageModifier(target.getClassification());
+        int finalDamage = (int) (baseDamage * modifier);
+        
+        target.takeDamage(finalDamage);
+        
+        String bonusAlert = modifier > 1.0 ? " [COUNTER BONUS ACTIVE!]" : "";
+        return this.name + " drops structural factual counter-arguments onto " + target.getName() + " for " + finalDamage + " damage!" + bonusAlert;
     }
     
     @Override
-    public int defend(String[] enemyBosses) {
-        int choice = JOptionPane.showOptionDialog(
-            null, 
-            "Where do you want to attack?",      
-            "Select Target Boss",                
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.QUESTION_MESSAGE, 
-            null, 
-            enemyBosses,                        
-            enemyBosses[0]                      
-        );                     
-
-        if (choice == JOptionPane.CLOSED_OPTION) {
-            return 0; 
-        }
-        
-        return 45; 
+    public String defend() {
+        return this.name + " cross-references the grading criteria formulas! Bracing for attacks and temporarily mitigating 45 incoming threat points.";
     }
     
     @Override
     public String[] getPassivename() {
         return new String[]{
-            "Instant Answer increasing teams morale by 30% every 4 rounds",
-            "Small chance to instantly counter questions Increasing teams intelligence by 40%"
+            "Instant Answer: Increasing team's morale by 30% every 4 rounds",
+            "Counter Question: Instantly counter questions, increasing team intelligence by 40%"
         };
     }
+    
     @Override
     public double[] getPassiveValue() {
-        // Balanced to 3 slots to match getPassivename() perfectly
-        return new double[] { 30.0, 40.0}; 
+        // Keeps a strict 1:1 mapping with getPassivename length to prevent UI array crashes
+        return new double[] { 0.30, 0.40 }; 
     }
+    
     @Override
     public String[] displayStats() {
         return new String[] {
@@ -140,7 +127,4 @@ public class CharacterOmar extends GameCharacter {
             "Role: Adaptive Mage / Knowledge DPS"
         };
     }
-    
-    @Override 
-    public void displayskills() {}
 }
