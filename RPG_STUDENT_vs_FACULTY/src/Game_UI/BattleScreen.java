@@ -162,7 +162,7 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
                 .addComponent(jButton3)
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,7 +199,7 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 330, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,7 +234,7 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jButton1)))
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,7 +266,7 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
-<<<<<<< HEAD
+
     @Override
     public void setHPBarBoss(int percentage) {
         HPBarHydra.setValue(percentage);
@@ -337,7 +337,6 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
     public void setPartyDisplay(String[] studentNames) {
         // Implementation for party display if needed
     }
-=======
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton12ActionPerformed
@@ -349,7 +348,7 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton14ActionPerformed
->>>>>>> c3567f72a5069d89a6ede83c682f61d449220c71
+
 
     /**
      * @param args the command line arguments
