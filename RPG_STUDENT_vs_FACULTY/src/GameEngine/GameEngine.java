@@ -37,21 +37,21 @@ public class GameEngine {
     public GameBoss spawnBoss(BossType bossType) {
         this.currentBoss = switch(bossType) {
             case HYDRA -> new Hydra();
-            case MIRO -> new Miro();
-            case CUIZON -> new Cuizon();
-            case LEEROY -> new Leeroy();
+            case MARU -> new Maru();
+            case JOVEH-> new Joveh();
+            case LERUI -> new Lerui();
             case JENATEH -> new Jenateh();
-            case PETRALBA -> new Petralba();
-            case KHIARA -> new Khiara();
-            case TIMOTHY -> new Timothy();
-            case AHDZZ -> new Ahdzz();
-            case SIRJC -> new SirJC();
-            case BANDALAN -> new Bandalan();
-            case PATZKI -> new Patzki();
-            case JIN -> new Jin();
-            case GUDIO -> new Gudio();
-            case TAN -> new Tan();
-            case BAYUCOT -> new Bayucot();
+            case LAPETRALBEY -> new LaPetralbey();
+            case KYARHEY -> new Kyarhey();
+            case TIMOTHEH -> new Timotheh();
+            case AHZZEE -> new Ahzzee();
+            case JEHCEY -> new Jehcey();
+            case BHARDIAN -> new Bhardian();
+            case PATZKHEY -> new Patzkhey();
+            case JHIEN -> new Jhien ();
+            case GHUARDIO -> new Ghuardio();
+            case ALYZEH -> new Alyzeh();
+            case BHARKYOT -> new Bharkyot();
         };
 
         this.currentTurn = 0;
@@ -63,9 +63,9 @@ public class GameEngine {
 
     public GameBoss spawnRandomBoss() {
         BossType[] randomBosses = {
-            BossType.KHIARA, BossType.TIMOTHY, BossType.AHDZZ,
-            BossType.SIRJC, BossType.BANDALAN, BossType.PATZKI,
-            BossType.JIN, BossType.GUDIO
+            BossType.KYARHEY, BossType.TIMOTHEH, BossType.AHZZEE,
+            BossType.JEHCEY, BossType.BHARDIAN, BossType.PATZKHEY,
+            BossType.JHIEN, BossType.GHUARDIO
         };
         return spawnBoss(randomBosses[rand.nextInt(randomBosses.length)]);
     }
@@ -218,8 +218,8 @@ public class GameEngine {
     }
 
     public enum BossType {
-        HYDRA, MIRO, CUIZON, LEEROY, JENATEH, PETRALBA,
-        KHIARA, TIMOTHY, AHDZZ, SIRJC, BANDALAN, PATZKI, JIN, GUDIO,
-        TAN, BAYUCOT
+        HYDRA, MARU, JOVEH, LERUI, JENATEH, LAPETRALBEY,
+        KYARHEY, TIMOTHEH, AHZZEE, JEHCEY, BHARDIAN, PATZKHEY, JHIEN, GHUARDIO,
+        ALYZEH, BHARKYOT
     }
 }
