@@ -45,7 +45,7 @@ public class Menu extends javax.swing.JFrame {
         jLabel1.setText("STUDENTS VS FACULTY");
         jLabel1.setFocusable(false);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 230, 440, 80));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 440, 80));
 
         jPanel1.setLayout(new java.awt.GridLayout(4, 1));
 
@@ -67,15 +67,21 @@ public class Menu extends javax.swing.JFrame {
         Quit.setBackground(new java.awt.Color(255, 204, 204));
         Quit.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         Quit.setText("Quit\n");
+        Quit.addActionListener(this::QuitActionPerformed);
         jPanel1.add(Quit);
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 300, 200, 170));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 330, 200, 170));
 
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/MENU.png"))); // NOI18N
         jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -30, 940, 630));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-50, -30, 1260, 800));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void QuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_QuitActionPerformed
 
     /**
      * @param args the command line arguments

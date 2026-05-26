@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Game_Logic;
+package Characters;
 
 /**
  *
  * @author user
  */
-abstract class Character {
+abstract class GameCharacter {
     
     protected String name;
     protected String role;
@@ -46,7 +46,7 @@ abstract class Character {
     
     
     
-    public Character(String name,String role, String damageType, String bestStat) {
+    public GameCharacter(String name,String role, String damageType, String bestStat) {
         this.name = name;
         this.damageType = damageType;
         this.bestStat = bestStat;
@@ -73,9 +73,9 @@ abstract class Character {
     public abstract void displayskills();
     public abstract double[] getPassiveValue();
     public abstract String useSkills(int skillNumber,String[] enemyBosses);   
-    public abstract void displayStats();
-    public abstract void basicAttack();
-    public abstract void defend();
+    public abstract String[] displayStats();
+    public abstract int defend(String[] enemyBosses);
+    public abstract int basicAttack(String[] enemyBosses);
     public abstract String[] getSkillname();
     public abstract String[] getPassivename();
 }
