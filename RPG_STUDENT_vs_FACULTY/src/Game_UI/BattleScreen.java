@@ -79,6 +79,7 @@ public BattleScreen() {
         JbtnPotionMana = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jprogBarRage = new javax.swing.JProgressBar();
+        Backgroundright = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -97,9 +98,9 @@ public BattleScreen() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jlblBoss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Screenshot 2026-05-21 212932.png"))); // NOI18N
+        jlblBoss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Hydra1.png"))); // NOI18N
         jlblBoss.setText("jLabel1");
-        getContentPane().add(jlblBoss, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, 260, 160));
+        getContentPane().add(jlblBoss, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 70, 360, 240));
 
         jlblTop.setText("jLabel2");
         getContentPane().add(jlblTop, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 70, 60));
@@ -140,6 +141,7 @@ public BattleScreen() {
         HPBarHydra.setStringPainted(true);
         getContentPane().add(HPBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 400, 350, 20));
 
+        ManaBarStudents.setBackground(new java.awt.Color(255, 255, 255));
         ManaBarStudents.setValue(100);
         ManaBarStudents.setStringPainted(true);
         getContentPane().add(ManaBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 420, 350, 20));
@@ -165,6 +167,7 @@ public BattleScreen() {
         getContentPane().add(MoraleMeter, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 440, 340, 20));
 
         BackGround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Roomss.png"))); // NOI18N
+        BackGround.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 380));
 
         jbtnAllySkill1.setText("Skill1");
@@ -278,7 +281,16 @@ public BattleScreen() {
         );
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 390, 100, 210));
+
+        jprogBarRage.setForeground(new java.awt.Color(255, 0, 0));
+        jprogBarRage.setValue(35);
+        jprogBarRage.setStringPainted(true);
         getContentPane().add(jprogBarRage, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 440, 270, 20));
+
+        Backgroundright.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Roomss.png"))); // NOI18N
+        Backgroundright.setText("jLabel1");
+        Backgroundright.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        getContentPane().add(Backgroundright, new org.netbeans.lib.awtextra.AbsoluteConstraints(1028, 0, 180, 380));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -506,6 +518,7 @@ public void setActionButtonsEnabled(boolean enabled) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BackGround;
+    private javax.swing.JLabel Backgroundright;
     private javax.swing.JTextArea ChatBox;
     private javax.swing.JProgressBar HPBarHydra;
     private javax.swing.JProgressBar HPBarStudents;
