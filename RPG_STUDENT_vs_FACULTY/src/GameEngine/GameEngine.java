@@ -185,7 +185,7 @@ public boolean isCoupleBossPhase() {
 
     StringBuilder result = new StringBuilder();
 
-    // Boss targets Front first, then Above, then Below
+    // Target sequence: Front → Above → Below
     GameCharacter target = null;
     String[] order = {"Front", "Above", "Below"};
     for (String pos : order) {
@@ -198,8 +198,15 @@ public boolean isCoupleBossPhase() {
         if (target != null) break;
     }
 
-    // Use basicAttack targeting that specific student
-    String bossAction = currentBoss.basicAttack(partyStudents); // still uses party list
+    if (target == null) {
+        this.gameState = GameState.PARTY_DEFEATED;
+        return "All students have been defeated!";
+    }
+
+    // Pass only the target as a single-element list
+    ArrayList<GameCharacter> targetList = new ArrayList<>();
+    targetList.add(target);
+    String bossAction = currentBoss.basicAttack(targetList);
     result.append(bossAction).append("\n");
 
     boolean anyAlive = partyStudents.stream().anyMatch(s -> s.getHp() > 0);
@@ -212,7 +219,6 @@ public boolean isCoupleBossPhase() {
     this.isPlayerTurn = true;
     return result.toString();
 }
-
     // --- GETTERS ---
 
     public GameBoss getCurrentBoss() {

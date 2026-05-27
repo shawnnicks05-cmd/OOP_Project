@@ -158,16 +158,15 @@ public class CharacterSelections extends javax.swing.JFrame {
             jtxtparty.setText("Please select a character first!");
             return;
         }
-
         if (partyMembers.contains(currentSelectedCharacter)) {
             jtxtparty.setText("Character already in party!");
             return;
         }
-
         if (parties < 3) {
             partyMembers.add(currentSelectedCharacter);
-            String position = (parties == 0) ? "[Front]" : (parties == 1) ? "[Top]" : "[Bottom]";
-            jtxtparty.append(currentSelectedCharacter.getName() + " " + position + "\n");
+            String position = (parties == 0) ? "Front" : (parties == 1) ? "Above" : "Below";
+            currentSelectedCharacter.setPosition(position);
+            jtxtparty.append(currentSelectedCharacter.getName() + " [" + position + "]\n");
             parties++;
         }
         

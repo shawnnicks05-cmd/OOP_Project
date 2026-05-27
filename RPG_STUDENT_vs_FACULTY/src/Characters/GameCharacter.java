@@ -79,7 +79,10 @@ public abstract class GameCharacter {
      public void setMorale(int morale) {
     this.morale = morale;
 }   
-
+public int getMana()
+{
+    return mana;
+}
     public int getAttack() {
         return intelligence + knowledge / 2;
     }

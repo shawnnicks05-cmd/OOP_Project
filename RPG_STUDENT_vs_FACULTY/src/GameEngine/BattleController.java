@@ -78,8 +78,9 @@ public class BattleController {
     }, 2000);
         return;
     }
-    }
-    private void executeBossAction() {
+        
+   }
+    public void executeBossAction() {
         String result = engine.executeBossTurn();
         appendChatMessage(result);
 
@@ -107,15 +108,33 @@ public class BattleController {
     int hpPercent = (int) ((boss.getHp() / (double) boss.getMaxHp()) * 100);
     battleScreen.setHPBarBoss(Math.max(0, Math.min(100, hpPercent)));
     battleScreen.setManaBarBoss(boss.getMana());
-    battleScreen.updateBossSkillButtons(boss.getSkillname());
+    String[] raw = boss.getSkillname();
+    String[] skillNames = new String[]{
+    raw.length > 0 ? raw[0] : "Skill 1",
+    raw.length > 1 ? raw[1] : "Skill 2",
+    raw.length > 2 ? raw[2] : "Skill 3"
+    };
+    battleScreen.updateBossSkillButtons(skillNames);
     // Show boss rage in the turn indicator area instead of the meter
     battleScreen.setRageMeter(boss.getRage()); // still updates if you add a bar later
 }
 
     private void updatePartyStats() {
-    // ... existing HP/Mana logic unchanged ...
+    // Update HP bar based on active front character
+    GameCharacter front = null;
+    for (GameCharacter s : engine.getPartyStudents()) {
+        if (s.getPosition().equalsIgnoreCase("Front") && s.getHp() > 0) {
+            front = s;
+            break;
+        }
+    }
+    if (front != null) {
+        int hpPercent = (int)((front.getHp() / (double) front.getMaxHp()) * 100);
+        battleScreen.setHPBarStudents(Math.max(0, Math.min(100, hpPercent)));
+        battleScreen.setManaBarStudents(front.getMana());
+    }
 
-    // Add morale update — average morale across alive party members
+    // Morale
     int totalMorale = 0, count = 0;
     for (GameCharacter student : engine.getPartyStudents()) {
         if (student.getHp() > 0) {
@@ -124,7 +143,7 @@ public class BattleController {
         }
     }
     if (count > 0) {
-        battleScreen.updateMoraleBar(totalMorale / count); // calls MoraleMeter directly
+        battleScreen.updateMoraleBar(totalMorale / count);
     }
 }
 

@@ -99,18 +99,16 @@ public BattleScreen() {
 
         jlblBoss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Screenshot 2026-05-21 212932.png"))); // NOI18N
         jlblBoss.setText("jLabel1");
-        getContentPane().add(jlblBoss, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, 260, 160));
+        getContentPane().add(jlblBoss, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 140, 240, 150));
 
-        jlblTop.setText("jLabel2");
-        getContentPane().add(jlblTop, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 70, 60));
+        jlblTop.setText("TOP");
+        getContentPane().add(jlblTop, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 90, 80));
 
-        jlblFront.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Shawn.png"))); // NOI18N
-        jlblFront.setText("jLabel3");
-        getContentPane().add(jlblFront, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 80, 70));
+        jlblFront.setText("FRONT");
+        getContentPane().add(jlblFront, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 140, 80, 70));
 
-        jlblBottom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Dwight.png"))); // NOI18N
-        jlblBottom.setText("jLabel4");
-        getContentPane().add(jlblBottom, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 70, 60));
+        jlblBottom.setText("BOTTOM");
+        getContentPane().add(jlblBottom, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 100, 80));
 
         ManaBarHydra.setValue(100);
         ManaBarHydra.setStringPainted(true);
@@ -285,40 +283,50 @@ public BattleScreen() {
     private void refreshActorDisplay() {
     GameCharacter actor = getActiveActor();
 
-    // Update skill buttons
     String[] raw = actor.getSkillname();
     jbtnAllySkill1.setText(raw.length > 1 ? raw[1] : "Skill 1");
     jbtnAllySkill2.setText(raw.length > 3 ? raw[3] : "Skill 2");
     jbtnAllySkill3.setText(raw.length > 5 ? raw[5] : "Skill 3");
 
-    // Update turn indicator
     turnIndicator.setText(actor.getName() + "'s Turn");
 
-    // Update the correct label based on the character's position
-    String imagePath = getImagePath(actor.getName());
-    javax.swing.ImageIcon icon = new javax.swing.ImageIcon(
-        getClass().getResource(imagePath));
-
-    switch (actor.getPosition().toLowerCase()) {
-        case "front" -> jlblFront.setIcon(icon);
-        case "above" -> jlblTop.setIcon(icon);
-        case "below" -> jlblBottom.setIcon(icon);
+    java.net.URL url = getClass().getResource(getImagePath(actor.getName()));
+    if (url == null) {
+        System.out.println("IMAGE NOT FOUND for actor: " + actor.getName());
+        return;
     }
+
+    javax.swing.JLabel targetLabel = switch (actor.getPosition().toLowerCase()) {
+        case "front" -> jlblFront;
+        case "above" -> jlblTop;
+        case "below" -> jlblBottom;
+        default -> null;
+    };
+
+    if (targetLabel == null) {
+        System.out.println("UNKNOWN POSITION: " + actor.getPosition());
+        return;
+    }
+
+    java.awt.Image img = new javax.swing.ImageIcon(url).getImage()
+        .getScaledInstance(targetLabel.getWidth(), targetLabel.getHeight(), java.awt.Image.SCALE_SMOOTH);
+    targetLabel.setIcon(new javax.swing.ImageIcon(img));
+    targetLabel.setText(""); // ← clear placeholder text
 }
     private String getImagePath(String characterName) {
     return switch (characterName.toLowerCase()) {
         case "shawn"    -> "/assets/Shawn.png";
         case "ethan"    -> "/assets/Ethan.png";
-        case "dwight"   -> "/assets/Dwights.png";
-        case "omar"     -> "/assets/Omars.png";
-        case "princess" -> "/assets/Camachos.png";
+        case "dwight"   -> "/assets/Dwights.png";  // ← check if this file exists
+        case "omar"     -> "/assets/Omars.png";     // ← check if this file exists
+        case "princess" -> "/assets/Camachos.png";  // ← check if this file exists
         default         -> "/assets/Shawn.png";
     };
 }
     public void updateBossSkillButtons(String[] skillNames) {
-    if (skillNames.length > 1) jbtnBossSkill1.setText(skillNames[1]);
-    if (skillNames.length > 3) jbtnBossSkill2.setText(skillNames[3]);
-    if (skillNames.length > 5) jbtnBossSkill3.setText(skillNames[5]);
+    if (skillNames.length > 0) jbtnBossSkill1.setText(skillNames[0]);
+    if (skillNames.length > 1) jbtnBossSkill2.setText(skillNames[1]);
+    if (skillNames.length > 2) jbtnBossSkill3.setText(skillNames[2]);
 }
     @Override
     public void setRageMeter(int percentage) {
@@ -326,13 +334,34 @@ public BattleScreen() {
     }
         private void setupPartyImages() {
     for (GameCharacter c : party) {
-        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(
-            getClass().getResource(getImagePath(c.getName())));
-        switch (c.getPosition().toLowerCase()) {
-            case "front" -> jlblFront.setIcon(icon);
-            case "above" -> jlblTop.setIcon(icon);
-            case "below" -> jlblBottom.setIcon(icon);
+        System.out.println("Setting image for: " + c.getName() + " | Position: " + c.getPosition());
+
+        java.net.URL url = getClass().getResource(getImagePath(c.getName()));
+        if (url == null) {
+            System.out.println("IMAGE NOT FOUND for: " + c.getName());
+            continue;
         }
+
+        javax.swing.JLabel targetLabel = switch (c.getPosition().toLowerCase()) {
+            case "front" -> jlblFront;
+            case "above" -> jlblTop;
+            case "below" -> jlblBottom;
+            default -> null;
+        };
+
+        if (targetLabel == null) {
+            System.out.println("UNKNOWN POSITION: " + c.getPosition());
+            continue;
+        }
+
+        // ← Use fixed sizes matching your AbsoluteConstraints in initComponents
+        int w = 70, h = 60; // jlblTop and jlblBottom are 70x60
+        if (c.getPosition().equalsIgnoreCase("front")) { w = 80; h = 70; } // jlblFront is 80x70
+
+        java.awt.Image img = new javax.swing.ImageIcon(url).getImage()
+            .getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH);
+        targetLabel.setIcon(new javax.swing.ImageIcon(img));
+        targetLabel.setText("");
     }
 }
     private GameCharacter getActiveActor() {
@@ -359,7 +388,7 @@ public BattleScreen() {
 
     private void jbtnAttackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAttackActionPerformed
         controller.executePlayerAction(0, getActiveActor());
-        advanceTurn();
+        triggerBossTurn();
     }//GEN-LAST:event_jbtnAttackActionPerformed
 
     
@@ -420,7 +449,16 @@ public void setActionButtonsEnabled(boolean enabled) {
     jbtnAllySkill2.setEnabled(enabled);  // ← fix
     jbtnAllySkill3.setEnabled(enabled);  // ← fix
 }
-
+private void triggerBossTurn() {
+    if (!controller.getEngine().isPlayerTurn()) {
+        new javax.swing.Timer(800, e -> {
+            ((javax.swing.Timer) e.getSource()).stop();
+            controller.executeBossAction();
+            controller.updateAllUI();
+            advanceTurn();
+        }).start();
+    }
+}
     @Override
     public void setBossImage(String imagePath) {
     try {
@@ -452,22 +490,22 @@ public void setActionButtonsEnabled(boolean enabled) {
     private void jbtnDefendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDefendActionPerformed
         GameCharacter actor = getActiveActor();
     controller.appendChatMessage(actor.defend());
-     advanceTurn();
+     triggerBossTurn();
     }//GEN-LAST:event_jbtnDefendActionPerformed
 
     private void jbtnAllySkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAllySkill1ActionPerformed
         controller.executePlayerAction(1, getActiveActor());
-         advanceTurn();
+         triggerBossTurn();
     }//GEN-LAST:event_jbtnAllySkill1ActionPerformed
 
     private void jbtnAllySkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAllySkill2ActionPerformed
         controller.executePlayerAction(2, getActiveActor());
-         advanceTurn();
+         triggerBossTurn();
     }//GEN-LAST:event_jbtnAllySkill2ActionPerformed
 
     private void jbtnAllySkill3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAllySkill3ActionPerformed
         controller.executePlayerAction(3, getActiveActor());
-         advanceTurn();
+         triggerBossTurn();
     }//GEN-LAST:event_jbtnAllySkill3ActionPerformed
 
     private void jbtnBossSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBossSkill2ActionPerformed
