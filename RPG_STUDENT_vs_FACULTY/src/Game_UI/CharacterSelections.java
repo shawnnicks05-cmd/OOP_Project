@@ -254,10 +254,10 @@ if (parties == 0) {
     jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [Front]\n");
     parties++;
 } else if (parties == 1) {
-    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [Middle]\n");
+    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [TOP]\n");
     parties++;
 } else if (parties == 2) {
-    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [Back]\n(Party Full!)");
+    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [BOTTOM]\n(Party Full!)");
     parties++;
 } else {
     jtxtparty.setText(existingText + "\nParty is already full!");
@@ -374,9 +374,10 @@ if (parties == 0) {
          jtxtparty.setText("You Should choose 3 parties to Start the Game!");
         return;
         }
-        
+
         if(parties == 3)
         {
+            
             nextJframe.setVisible(true);
             this.dispose();
         }
