@@ -23,13 +23,21 @@
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/GameEngine.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/GameLauncher.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/IBattleScreenUI.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Game_UI/BattleScreen.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Game_UI/Menu.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Game_UI/CharacterSelections.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/revive.png</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/mana.png</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/health.png</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/bro.png</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/EthanChar.png</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/Ethan.png</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/Shawn.png</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Leeroy.java</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/Dwights.png</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/Dwight.png</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/CharacterFactory.java</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Game_UI/BattleScreen.form</file>
+            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Game_UI/BattleScreen.java</file>
         </group>
     </open-files>
 </project-private>
