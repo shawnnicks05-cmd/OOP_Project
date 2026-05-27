@@ -20,10 +20,19 @@ public class CharacterDwight extends GameCharacter {
         // Default positioning layout strategy for the combat grid
         this.position = "Front"; 
     }
-    
+    @Override
+    public String getRole()
+    {
+        return role;
+    }
+    @Override
+    public String getName()
+    {
+        return name;
+    }
     @Override
     public String[] getSkillname() {
-        return new String[] {"JavaScript Crash", "Responsive Shield", "UI Overload"};
+        return new String[] {"--SKILLS--","JavaScript Crash","Glitch-based tech attack.\n", "Responsive Shield","Creates temporary protection.\n", "UI Overload","Confuses enemies.\n"};
     }
     
     @Override
@@ -110,6 +119,7 @@ public class CharacterDwight extends GameCharacter {
     @Override
     public String[] getPassivename() {
         return new String[]{
+            "--PASSIVE--\n",
             "Clean Interface: Increasing team's morale by 7 every 5 rounds",
             "Code Optimization: Increasing critical damage and crit rate by 20% and 15%"
         };
@@ -125,6 +135,7 @@ public class CharacterDwight extends GameCharacter {
     @Override
     public String[] displayStats() {
         return new String[] {
+            "--STATS--\n",
             "HP: " + this.hp + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Morale: " + this.morale + "%",

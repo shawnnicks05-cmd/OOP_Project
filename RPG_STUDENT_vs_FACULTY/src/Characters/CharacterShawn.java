@@ -24,9 +24,18 @@ public class CharacterShawn extends GameCharacter {
     
     @Override
     public String[] getSkillname() {
-        return new String[] {"BrainStorm Burst", "Group Study", "Deadline Focus"};
+        return new String[] {"--Skills--\n","BrainStorm Burst","AOE intelligence-based attack.  \n", "Group Study","Buffs teammates' attack and defense.\n", "Deadline Focus","Removes panic and stress debuffs.\n"};
     }
-    
+    @Override
+    public String getRole()
+    {
+        return role;
+    }
+    @Override
+    public String getName()
+    {
+        return name;
+    }
     @Override
     public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
         if (skillNumber < 1 || skillNumber > 3) {
@@ -105,6 +114,7 @@ public class CharacterShawn extends GameCharacter {
     @Override
     public String[] getPassivename() {
         return new String[]{
+            "--Passive Skills--\n",
             "Enhance Intelligence to all by 2%",
             "Increases team critical thinking by 3%",
             "Bonuses accuracy by 3%"
@@ -120,6 +130,7 @@ public class CharacterShawn extends GameCharacter {
     @Override
     public String[] displayStats() {
         return new String[] {
+            "--STATS--\n",
             "HP: " + this.hp + "/" + this.maxHp,
             "Mana: " + this.mana + "/" + this.maxMana,
             "Morale: " + this.morale + "%",

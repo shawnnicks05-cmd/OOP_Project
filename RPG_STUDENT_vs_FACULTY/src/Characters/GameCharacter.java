@@ -58,7 +58,7 @@ public abstract class GameCharacter {
     public int getHp() {
         return this.hp; // Clean, simple text-safe reading loop
     }
-    
+   
     public String getPosition() {
         return this.position;
     }

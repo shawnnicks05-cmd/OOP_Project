@@ -43,13 +43,14 @@ public class Menu extends javax.swing.JFrame {
         jLabel1.setText("STUDENTS VS FACULTY");
         jLabel1.setFocusable(false);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 440, 80));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 630, 80));
 
         jPanel1.setLayout(new java.awt.GridLayout(2, 1));
 
         Start.setBackground(new java.awt.Color(255, 204, 204));
         Start.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         Start.setText("Start Game");
+        Start.addActionListener(this::StartActionPerformed);
         jPanel1.add(Start);
 
         Quit.setBackground(new java.awt.Color(255, 204, 204));
@@ -68,8 +69,15 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void QuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_QuitActionPerformed
+
+    private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
+        CharacterSelections nextJframe = new CharacterSelections();
+        
+        nextJframe.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_StartActionPerformed
 
     /**
      * @param args the command line arguments
