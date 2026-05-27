@@ -11,29 +11,26 @@ public class CharacterDwight extends GameCharacter {
     
     public CharacterDwight() {
         super("Dwight", "Tech Builder / Utility DPS", "Tech Damage", "Creativity");
-        this.maxHp = 100;
-        this.hp = 100;
-        this.mana = 100;
-        this.maxMana = 100;
-        this.morale = 100;
-        
-        // Default positioning layout strategy for the combat grid
-        this.position = "Front"; 
+        setMaxHp(100);
+        setHp(100);
+        setMaxMana(100);
+        setMana(100);
+        setMorale(100);
+        setPosition("Front");
+        setAttackPower(55);
+        setDefensePower(25);
     }
     @Override
-    public int getMorale()
-    {
-        return morale;
+    public int getMorale() {
+        return super.getMorale();
     }
     @Override
-    public String getRole()
-    {
-        return role;
+    public String getRole() {
+        return super.getRole();
     }
     @Override
-    public String getName()
-    {
-        return name;
+    public String getName() {
+        return super.getName();
     }
     @Override
     public String[] getSkillname() {
@@ -45,52 +42,58 @@ public class CharacterDwight extends GameCharacter {
         if (skillNumber < 1 || skillNumber > 3) {
             return "Unknown skill selected.";
         }
-        
+
         GameBoss targetBoss = null;
         if (!activeBosses.isEmpty()) {
             targetBoss = activeBosses.get(0);
         }
-        
+
         switch(skillNumber) {
             case 1 -> { // 💻 JavaScript Crash (Single-Target Tech Attack)
-                if (targetBoss == null) return this.name + " finds no compiler terminal to target.";
-                
-                if (this.mana >= 25) {
-                    this.mana -= 25;
-                    
-                    int baseDamage = 50;
-                    // Processes system multipliers (e.g., Tech Damage deals 1.5x damage against Projects classification!)
-                    double modifier = calculateDamageModifier(targetBoss.getClassification());
-                    int finalDamage = (int) (baseDamage * modifier);
-                    
-                    targetBoss.takeDamage(finalDamage);
-                    
-                    String modifierAlert = modifier > 1.0 ? " [COMPILER ERROR OVERFLOW BONUS!]" : "";
-                    return this.name + " executes a JavaScript Crash on " + targetBoss.getName() + "!" +
-                           "\nDeals " + finalDamage + " Tech Damage." + modifierAlert;
-                } else {
+                if (targetBoss == null) return getName() + " finds no compiler terminal to target.";
+
+                if (isSkillOnCooldown(1)) {
+                    return getSkillDisplayName(1) + " can't be used for " + getSkillCooldownRemaining(1) + " more rounds.";
+                }
+                if (!trySpendMana(25)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(1);
+
+                int baseDamage = calculateAttackDamage(targetBoss) + 10;
+                // Processes system multipliers (e.g., Tech Damage deals 1.5x damage against Projects classification!)
+                double modifier = calculateDamageModifier(targetBoss.getClassification());
+                int finalDamage = (int) (baseDamage * modifier);
+
+                targetBoss.takeDamage(finalDamage);
+
+                String modifierAlert = modifier > 1.0 ? " [COMPILER ERROR OVERFLOW BONUS!]" : "";
+                return getName() + " executes a JavaScript Crash on " + targetBoss.getName() + "!" +
+                       "\nDeals " + finalDamage + " Tech Damage." + modifierAlert;
             }
             case 2 -> { // 🛡️ Responsive Shield (Defensive Support)
-                if (this.mana >= 30) {
-                    this.mana -= 30;
-                    // In your battle turn processor, this can inject temporary shield layers to an ally
-                    return this.name + " deploys a [Responsive Shield]! Creating temporary structural protection for the targeted slot.";
-                } else {
+                if (isSkillOnCooldown(2)) {
+                    return getSkillDisplayName(2) + " can't be used for " + getSkillCooldownRemaining(2) + " more rounds.";
+                }
+                if (!trySpendMana(30)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(2);
+                // In your battle turn processor, this can inject temporary shield layers to an ally
+                return getName() + " deploys a [Responsive Shield]! Creating temporary structural protection for the targeted slot.";
             }
             case 3 -> { // 🌀 UI Overload (Status Control Debuff)
-                if (targetBoss == null) return this.name + " finds no interface viewport to clutter.";
-                
-                if (this.mana >= 40) {
-                    this.mana -= 40;
-                    // Modifies status metrics inside your turn mechanics
-                    return this.name + " triggers a complete [UI Overload]! Cluttering the viewport and confusing " + targetBoss.getName() + ".";
-                } else {
+                if (targetBoss == null) return getName() + " finds no interface viewport to clutter.";
+
+                if (isSkillOnCooldown(3)) {
+                    return getSkillDisplayName(3) + " can't be used for " + getSkillCooldownRemaining(3) + " more rounds.";
+                }
+                if (!trySpendMana(40)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(3);
+                // Modifies status metrics inside your turn mechanics
+                return getName() + " triggers a complete [UI Overload]! Cluttering the viewport and confusing " + targetBoss.getName() + ".";
             }
             default -> {
                 return "Unknown skill selected.";
@@ -101,24 +104,23 @@ public class CharacterDwight extends GameCharacter {
     @Override
     public String basicAttack(ArrayList<GameBoss> activeBosses) {
         if (activeBosses.isEmpty()) {
-            return this.name + " runs a diagnostic, but there are no targets to ping.";
+            return getName() + " runs a diagnostic, but there are no targets to ping.";
         }
         
         GameBoss target = activeBosses.get(0);
-        int baseDamage = 50; 
+        int baseDamage = calculateAttackDamage(target);
         
         double modifier = calculateDamageModifier(target.getClassification());
-        int finalDamage = (int) (baseDamage * modifier);
-        
-        target.takeDamage(finalDamage);
-        
-        String bonusAlert = modifier > 1.0 ? " [DIRECT DEP_INJECTION EXPLOIT!]" : "";
-        return this.name + " throws a raw unoptimized script terminal at " + target.getName() + " for " + finalDamage + " damage!" + bonusAlert;
+        String result = attackBossWithRoll(target, baseDamage, modifier, "throws a raw unoptimized script terminal at");
+        if (modifier > 1.0) {
+            result += " [DIRECT DEP_INJECTION EXPLOIT!]";
+        }
+        return result;
     }
 
     @Override
     public String defend() {
-        return this.name + " refactors the catch blocks! Hardening connection ports and mitigating 35 incoming damage points.";
+        return getName() + " refactors the catch blocks! Hardening connection ports and mitigating 35 incoming damage points.";
     }
     
     @Override
@@ -141,9 +143,9 @@ public class CharacterDwight extends GameCharacter {
     public String[] displayStats() {
         return new String[] {
             "--STATS--\n",
-            "HP: " + this.hp + "/" + this.maxHp,
-            "Mana: " + this.mana + "/" + this.maxMana,
-            "Morale: " + this.morale + "%",
+            "HP: " + getHp() + "/" + getMaxHp(),
+            "Mana: " + getMana() + "/" + getMaxMana(),
+            "Morale: " + getMorale() + "%",
             "Role: Tech Builder / Utility DPS"
         };
     }

@@ -12,29 +12,26 @@ public class CharacterPrincess extends GameCharacter {
     // Cleaned up constructor: Removed unused arguments to prevent instantiation issues
     public CharacterPrincess() {
         super("Princess", "Healer / Resource Support", "Support Energy", "Knowledge");
-        this.maxHp = 100;
-        this.hp = 100;
-        this.mana = 100;
-        this.maxMana = 100;
-        this.morale = 100;
-        
-        // Default positioning rule for your grid layout (e.g., Back row support)
-        this.position = "Below"; 
+        setMaxHp(100);
+        setHp(100);
+        setMaxMana(100);
+        setMana(100);
+        setMorale(100);
+        setPosition("Below");
+        setAttackPower(25);
+        setDefensePower(50);
     }
     @Override
-    public String getRole()
-    {
-        return role;
+    public String getRole() {
+        return super.getRole();
     }
     @Override
-    public String getName()
-    {
-        return name;
+    public String getName() {
+        return super.getName();
     }
     @Override
-    public int getMorale()
-    {
-        return morale;
+    public int getMorale() {
+        return super.getMorale();
     }
     @Override
     public String[] getSkillname() {
@@ -46,45 +43,51 @@ public class CharacterPrincess extends GameCharacter {
         if (skillNumber < 1 || skillNumber > 3) {
             return "Unknown skill selected.";
         }
-        
+
         // Grab a fallback target boss from the engine array if needed
         GameBoss targetBoss = null;
         if (!activeBosses.isEmpty()) {
             targetBoss = activeBosses.get(0);
         }
-        
+
         switch(skillNumber) {
             case 1 -> { // 🧪 Citation Heal (Team restoration)
-                if (this.mana >= 25) {
-                    this.mana -= 25;
-                    
-                    // In your battle engine loop, you would typically accept an array of 
-                    // students here and run student.heal(25) on them!
-                    
-                    return this.name + " uses [Citation Heal]! Restoring Team's Hp and Mana by 25 points.";
-                } else {
+                if (isSkillOnCooldown(1)) {
+                    return getSkillDisplayName(1) + " can't be used for " + getSkillCooldownRemaining(1) + " more rounds.";
+                }
+                if (!trySpendMana(25)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(1);
+
+                // In your battle engine loop, you would typically accept an array of
+                // students here and run student.heal(25) on them!
+
+                return getName() + " uses [Citation Heal]! Restoring Team's Hp and Mana by 25 points.";
             }
             case 2 -> { // 🔗 Research Link (Stat Multiplier Buff)
-                if (this.mana >= 30) {
-                    this.mana -= 30;
-                    return this.name + " establishes a [Research Link]! Boosting the Team's structural intelligence.";
-                } else {
+                if (isSkillOnCooldown(2)) {
+                    return getSkillDisplayName(2) + " can't be used for " + getSkillCooldownRemaining(2) + " more rounds.";
+                }
+                if (!trySpendMana(30)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(2);
+                return getName() + " establishes a [Research Link]! Boosting the Team's structural intelligence.";
             }
             case 3 -> { // 📜 Verified Facts (Debuff Cleanse)
-                if (this.mana >= 40) {
-                    this.mana -= 40;
-                    
-                    // Logic update flag changes
-                    this.isConfused = false; 
-                    
-                    return this.name + " presents [Verified Facts]! Canceling enemy confusion status mechanics and correcting errors.";
-                } else {
+                if (isSkillOnCooldown(3)) {
+                    return getSkillDisplayName(3) + " can't be used for " + getSkillCooldownRemaining(3) + " more rounds.";
+                }
+                if (!trySpendMana(40)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(3);
+
+                // Logic update flag changes
+                this.isConfused = false;
+
+                return getName() + " presents [Verified Facts]! Canceling enemy confusion status mechanics and correcting errors.";
             }
             default -> {
                 return "Unknown skill selected.";
@@ -95,27 +98,25 @@ public class CharacterPrincess extends GameCharacter {
     @Override
     public String basicAttack(ArrayList<GameBoss> activeBosses) {
         if (activeBosses.isEmpty()) {
-            return this.name + " checks her references but finds no targets remaining.";
+            return getName() + " checks her references but finds no targets remaining.";
         }
         
         // Select the active boss threat directly
         GameBoss target = activeBosses.get(0);
-        int baseDamage = 20; 
+        int baseDamage = Math.max(5, calculateAttackDamage(target) / 2);
         
         // Process character type matchups against the current boss target classification
         double modifier = calculateDamageModifier(target.getClassification());
-        int finalDamage = (int) (baseDamage * modifier);
-        
-        target.takeDamage(finalDamage);
-        
-        String counterBonusText = modifier > 1.0 ? " [COUNTER TYPE ADVANTAGE!]" : "";
-        return this.name + " strikes " + target.getName() + " with baseline academic proof for " 
-               + finalDamage + " Support damage!" + counterBonusText;
+        String result = attackBossWithRoll(target, baseDamage, modifier, "strikes");
+        if (modifier > 1.0) {
+            result += " [COUNTER TYPE ADVANTAGE!]";
+        }
+        return result;
     }
 
     @Override
     public String defend() {
-        return this.name + " reviews peer-reviewed security documentation! Defenses temporarily raised by 35.";
+        return getName() + " reviews peer-reviewed security documentation! Defenses temporarily raised by 35.";
     }
 
     @Override
@@ -137,9 +138,9 @@ public class CharacterPrincess extends GameCharacter {
     public String[] displayStats() {
         return new String[] {
             "--STATS--\n",
-            "HP: " + this.hp + "/" + this.maxHp,
-            "Mana: " + this.mana + "/" + this.maxMana,
-            "Morale: " + this.morale + "%",
+            "HP: " + getHp() + "/" + getMaxHp(),
+            "Mana: " + getMana() + "/" + getMaxMana(),
+            "Morale: " + getMorale() + "%",
             "Role: Healer / Resource Support"
         };
     }

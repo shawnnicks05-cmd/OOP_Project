@@ -58,12 +58,12 @@ public class Bharkyot extends GameBoss {
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
         int baseDamage = 28;
-        target.takeDamage(baseDamage);
+        String result = attackPlayerWithRoll(target, baseDamage, "strikes", target.isTaunted());
         this.addRage(16);
 
         String partnerBonus = hasPartner ? " [Tan gains bonus speed!]" : "";
         String rageAlert = this.isEnragedDoTActive() ? "[WARN] Nightmare corridor closes in! Unshieldable DoT active!" : "";
-        return this.name + " strikes " + target.getName() + " with environmental pressure for " + baseDamage + " damage!" + partnerBonus + " " + rageAlert;
+        return result + partnerBonus + " " + rageAlert;
     }
 
     @Override
@@ -79,12 +79,13 @@ public class Bharkyot extends GameBoss {
                     this.mana -= 55;
                     this.addRage(22);
                     int damage = 42;
+                    StringBuilder damageLog = new StringBuilder();
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {
-                            student.takeDamage(damage);
+                            damageLog.append(attackPlayerWithRoll(student, damage, "is hit by", student.isTaunted())).append("\n");
                         }
                     }
-                    return this.name + " springs a [Surprise Practical Exam]!\nRandom AoE damage of " + damage + " to all!";
+                    return this.name + " springs a [Surprise Practical Exam]!\nRandom AoE damage of " + damage + " to all!\n" + damageLog;
                 }
                 return this.name + " attempted [Surprise Practical Exam] but lacks Mana!";
             }
@@ -93,12 +94,13 @@ public class Bharkyot extends GameBoss {
                     this.mana -= 60;
                     this.addRage(24);
                     int damage = 30;
+                    StringBuilder damageLog = new StringBuilder();
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {
-                            student.takeDamage(damage);
+                            damageLog.append(attackPlayerWithRoll(student, damage, "is flooded by", student.isTaunted())).append("\n");
                         }
                     }
-                    return this.name + " creates [Information Overload]!\nApplies confusion and panic! Deals " + damage + " to all!";
+                    return this.name + " creates [Information Overload]!\nApplies confusion and panic! Deals " + damage + " to all!\n" + damageLog;
                 }
                 return this.name + " attempted [Information Overload] but lacks Mana!";
             }

@@ -17,6 +17,14 @@ public class Menu extends javax.swing.JFrame {
      */
     public Menu() {
         initComponents();
+        configureWindow();
+    }
+
+    private void configureWindow() {
+        // Center the window and disable maximize/resize
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setExtendedState(javax.swing.JFrame.NORMAL);
     }
 
     /**
@@ -30,6 +38,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        LoadGame = new javax.swing.JButton();
         Start = new javax.swing.JButton();
         Quit = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -45,19 +54,25 @@ public class Menu extends javax.swing.JFrame {
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 630, 80));
 
-        jPanel1.setLayout(new java.awt.GridLayout(2, 1));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        LoadGame.setBackground(new java.awt.Color(255, 204, 204));
+        LoadGame.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        LoadGame.setText("Load Game");
+        LoadGame.addActionListener(this::LoadGameActionPerformed);
+        jPanel1.add(LoadGame, java.awt.BorderLayout.LINE_END);
 
         Start.setBackground(new java.awt.Color(255, 204, 204));
         Start.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        Start.setText("Start Game");
+        Start.setText("START GAME");
         Start.addActionListener(this::StartActionPerformed);
-        jPanel1.add(Start);
+        jPanel1.add(Start, java.awt.BorderLayout.CENTER);
 
         Quit.setBackground(new java.awt.Color(255, 204, 204));
         Quit.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         Quit.setText("Quit\n");
         Quit.addActionListener(this::QuitActionPerformed);
-        jPanel1.add(Quit);
+        jPanel1.add(Quit, java.awt.BorderLayout.PAGE_END);
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, 210, 100));
 
@@ -78,6 +93,10 @@ public class Menu extends javax.swing.JFrame {
         nextJframe.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_StartActionPerformed
+
+    private void LoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadGameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LoadGameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -105,6 +124,7 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton LoadGame;
     private javax.swing.JButton Quit;
     private javax.swing.JButton Start;
     private javax.swing.JLabel jLabel1;

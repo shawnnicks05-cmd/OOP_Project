@@ -27,6 +27,11 @@ public abstract class GameBoss {
     protected int rage;
     protected int defence; // Matches Jenateh's spelling!
 
+    // --- Boss skill cooldown system (per-skill, in turns/rounds) ---
+    // skillNumber is 1..3 externally; internally we map to index 0..2.
+    protected final int[] skillCooldownMax = new int[] { 3, 3, 3 };
+    protected final int[] skillCooldownRemaining = new int[] { 0, 0, 0 };
+
     public GameBoss(String name, String classification, String difficulty, String damageType) {
         this.name = name;
         this.classification = classification;
@@ -44,6 +49,33 @@ public abstract class GameBoss {
     public int getHp() { return this.hpBoss; }
     public int getMaxHp() { return this.maxHp; }
     public int getRage() { return this.rage; }
+    public int getSkillCooldownRemaining(int skillNumber) {
+        int idx = skillNumber - 1;
+        if (idx < 0 || idx >= 3) return 0;
+        return skillCooldownRemaining[idx];
+    }
+
+    public boolean isSkillOnCooldown(int skillNumber) {
+        return getSkillCooldownRemaining(skillNumber) > 0;
+    }
+
+    public void tickCooldowns() {
+        for (int i = 0; i < skillCooldownRemaining.length; i++) {
+            if (skillCooldownRemaining[i] > 0) skillCooldownRemaining[i]--;
+        }
+    }
+
+    public void setSkillCooldowns(int cd1, int cd2, int cd3) {
+        skillCooldownMax[0] = Math.max(0, cd1);
+        skillCooldownMax[1] = Math.max(0, cd2);
+        skillCooldownMax[2] = Math.max(0, cd3);
+    }
+
+    public void startSkillCooldown(int skillNumber) {
+        int idx = skillNumber - 1;
+        if (idx < 0 || idx >= 3) return;
+        skillCooldownRemaining[idx] = skillCooldownMax[idx];
+    }
     
     // --- COMBAT STAT MODIFIERS ---
     public void setRage(int rage) {
@@ -52,10 +84,35 @@ public abstract class GameBoss {
     public String getImagePath() {
     return "/assets/" + getName() + ".png";
 }
+
+    protected int rollDamage(int baseDamage, boolean tauntPenalty) {
+        double roll = Math.random();
+        double missChance = tauntPenalty ? 0.20 : 0.10;
+        double critChance = 0.15;
+        if (roll < missChance) return -1;
+        if (roll < missChance + critChance) return (int)(baseDamage * 1.5);
+        return baseDamage;
+    }
+
+    protected String attackPlayerWithRoll(GameCharacter target, int baseDamage, String attackDescription, boolean tauntPenalty) {
+        int rolled = rollDamage(baseDamage, tauntPenalty);
+        if (rolled == -1) {
+            return this.name + " misses " + target.getName() + " with " + attackDescription + ".";
+        }
+        target.takeDamage(rolled);
+        boolean crit = rolled > baseDamage;
+        return this.name + " " + attackDescription + " " + target.getName() + " for " + rolled + " damage!" + (crit ? " CRITICAL STRIKE!" : "");
+    }
+
     public void takeDamage(int ammount) {
-        this.hpBoss -= ammount;
-        
-        // Prevent negative health values, clamp minimum to 0
+        if (ammount <= 0) {
+            return;
+        }
+        int rolled = rollDamage(ammount, false);
+        if (rolled == -1) {
+            return;
+        }
+        this.hpBoss -= rolled;
         if (this.hpBoss < 0) {
             this.hpBoss = 0;
         }

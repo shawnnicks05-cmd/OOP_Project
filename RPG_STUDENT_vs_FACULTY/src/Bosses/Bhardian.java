@@ -55,13 +55,13 @@ public class Bhardian extends GameBoss {
 
         for (GameCharacter student : partyStudents) {
             if (student.getHp() > 0) {
-                student.takeDamage(baseDamage);
+                result.append(attackPlayerWithRoll(student, baseDamage, "slams", student.isTaunted())).append("\n");
             }
         }
 
         this.addRage(13);
         String rageAlert = this.isEnragedDoTActive() ? "[WARN] Intimidation reaches critical levels! Morale-shredding DoT active!" : "";
-        result.append("All students take ").append(baseDamage).append(" damage! ").append(rageAlert);
+        result.append(rageAlert);
 
         return result.toString();
     }
@@ -79,12 +79,13 @@ public class Bhardian extends GameBoss {
                     this.mana -= 45;
                     this.addRage(19);
                     int damage = 35;
+                    StringBuilder damageLog = new StringBuilder();
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {
-                            student.takeDamage(damage);
+                            damageLog.append(attackPlayerWithRoll(student, damage, "is struck by", student.isTaunted())).append("\n");
                         }
                     }
-                    return this.name + " unleashes a [Pressure Wave]!\nAoE morale damage of " + damage + " to all!";
+                    return this.name + " unleashes a [Pressure Wave]!\nAoE morale damage of " + damage + " to all!\n" + damageLog;
                 }
                 return this.name + " attempted [Pressure Wave] but lacks Mana!";
             }
@@ -100,8 +101,8 @@ public class Bhardian extends GameBoss {
                         }
                     }
                     int damage = 42;
-                    weakest.takeDamage(damage);
-                    return this.name + " delivers [Strict Grading] to " + weakest.getName() + "!\nCritical hit! Deals " + damage + " damage!";
+                    String attackResult = attackPlayerWithRoll(weakest, damage, "targets", weakest.isTaunted());
+                    return this.name + " delivers [Strict Grading] to " + weakest.getName() + "!\n" + attackResult;
                 }
                 return this.name + " attempted [Strict Grading] but lacks Mana!";
             }

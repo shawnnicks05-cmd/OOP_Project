@@ -52,11 +52,11 @@ public class Ghuardio extends GameBoss {
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
         int baseDamage = 20;
-        target.takeDamage(baseDamage);
+        String result = attackPlayerWithRoll(target, baseDamage, "retaliates against", target.isTaunted());
         this.addRage(10);
 
         String rageAlert = this.isEnragedDoTActive() ? "[WARN] Friction-burn damage reflected! DoT active!" : "";
-        return this.name + " retaliates against " + target.getName() + " for " + baseDamage + " damage! " + rageAlert;
+        return result + " " + rageAlert;
     }
 
     @Override

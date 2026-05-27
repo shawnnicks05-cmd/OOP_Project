@@ -12,14 +12,14 @@ public class CharacterOmar extends GameCharacter {
     // Cleaned up constructor: Removed unused arguments to stay optimized
     public CharacterOmar() {
         super("Omar", "Adaptive Mage / Knowledge DPS", "Knowledge Damage", "Wisdom");
-        this.maxHp = 100;
-        this.hp = 100;
-        this.mana = 100;
-        this.maxMana = 100;
-        this.morale = 100;
-        
-        // Default tactical positioning on your turn system grid
-        this.position = "Front"; 
+        setMaxHp(100);
+        setHp(100);
+        setMaxMana(100);
+        setMana(100);
+        setMorale(100);
+        setPosition("Front");
+        setAttackPower(53);
+        setDefensePower(20);
     }
     
     @Override
@@ -27,57 +27,61 @@ public class CharacterOmar extends GameCharacter {
         return new String[] {"--SKILLS--\n","Information Overflow","Massive AOE knowledge attack.\n", "Explain Again","Restores ally focus and stamina.\n", "Smart Response\n","Copies enemy ability temporarily."};
     }
     @Override
-    public int getMorale()
-    {
-        return morale;
+    public int getMorale() {
+        return super.getMorale();
     }
     @Override
     public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
         if (skillNumber < 1 || skillNumber > 3) {
             return "Unknown skill selected.";
         }
-        
+
         GameBoss targetBoss = null;
         if (!activeBosses.isEmpty()) {
             targetBoss = activeBosses.get(0);
         }
-        
+
         switch(skillNumber) {
             case 1 -> { // 💥 Information Overflow (Massive single target / AOE nuke)
-                if (targetBoss == null) return this.name + " finds no active boss to attack.";
-                
-                if (this.mana >= 25) {
-                    this.mana -= 25;
-                    
-                    int baseDamage = 52;
-                    // Apply type multipliers based on the target boss classification (e.g., vs Exams)
-                    double modifier = calculateDamageModifier(targetBoss.getClassification());
-                    int finalDamage = (int) (baseDamage * modifier);
-                    
-                    targetBoss.takeDamage(finalDamage);
-                    
-                    String modifierAlert = modifier > 1.0 ? " [CRITICAL TYPE ADVANTAGE!]" : "";
-                    return this.name + " deals a massive Information Overflow directly at " + targetBoss.getName() + "!" +
-                           "\nDeals " + finalDamage + " Knowledge Damage." + modifierAlert;
-                } else {
+                if (targetBoss == null) return getName() + " finds no active boss to attack.";
+
+                if (isSkillOnCooldown(1)) {
+                    return getSkillDisplayName(1) + " can't be used for " + getSkillCooldownRemaining(1) + " more rounds.";
+                }
+                if (!trySpendMana(25)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(1);
+
+                int baseDamage = calculateAttackDamage(targetBoss) + 5;
+                // Apply type multipliers based on the target boss classification (e.g., vs Exams)
+                double modifier = calculateDamageModifier(targetBoss.getClassification());
+                int finalDamage = (int) (baseDamage * modifier);
+
+                targetBoss.takeDamage(finalDamage);
+                String modifierAlert = modifier > 1.0 ? " [CRITICAL TYPE ADVANTAGE!]" : "";
+                return getName() + " deals a massive Information Overflow directly at " + targetBoss.getName() + "!" +
+                       "\nDeals " + finalDamage + " Knowledge Damage." + modifierAlert;
             }
             case 2 -> { // 🔁 Explain Again (Support restoration)
-                if (this.mana >= 30) {
-                    this.mana -= 30;
-                    return this.name + " triggers [Explain Again]! Restoring allied focus metrics and stabilizing team stamina bars.";
-                } else {
+                if (isSkillOnCooldown(2)) {
+                    return getSkillDisplayName(2) + " can't be used for " + getSkillCooldownRemaining(2) + " more rounds.";
+                }
+                if (!trySpendMana(30)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(2);
+                return getName() + " triggers [Explain Again]! Restoring allied focus metrics and stabilizing team stamina bars.";
             }
             case 3 -> { // 🧠 Smart Response (Mimic utility)
-                if (this.mana >= 40) {
-                    this.mana -= 40;
-                    return this.name + " executes a [Smart Response]! Analyzing framework configurations and copying enemy attributes for 1 round.";
-                } else {
+                if (isSkillOnCooldown(3)) {
+                    return getSkillDisplayName(3) + " can't be used for " + getSkillCooldownRemaining(3) + " more rounds.";
+                }
+                if (!trySpendMana(40)) {
                     return "No Mana!";
                 }
+                startSkillCooldown(3);
+                return getName() + " executes a [Smart Response]! Analyzing framework configurations and copying enemy attributes for 1 round.";
             }
             default -> {
                 return "Unknown skill selected.";
@@ -88,24 +92,23 @@ public class CharacterOmar extends GameCharacter {
     @Override
     public String basicAttack(ArrayList<GameBoss> activeBosses) {
         if (activeBosses.isEmpty()) {
-            return this.name + " stands ready but finds no active threats to calculate.";
+            return getName() + " stands ready but finds no active threats to calculate.";
         }
         
         GameBoss target = activeBosses.get(0);
         int baseDamage = 53; // High base knowledge modifier attack
         
         double modifier = calculateDamageModifier(target.getClassification());
-        int finalDamage = (int) (baseDamage * modifier);
-        
-        target.takeDamage(finalDamage);
-        
-        String bonusAlert = modifier > 1.0 ? " [COUNTER BONUS ACTIVE!]" : "";
-        return this.name + " drops structural factual counter-arguments onto " + target.getName() + " for " + finalDamage + " damage!" + bonusAlert;
+        String result = attackBossWithRoll(target, baseDamage, modifier, "drops structural factual counter-arguments onto");
+        if (modifier > 1.0) {
+            result += " [COUNTER BONUS ACTIVE!]";
+        }
+        return result;
     }
     
     @Override
     public String defend() {
-        return this.name + " cross-references the grading criteria formulas! Bracing for attacks and temporarily mitigating 45 incoming threat points.";
+        return getName() + " cross-references the grading criteria formulas! Bracing for attacks and temporarily mitigating 45 incoming threat points.";
     }
     
     @Override
@@ -127,9 +130,9 @@ public class CharacterOmar extends GameCharacter {
     public String[] displayStats() {
         return new String[] {
             "--STATS--\n",
-            "HP: " + this.hp + "/" + this.maxHp,
-            "Mana: " + this.mana + "/" + this.maxMana,
-            "Morale: " + this.morale + "%",
+            "HP: " + getHp() + "/" + getMaxHp(),
+            "Mana: " + getMana() + "/" + getMaxMana(),
+            "Morale: " + getMorale() + "%",
             "Role: Adaptive Mage / Knowledge DPS"
         };
     }

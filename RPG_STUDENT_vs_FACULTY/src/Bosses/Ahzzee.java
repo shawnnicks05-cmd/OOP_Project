@@ -11,7 +11,8 @@ import java.util.Random;
 public class Ahzzee extends GameBoss {
 
     public Ahzzee () {
-        super("Ahzzee ", "Tech Boss", "Random", "Digital / System Damage");
+        // IMPORTANT: no trailing space in name, otherwise the image path becomes "/assets/Ahzzee .png"
+        super("Ahzzee", "Tech Boss", "Random", "Digital / System Damage");
         this.hpBoss = 95;
         this.maxHp = 95;
         this.mana = 80;
@@ -52,11 +53,11 @@ public class Ahzzee extends GameBoss {
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
         int baseDamage = 18;
-        target.takeDamage(baseDamage);
+        String result = attackPlayerWithRoll(target, baseDamage, "corrupts", target.isTaunted());
         this.addRage(11);
 
         String rageAlert = this.isEnragedDoTActive() ? "[WARN] Server overload! Screen-glitch DoT active!" : "";
-        return this.name + " corrupts " + target.getName() + "'s UI for " + baseDamage + " damage! " + rageAlert;
+        return result + " " + rageAlert;
     }
 
     @Override
@@ -77,12 +78,13 @@ public class Ahzzee extends GameBoss {
                     this.mana -= 40;
                     this.addRage(16);
                     int damage = 25;
+                    StringBuilder damageLog = new StringBuilder();
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {
-                            student.takeDamage(damage);
+                            damageLog.append(attackPlayerWithRoll(student, damage, "hits", student.isTaunted())).append("\n");
                         }
                     }
-                    return this.name + " creates a [Lag Spike]!\nSlows entire team and deals " + damage + " damage!";
+                    return this.name + " creates a [Lag Spike]!\nSlows entire team and deals " + damage + " damage!\n" + damageLog;
                 }
                 return this.name + " attempted [Lag Spike] but lacks Mana!";
             }

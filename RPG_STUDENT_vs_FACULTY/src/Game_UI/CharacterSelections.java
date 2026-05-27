@@ -24,6 +24,14 @@ public class CharacterSelections extends javax.swing.JFrame {
     private int parties = 0;
     public CharacterSelections() {
         initComponents();
+        configureWindow();
+    }
+
+    private void configureWindow() {
+        // Center the window and disable maximize/resize
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setExtendedState(javax.swing.JFrame.NORMAL);
     }
     
     /**
