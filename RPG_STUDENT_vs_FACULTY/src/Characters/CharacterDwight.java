@@ -21,6 +21,11 @@ public class CharacterDwight extends GameCharacter {
         this.position = "Front"; 
     }
     @Override
+    public int getMorale()
+    {
+        return morale;
+    }
+    @Override
     public String getRole()
     {
         return role;

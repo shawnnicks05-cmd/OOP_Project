@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Game_UI;
-
+import java.util.ArrayList;
 import GameEngine.IBattleScreenUI;
-
+import Characters.*;
+import GameEngine.*;
 /**
  *
  * @author Acer
@@ -13,14 +14,31 @@ import GameEngine.IBattleScreenUI;
 public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BattleScreen.class.getName());
+    private ArrayList<GameCharacter> party;
+    private BattleController controller;
+    private int currentActorIndex = 0; 
 
+    private final String[] TURN_ORDER = {"Front", "Above", "Below"};
     /**
      * Creates new form BattleScreen
      */
-    public BattleScreen() {
+public BattleScreen(ArrayList<GameCharacter> party) {
         initComponents();
+    this.party = party;
+    this.controller = new BattleController(this);
+    HPBarStudents.setStringPainted(true);
+    ManaBarStudents.setStringPainted(true);
+    MoraleMeter.setStringPainted(true);
+    MoraleMeter.setValue(100);
+    setupPartyImages();
+    controller.getEngine().initializeParty(party);  // ← set party first
+    controller.spawnNextBoss();
+    controller.appendChatMessage("Battle started!");
+    refreshActorDisplay();
     }
-
+public BattleScreen() {
+    initComponents();
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,10 +49,11 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jlblBoss = new javax.swing.JLabel();
+        jlblTop = new javax.swing.JLabel();
+        jlblFront = new javax.swing.JLabel();
+        jlblBottom = new javax.swing.JLabel();
         ManaBarHydra = new javax.swing.JProgressBar();
         HPBarStudents = new javax.swing.JProgressBar();
         HPBarHydra = new javax.swing.JProgressBar();
@@ -45,21 +64,21 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
         MoraleMeter = new javax.swing.JProgressBar();
         BackGround = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        jbtnAllySkill1 = new javax.swing.JButton();
+        jbtnAllySkill2 = new javax.swing.JButton();
+        jbtnAllySkill3 = new javax.swing.JButton();
+        jbtnAttack = new javax.swing.JButton();
+        jbtnDefend = new javax.swing.JButton();
+        jbtnBossSkill1 = new javax.swing.JButton();
+        jbtnBossSkill2 = new javax.swing.JButton();
+        jbtnBossSkill3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
+        jbtnPotionRevive = new javax.swing.JButton();
+        jbtnPotionHp = new javax.swing.JButton();
+        JbtnPotionMana = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
+        jprogBarRage = new javax.swing.JProgressBar();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -72,27 +91,30 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/bro.png"))); // NOI18N
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Screenshot 2026-05-21 212932.png"))); // NOI18N
-        jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, 260, 160));
+        jlblBoss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Screenshot 2026-05-21 212932.png"))); // NOI18N
+        jlblBoss.setText("jLabel1");
+        getContentPane().add(jlblBoss, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, 260, 160));
 
-        jLabel2.setText("jLabel2");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 70, 60));
+        jlblTop.setText("jLabel2");
+        getContentPane().add(jlblTop, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 70, 60));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Shawn.png"))); // NOI18N
-        jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 80, 70));
+        jlblFront.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Shawn.png"))); // NOI18N
+        jlblFront.setText("jLabel3");
+        getContentPane().add(jlblFront, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 80, 70));
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Dwight.png"))); // NOI18N
-        jLabel4.setText("jLabel4");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 70, 60));
+        jlblBottom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Dwight.png"))); // NOI18N
+        jlblBottom.setText("jLabel4");
+        getContentPane().add(jlblBottom, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 70, 60));
 
         ManaBarHydra.setValue(100);
         ManaBarHydra.setStringPainted(true);
-        getContentPane().add(ManaBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 420, 180, 20));
+        getContentPane().add(ManaBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 420, 330, 20));
 
         HPBarStudents.setBackground(new java.awt.Color(255, 255, 255));
         HPBarStudents.setFont(new java.awt.Font("Segoe UI Black", 0, 10)); // NOI18N
@@ -111,16 +133,16 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
                 super.paintDeterminate(g, c);
             }
         });
-        getContentPane().add(HPBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 400, 180, 20));
+        getContentPane().add(HPBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 400, 350, 20));
 
         HPBarHydra.setForeground(new java.awt.Color(51, 255, 51));
         HPBarHydra.setValue(100);
         HPBarHydra.setStringPainted(true);
-        getContentPane().add(HPBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 400, 200, 20));
+        getContentPane().add(HPBarHydra, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 400, 350, 20));
 
         ManaBarStudents.setValue(100);
         ManaBarStudents.setStringPainted(true);
-        getContentPane().add(ManaBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 420, 180, 20));
+        getContentPane().add(ManaBarStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 420, 350, 20));
 
         jScrollPane1.setBackground(new java.awt.Color(0, 153, 0));
 
@@ -129,27 +151,30 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
         ChatBox.setRows(5);
         jScrollPane1.setViewportView(ChatBox);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 0, 180, 380));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 0, 180, 380));
 
         turnIndicator.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         turnIndicator.setForeground(new java.awt.Color(255, 51, 51));
         turnIndicator.setText("Shawn's Turn");
-        getContentPane().add(turnIndicator, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 390, 80, -1));
+        getContentPane().add(turnIndicator, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 410, 80, -1));
         turnIndicator.getAccessibleContext().setAccessibleName("");
 
         MoraleMeter.setForeground(new java.awt.Color(255, 153, 0));
         MoraleMeter.setValue(50);
         MoraleMeter.setStringPainted(true);
-        getContentPane().add(MoraleMeter, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 440, 170, 20));
+        getContentPane().add(MoraleMeter, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 440, 340, 20));
 
         BackGround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Roomss.png"))); // NOI18N
-        getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 380));
+        getContentPane().add(BackGround, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 380));
 
-        jButton2.setText("Skill1");
+        jbtnAllySkill1.setText("Skill1");
+        jbtnAllySkill1.addActionListener(this::jbtnAllySkill1ActionPerformed);
 
-        jButton3.setText("Skill2");
+        jbtnAllySkill2.setText("Skill2");
+        jbtnAllySkill2.addActionListener(this::jbtnAllySkill2ActionPerformed);
 
-        jButton4.setText("Skill3");
+        jbtnAllySkill3.setText("Skill3");
+        jbtnAllySkill3.addActionListener(this::jbtnAllySkill3ActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -157,43 +182,46 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addGap(18, 18, 18)
-                .addComponent(jButton4)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addComponent(jbtnAllySkill1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbtnAllySkill2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbtnAllySkill3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(jbtnAllySkill2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtnAllySkill3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtnAllySkill1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 490, 270, 100));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 490, 500, 100));
 
-        jButton5.setText("Attack");
-        jButton5.addActionListener(this::jButton5ActionPerformed);
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 410, 100, 30));
+        jbtnAttack.setText("Attack");
+        jbtnAttack.addActionListener(this::jbtnAttackActionPerformed);
+        getContentPane().add(jbtnAttack, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 420, 100, 30));
 
-        jButton6.setText("Defend");
-        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 100, 30));
+        jbtnDefend.setText("Defend");
+        jbtnDefend.addActionListener(this::jbtnDefendActionPerformed);
+        getContentPane().add(jbtnDefend, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 460, 100, 30));
 
-        jButton7.setText("Skills1");
-        jButton7.addActionListener(this::jButton7ActionPerformed);
-        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 490, 90, 50));
+        jbtnBossSkill1.setText("Skills1");
+        jbtnBossSkill1.addActionListener(this::jbtnBossSkill1ActionPerformed);
+        getContentPane().add(jbtnBossSkill1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 490, 190, 50));
 
-        jButton8.setText("Skills2");
-        jButton8.setToolTipText("");
-        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 490, 100, 50));
+        jbtnBossSkill2.setText("Skills2");
+        jbtnBossSkill2.setToolTipText("");
+        jbtnBossSkill2.addActionListener(this::jbtnBossSkill2ActionPerformed);
+        getContentPane().add(jbtnBossSkill2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 490, 160, 50));
 
-        jButton9.setText("Skills3");
-        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 490, 90, 50));
+        jbtnBossSkill3.setText("Skills3");
+        jbtnBossSkill3.addActionListener(this::jbtnBossSkill3ActionPerformed);
+        getContentPane().add(jbtnBossSkill3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 490, 170, 50));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -208,14 +236,14 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 470, 330, -1));
 
-        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/revive.png"))); // NOI18N
-        jButton12.addActionListener(this::jButton12ActionPerformed);
+        jbtnPotionRevive.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/revive.png"))); // NOI18N
+        jbtnPotionRevive.addActionListener(this::jbtnPotionReviveActionPerformed);
 
-        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/health.png"))); // NOI18N
-        jButton13.addActionListener(this::jButton13ActionPerformed);
+        jbtnPotionHp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/health.png"))); // NOI18N
+        jbtnPotionHp.addActionListener(this::jbtnPotionHpActionPerformed);
 
-        jButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/mana.png"))); // NOI18N
-        jButton14.addActionListener(this::jButton14ActionPerformed);
+        JbtnPotionMana.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/mana.png"))); // NOI18N
+        JbtnPotionMana.addActionListener(this::JbtnPotionManaActionPerformed);
 
         jButton1.setText("Potions:");
 
@@ -228,9 +256,9 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton14, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                            .addComponent(jButton12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jbtnPotionHp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(JbtnPotionMana, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                            .addComponent(jbtnPotionRevive, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jButton1)))
@@ -241,32 +269,100 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbtnPotionHp, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(JbtnPotionMana, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton12)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addComponent(jbtnPotionRevive)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, 100, 210));
-
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/bro.png"))); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 1210, 240));
+        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 390, 100, 210));
+        getContentPane().add(jprogBarRage, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 440, 270, 20));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private void refreshActorDisplay() {
+    GameCharacter actor = getActiveActor();
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    // Update skill buttons
+    String[] raw = actor.getSkillname();
+    jbtnAllySkill1.setText(raw.length > 1 ? raw[1] : "Skill 1");
+    jbtnAllySkill2.setText(raw.length > 3 ? raw[3] : "Skill 2");
+    jbtnAllySkill3.setText(raw.length > 5 ? raw[5] : "Skill 3");
+
+    // Update turn indicator
+    turnIndicator.setText(actor.getName() + "'s Turn");
+
+    // Update the correct label based on the character's position
+    String imagePath = getImagePath(actor.getName());
+    javax.swing.ImageIcon icon = new javax.swing.ImageIcon(
+        getClass().getResource(imagePath));
+
+    switch (actor.getPosition().toLowerCase()) {
+        case "front" -> jlblFront.setIcon(icon);
+        case "above" -> jlblTop.setIcon(icon);
+        case "below" -> jlblBottom.setIcon(icon);
+    }
+}
+    private String getImagePath(String characterName) {
+    return switch (characterName.toLowerCase()) {
+        case "shawn"    -> "/assets/Shawn.png";
+        case "ethan"    -> "/assets/Ethan.png";
+        case "dwight"   -> "/assets/Dwights.png";
+        case "omar"     -> "/assets/Omars.png";
+        case "princess" -> "/assets/Camachos.png";
+        default         -> "/assets/Shawn.png";
+    };
+}
+    public void updateBossSkillButtons(String[] skillNames) {
+    if (skillNames.length > 1) jbtnBossSkill1.setText(skillNames[1]);
+    if (skillNames.length > 3) jbtnBossSkill2.setText(skillNames[3]);
+    if (skillNames.length > 5) jbtnBossSkill3.setText(skillNames[5]);
+}
+    @Override
+    public void setRageMeter(int percentage) {
+     jprogBarRage.setValue(percentage);
+    }
+        private void setupPartyImages() {
+    for (GameCharacter c : party) {
+        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(
+            getClass().getResource(getImagePath(c.getName())));
+        switch (c.getPosition().toLowerCase()) {
+            case "front" -> jlblFront.setIcon(icon);
+            case "above" -> jlblTop.setIcon(icon);
+            case "below" -> jlblBottom.setIcon(icon);
+        }
+    }
+}
+    private GameCharacter getActiveActor() {
+    String currentPos = TURN_ORDER[currentActorIndex];
+    for (GameCharacter c : party) {
+        if (c.getPosition().equalsIgnoreCase(currentPos) && c.getHp() > 0) {
+            return c;
+        }
+    }
+    // If that slot is dead, skip to next alive character
+    for (GameCharacter c : party) {
+        if (c.getHp() > 0) return c;
+    }
+    return party.get(0);
+    }
+    private void advanceTurn() {
+    currentActorIndex = (currentActorIndex + 1) % TURN_ORDER.length;
+    refreshActorDisplay();  // ← ADD this
+    controller.appendChatMessage("--- " + getActiveActor().getName() + "'s turn ---");
+}
+    private void jbtnBossSkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBossSkill1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_jbtnBossSkill1ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void jbtnAttackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAttackActionPerformed
+        controller.executePlayerAction(0, getActiveActor());
+        advanceTurn();
+    }//GEN-LAST:event_jbtnAttackActionPerformed
 
-
+    
     @Override
     public void setHPBarBoss(int percentage) {
         HPBarHydra.setValue(percentage);
@@ -281,15 +377,12 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
     public void setHPBarStudents(int percentage) {
         HPBarStudents.setValue(percentage);
     }
-
+    public void updateMoraleBar(int percentage) {
+    MoraleMeter.setValue(percentage);
+    }
     @Override
     public void setManaBarStudents(int percentage) {
         ManaBarStudents.setValue(percentage);
-    }
-
-    @Override
-    public void setRageMeter(int percentage) {
-        MoraleMeter.setValue(percentage);
     }
 
     @Override
@@ -313,41 +406,77 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
     }
 
     @Override
-    public void updateSkillButtons(String[] skillNames) {
-        if (skillNames.length > 0) jButton7.setText(skillNames[0]);
-        if (skillNames.length > 1) jButton8.setText(skillNames[1]);
-        if (skillNames.length > 2) jButton9.setText(skillNames[2]);
-    }
+public void updateSkillButtons(String[] skillNames) {
+    if (skillNames.length > 0) jbtnAllySkill1.setText(skillNames[0]);  // ← fix
+    if (skillNames.length > 1) jbtnAllySkill2.setText(skillNames[1]);  // ← fix
+    if (skillNames.length > 2) jbtnAllySkill3.setText(skillNames[2]);  // ← fix
+}
 
     @Override
-    public void setActionButtonsEnabled(boolean enabled) {
-        jButton5.setEnabled(enabled);
-        jButton6.setEnabled(enabled);
-        jButton7.setEnabled(enabled);
-        jButton8.setEnabled(enabled);
-        jButton9.setEnabled(enabled);
-    }
+public void setActionButtonsEnabled(boolean enabled) {
+    jbtnAttack.setEnabled(enabled);
+    jbtnDefend.setEnabled(enabled);
+    jbtnAllySkill1.setEnabled(enabled);  // ← fix
+    jbtnAllySkill2.setEnabled(enabled);  // ← fix
+    jbtnAllySkill3.setEnabled(enabled);  // ← fix
+}
 
     @Override
     public void setBossImage(String imagePath) {
-        // Implementation for boss image if needed
+    try {
+        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(
+            getClass().getResource(imagePath));
+        jlblBoss.setIcon(icon);
+        jlblBoss.revalidate();
+        jlblBoss.repaint();
+    } catch (Exception e) {
+        logger.log(java.util.logging.Level.WARNING, "Boss image not found: " + imagePath, e);
     }
-
+}
     @Override
     public void setPartyDisplay(String[] studentNames) {
         // Implementation for party display if needed
     }
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+    private void jbtnPotionReviveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPotionReviveActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton12ActionPerformed
+    }//GEN-LAST:event_jbtnPotionReviveActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+    private void jbtnPotionHpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPotionHpActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton13ActionPerformed
+    }//GEN-LAST:event_jbtnPotionHpActionPerformed
 
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+    private void JbtnPotionManaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnPotionManaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton14ActionPerformed
+    }//GEN-LAST:event_JbtnPotionManaActionPerformed
+
+    private void jbtnDefendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDefendActionPerformed
+        GameCharacter actor = getActiveActor();
+    controller.appendChatMessage(actor.defend());
+     advanceTurn();
+    }//GEN-LAST:event_jbtnDefendActionPerformed
+
+    private void jbtnAllySkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAllySkill1ActionPerformed
+        controller.executePlayerAction(1, getActiveActor());
+         advanceTurn();
+    }//GEN-LAST:event_jbtnAllySkill1ActionPerformed
+
+    private void jbtnAllySkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAllySkill2ActionPerformed
+        controller.executePlayerAction(2, getActiveActor());
+         advanceTurn();
+    }//GEN-LAST:event_jbtnAllySkill2ActionPerformed
+
+    private void jbtnAllySkill3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAllySkill3ActionPerformed
+        controller.executePlayerAction(3, getActiveActor());
+         advanceTurn();
+    }//GEN-LAST:event_jbtnAllySkill3ActionPerformed
+
+    private void jbtnBossSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBossSkill2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbtnBossSkill2ActionPerformed
+
+    private void jbtnBossSkill3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBossSkill3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbtnBossSkill3ActionPerformed
 
 
     /**
@@ -380,31 +509,32 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
     private javax.swing.JTextArea ChatBox;
     private javax.swing.JProgressBar HPBarHydra;
     private javax.swing.JProgressBar HPBarStudents;
+    private javax.swing.JButton JbtnPotionMana;
     private javax.swing.JProgressBar ManaBarHydra;
     private javax.swing.JProgressBar ManaBarStudents;
     private javax.swing.JProgressBar MoraleMeter;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbtnAllySkill1;
+    private javax.swing.JButton jbtnAllySkill2;
+    private javax.swing.JButton jbtnAllySkill3;
+    private javax.swing.JButton jbtnAttack;
+    private javax.swing.JButton jbtnBossSkill1;
+    private javax.swing.JButton jbtnBossSkill2;
+    private javax.swing.JButton jbtnBossSkill3;
+    private javax.swing.JButton jbtnDefend;
+    private javax.swing.JButton jbtnPotionHp;
+    private javax.swing.JButton jbtnPotionRevive;
+    private javax.swing.JLabel jlblBoss;
+    private javax.swing.JLabel jlblBottom;
+    private javax.swing.JLabel jlblFront;
+    private javax.swing.JLabel jlblTop;
+    private javax.swing.JProgressBar jprogBarRage;
     private javax.swing.JLabel turnIndicator;
     // End of variables declaration//GEN-END:variables
 }

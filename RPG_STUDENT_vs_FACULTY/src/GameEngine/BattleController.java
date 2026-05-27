@@ -26,11 +26,27 @@ public class BattleController {
         updateAllUI();
     }
 
-    public void initializeRandomBattle(ArrayList<GameCharacter> partyStudents) {
-        engine.initializeParty(partyStudents);
-        engine.spawnRandomBoss();
-        updateAllUI();
+    public void spawnNextBoss() {
+    GameBoss next = engine.spawnNextBoss();
+    
+    if (next == null) {
+        appendChatMessage("\n*** ALL BOSSES DEFEATED — CONGRATULATIONS! ***");
+        return;
     }
+
+    battleScreen.clearChatBox();
+    battleScreen.setBossImage(next.getImagePath());
+    updateAllUI();
+
+    if (engine.isHydraHeadPhase()) {
+        appendChatMessage("⚠ HYDRA HEAD " + (engine.getBossRound() - 3) + " of 3: "
+            + next.getName() + " appears!");
+    } else if (engine.isCoupleBossPhase()) {
+        appendChatMessage("⚠ " + engine.getLastBattleMessage());
+    } else {
+        appendChatMessage(engine.getLastBattleMessage());
+    }
+}
 
     // --- TURN EXECUTION ---
 
@@ -44,19 +60,25 @@ public class BattleController {
         appendChatMessage(result);
 
         if (engine.getGameState() == GameEngine.GameState.BOSS_DEFEATED) {
-            appendChatMessage("\n*** VICTORY! ***\n" + engine.getCurrentBoss().getName() + " has been defeated!");
-            return;
+    String roundMsg = engine.isHydraHeadPhase()
+        ? "\n[HYDRA HEAD DESTROYED! The Hydra still lives...]"
+        : engine.getBossRound() == 11
+            ? "\n*** THE HYDRA IS DEFEATED! YOU WIN! ***"
+            : "\n*** VICTORY! ***";
+
+    appendChatMessage(roundMsg);
+
+    if (engine.getGameState() == GameEngine.GameState.GAME_OVER) return;
+
+    new java.util.Timer().schedule(new java.util.TimerTask() {
+        @Override
+        public void run() {
+            javax.swing.SwingUtilities.invokeLater(() -> spawnNextBoss());
         }
-
-        // Boss's turn after a short delay
-        new java.util.Timer().schedule(new java.util.TimerTask() {
-            @Override
-            public void run() {
-                executeBossAction();
-            }
-        }, 1500);
+    }, 2000);
+        return;
     }
-
+    }
     private void executeBossAction() {
         String result = engine.executeBossTurn();
         appendChatMessage(result);
@@ -79,43 +101,32 @@ public class BattleController {
     }
 
     private void updateBossStats() {
-        GameBoss boss = engine.getCurrentBoss();
-        if (boss == null) return;
+    GameBoss boss = engine.getCurrentBoss();
+    if (boss == null) return;
 
-        int hpPercent = (int) ((boss.getHp() / (double) boss.getMaxHp()) * 100);
-        battleScreen.setHPBarBoss(Math.max(0, Math.min(100, hpPercent)));
-        battleScreen.setManaBarBoss(boss.getMana());
-        battleScreen.setRageMeter(boss.getRage());
-    }
+    int hpPercent = (int) ((boss.getHp() / (double) boss.getMaxHp()) * 100);
+    battleScreen.setHPBarBoss(Math.max(0, Math.min(100, hpPercent)));
+    battleScreen.setManaBarBoss(boss.getMana());
+    battleScreen.updateBossSkillButtons(boss.getSkillname());
+    // Show boss rage in the turn indicator area instead of the meter
+    battleScreen.setRageMeter(boss.getRage()); // still updates if you add a bar later
+}
 
     private void updatePartyStats() {
-        ArrayList<GameCharacter> party = engine.getPartyStudents();
-        if (party.isEmpty()) return;
+    // ... existing HP/Mana logic unchanged ...
 
-        int totalHP = 0;
-        int maxHP = 0;
-        int totalMana = 0;
-        int maxMana = 0;
-
-        for (GameCharacter student : party) {
-            if (student.getHp() > 0) {
-                totalHP += student.getHp();
-                maxHP += student.getMaxHp();
-                totalMana += 50;
-                maxMana += 50;
-            }
-        }
-
-        if (maxHP > 0) {
-            int hpPercent = (int) ((totalHP / (double) maxHP) * 100);
-            battleScreen.setHPBarStudents(Math.max(0, Math.min(100, hpPercent)));
-        }
-
-        if (maxMana > 0) {
-            int manaPercent = (int) ((totalMana / (double) maxMana) * 100);
-            battleScreen.setManaBarStudents(Math.max(0, Math.min(100, manaPercent)));
+    // Add morale update — average morale across alive party members
+    int totalMorale = 0, count = 0;
+    for (GameCharacter student : engine.getPartyStudents()) {
+        if (student.getHp() > 0) {
+            totalMorale += student.getMorale();
+            count++;
         }
     }
+    if (count > 0) {
+        battleScreen.updateMoraleBar(totalMorale / count); // calls MoraleMeter directly
+    }
+}
 
     private void updateBattleInfo() {
         String status = engine.getBattleStatus();
@@ -125,15 +136,26 @@ public class BattleController {
     }
 
     private void updateActionButtons() {
-        GameBoss boss = engine.getCurrentBoss();
-        if (boss == null) return;
+    ArrayList<GameCharacter> party = engine.getPartyStudents();
 
-        String[] skillNames = boss.getSkillname();
+    GameCharacter actor = party.stream()
+        .filter(c -> c.getHp() > 0)
+        .findFirst().orElse(null);
+
+    if (actor != null) {
+        String[] raw = actor.getSkillname();
+        // Your skill arrays have labels mixed in like "--SKILLS--", filter to just the skill names
+        // Slots 1, 3, 5 in the array are the actual skill names (0-indexed)
+        String[] skillNames = new String[] {
+            raw.length > 1 ? raw[1] : "Skill 1",
+            raw.length > 3 ? raw[3] : "Skill 2",
+            raw.length > 5 ? raw[5] : "Skill 3"
+        };
         battleScreen.updateSkillButtons(skillNames);
-
-        boolean isPlayerTurn = engine.isPlayerTurn();
-        battleScreen.setActionButtonsEnabled(isPlayerTurn);
     }
+
+    battleScreen.setActionButtonsEnabled(engine.isPlayerTurn());
+}
 
     public void appendChatMessage(String message) {
         battleScreen.appendToChatBox(message + "\n");

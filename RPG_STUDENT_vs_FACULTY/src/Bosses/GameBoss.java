@@ -46,7 +46,12 @@ public abstract class GameBoss {
     public int getRage() { return this.rage; }
     
     // --- COMBAT STAT MODIFIERS ---
-
+    public void setRage(int rage) {
+    this.rage = rage;
+}
+    public String getImagePath() {
+    return "/assets/" + getName() + ".png";
+}
     public void takeDamage(int ammount) {
         this.hpBoss -= ammount;
         

@@ -3,10 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Acer/OneDrive/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/GameEngine.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Game_UI/Menu.java</file>
-=======
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Characters/GameCharacter.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Characters/CharacterShawn.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/GameBoss.java</file>
@@ -15,14 +11,7 @@
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Characters/CharacterOmar.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Characters/CharacterEthan.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Jenateh.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Ahdzz.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Bandalan.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Bayucot.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Cuizon.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Gudio.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Hydra.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Jin.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Khiara.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/BattleController.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/GameEngine.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/GameLauncher.java</file>
@@ -36,13 +25,10 @@
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/EthanChar.png</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/Ethan.png</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/Shawn.png</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Bosses/Leeroy.java</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/Dwights.png</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/assets/Dwight.png</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/GameEngine/CharacterFactory.java</file>
-            <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Game_UI/BattleScreen.form</file>
             <file>file:/C:/Users/user/Desktop/RPG/RPG_STUDENT_vs_FACULTY/src/Game_UI/BattleScreen.java</file>
->>>>>>> 4a2a5cffd543b3c98e94c6e083806a92014fd4d5
         </group>
     </open-files>
 </project-private>

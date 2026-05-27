@@ -26,7 +26,11 @@ public class CharacterOmar extends GameCharacter {
     public String[] getSkillname() {
         return new String[] {"--SKILLS--\n","Information Overflow","Massive AOE knowledge attack.\n", "Explain Again","Restores ally focus and stamina.\n", "Smart Response\n","Copies enemy ability temporarily."};
     }
-    
+    @Override
+    public int getMorale()
+    {
+        return morale;
+    }
     @Override
     public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
         if (skillNumber < 1 || skillNumber > 3) {

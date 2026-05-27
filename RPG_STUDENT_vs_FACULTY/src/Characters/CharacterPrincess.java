@@ -32,6 +32,11 @@ public class CharacterPrincess extends GameCharacter {
         return name;
     }
     @Override
+    public int getMorale()
+    {
+        return morale;
+    }
+    @Override
     public String[] getSkillname() {
         return new String[] {"--SKILLS--\n","Citation Heal","Restores HP and mana.\n", "Research Link","Boosts ally intelligence.\n", "Verified Facts","Cancels enemy confusion attacks."};
     }

@@ -24,8 +24,8 @@ public class GameLauncher {
      */
     public static void initializeRandomBossBattle(BattleController controller,
                                                   ArrayList<GameCharacter> partyStudents) {
-        controller.initializeRandomBattle(partyStudents);
-        controller.appendChatMessage("A random boss appears!");
+         controller.getEngine().initializeParty(partyStudents);  // ← set party first
+    controller.spawnNextBoss();
     }
 
     /**
