@@ -36,6 +36,13 @@ public class CharacterShawn extends GameCharacter {
     {
         return name;
     }
+    
+    @Override
+    public int getMorale()
+    {
+        return morale;
+    }
+        
     @Override
     public String useSkills(int skillNumber, ArrayList<GameBoss> activeBosses) {
         if (skillNumber < 1 || skillNumber > 3) {

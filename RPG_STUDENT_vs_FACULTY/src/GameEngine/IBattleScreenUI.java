@@ -27,4 +27,6 @@ public interface IBattleScreenUI {
     // Boss/Character Info
     void setBossImage(String imagePath);
     void setPartyDisplay(String[] studentNames);
+    void updateBossSkillButtons(String[] skillNames);
+    void updateMoraleBar(int percentage);
 }

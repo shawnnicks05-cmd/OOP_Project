@@ -19,12 +19,13 @@ public class CharacterSelections extends javax.swing.JFrame {
     /**
      * Creates new form CharacterSelections
      */
+    private ArrayList<GameCharacter> partyMembers = new ArrayList<>();
+    private GameCharacter currentSelectedCharacter = null;
+    private int parties = 0;
     public CharacterSelections() {
         initComponents();
     }
-    private int parties = 0;
-    private String currentSelection = "";
-    private ArrayList<String> partyMembers = new ArrayList<>();
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -141,48 +142,38 @@ public class CharacterSelections extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddActionPerformed
+    private void updateDisplay(GameCharacter character, String imagePath) {
+        this.currentSelectedCharacter = character;
+        String combined = String.join("\n", character.displayStats()) + "\n\n" 
+                        + String.join("\n", character.getSkillname()) + "\n\n" 
+                        + String.join("\n", character.getPassivename());
         
-       
-    // 1. Check if a character is selected
-    if (currentSelection.isEmpty()) {
-        jtxtparty.setText("Please select a character first!");
-        return;
+        jtxtrole.setText(character.getRole());
+        jlblname.setText(character.getName());
+        jtxtDescription.setText(combined);
+        jlabelImage.setIcon(new ImageIcon(getClass().getResource(imagePath)));
     }
-    
-    // 2. Get existing text to append new info
-    
-    // 3. Logic to append based on party count
-    // Define this at the top of your class, outside any methods
+    private void jbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddActionPerformed
+     if (currentSelectedCharacter == null) {
+            jtxtparty.setText("Please select a character first!");
+            return;
+        }
 
-    // Now this method uses the class-level 'parties' variable
-                                     
-    
+        if (partyMembers.contains(currentSelectedCharacter)) {
+            jtxtparty.setText("Character already in party!");
+            return;
+        }
 
-    // Add to the list (this is what you will pass to the Battleground)
-    partyMembers.add(currentSelection);
-
-    // Get existing text so it doesn't get deleted
-    String existingText = jtxtparty.getText();
-    
-    // Logic to append
-    // 3. Logic to append based on party count
-if (parties == 0) {
-    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [Front]\n");
-    parties++;
-} else if (parties == 1) {
-    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [TOP]\n");
-    parties++;
-} else if (parties == 2) {
-    jtxtparty.setText(existingText + "\nYou added " + currentSelection + " [BOTTOM]\n(Party Full!)");
-    parties++;
-} else {
-    jtxtparty.setText(existingText + "\nParty is already full!");
-}
-
- 
-     
+        if (parties < 3) {
+            partyMembers.add(currentSelectedCharacter);
+            String position = (parties == 0) ? "[Front]" : (parties == 1) ? "[Top]" : "[Bottom]";
+            jtxtparty.append(currentSelectedCharacter.getName() + " " + position + "\n");
+            parties++;
+        }
+        
+        if (parties == 3) {
+            jtxtparty.append("(Party Full!)");
+        }
     }//GEN-LAST:event_jbtnAddActionPerformed
 
     private void jtxtroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtroleActionPerformed
@@ -190,58 +181,17 @@ if (parties == 0) {
     }//GEN-LAST:event_jtxtroleActionPerformed
 
     private void jbtnPrincessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPrincessActionPerformed
-        // TODO add your handling code here:
-        CharacterPrincess princess = new CharacterPrincess();
-        String[] stats = princess.displayStats();
-        String name = princess.getName();
-        ImageIcon Icon = new ImageIcon("src/assets/Camachos.png");
-        String[] skills = princess.getSkillname();
-        String[] passive = princess.getPassivename();
-        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
-        String role = princess.getRole();
-        jtxtrole.setText(String.join("\n",role));
-        jlblname.setText(String.join("\n",name));
-        jtxtDescription.setText(combined);
-
-        jtxtDescription.setEditable(false);
-        jlabelImage.setIcon(Icon);
-        currentSelection = name;
+        updateDisplay(new CharacterPrincess(), "/assets/Camachos.png");
     }//GEN-LAST:event_jbtnPrincessActionPerformed
 
     private void jbtnDwightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDwightActionPerformed
         // TODO add your handling code here:
-        CharacterDwight dwight = new CharacterDwight();
-        String[] stats = dwight.displayStats();
-        String name = dwight.getName();
-        ImageIcon Icon = new ImageIcon("src/assets/Dwights.png");
-        String[] skills = dwight.getSkillname();
-        String[] passive = dwight.getPassivename();
-        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
-        String role = dwight.getRole();
-        jtxtrole.setText(String.join("\n",role));
-        jlblname.setText(String.join("\n",name));
-        jtxtDescription.setText(combined);
+        updateDisplay(new CharacterDwight(), "/assets/Dwights.png");
 
-        jtxtDescription.setEditable(false);
-        jlabelImage.setIcon(Icon);
-        currentSelection = name;
     }//GEN-LAST:event_jbtnDwightActionPerformed
 
     private void jbtnEthanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEthanActionPerformed
-        CharacterEthan ethan = new CharacterEthan();
-        String[] stats = ethan.displayStats();
-        String name = ethan.getName();
-        ImageIcon Icon = new ImageIcon("src/assets/Ethan.png");
-        String[] skills = ethan.getSkillname();
-        String[] passive = ethan.getPassivename();
-        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
-        String role = ethan.getRole();
-        jtxtrole.setText(String.join("\n",role));
-        jlblname.setText(String.join("\n",name));
-        jtxtDescription.setText(combined);
-        jtxtDescription.setEditable(false);
-        jlabelImage.setIcon(Icon);
-        currentSelection = name;
+        updateDisplay(new CharacterEthan(), "/assets/Ethan.png");
     
     }//GEN-LAST:event_jbtnEthanActionPerformed
 
@@ -250,55 +200,24 @@ if (parties == 0) {
     }//GEN-LAST:event_jtxtDescriptionInputMethodTextChanged
 
     private void jbtnShawnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnShawnActionPerformed
-        CharacterShawn shawn = new CharacterShawn();
-        String[] stats = shawn.displayStats();
-        String name = shawn.getName();
-        ImageIcon Icon = new ImageIcon("src/assets/Shawn.png");
-        String[] skills = shawn.getSkillname();
-        String[] passive = shawn.getPassivename();
-        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
-        String role = shawn.getRole();
-        jtxtrole.setText(String.join("\n",role));
-        jlblname.setText(String.join("\n",name));
-        jtxtDescription.setText(combined);
-
-        jtxtDescription.setEditable(false);
-        jlabelImage.setIcon(Icon);
-        currentSelection = name;
+        updateDisplay(new CharacterShawn(), "/assets/Shawn.png");
     }//GEN-LAST:event_jbtnShawnActionPerformed
 
     private void jbtnOmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnOmarActionPerformed
-        CharacterOmar omar = new CharacterOmar();
-        String[] stats = omar.displayStats();
-        String name = omar.getName();
-        ImageIcon Icon = new ImageIcon("src/assets/Omars.png");
-        String[] skills = omar.getSkillname();
-        String[] passive = omar.getPassivename();
-        String combined = String.join("\n", stats) + "\n\n" + String.join("\n", skills) + "\n\n" + String.join("\n", passive);
-        String role = omar.getRole();
-        jtxtrole.setText(String.join("\n",role));
-        jlblname.setText(String.join("\n",name));
-        jtxtDescription.setText(combined);
-        
-        jtxtDescription.setEditable(false);
-        jlabelImage.setIcon(Icon);
-       currentSelection = name;
+        updateDisplay(new CharacterOmar(), "/assets/Omars.png");
     }//GEN-LAST:event_jbtnOmarActionPerformed
 
     private void jbtnstartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnstartActionPerformed
-        BattleScreen nextJframe = new BattleScreen();
+        if (parties < 3) {
+            jtxtparty.setText("You must choose 3 characters to start!");
+            return;
+        }
         
-        if (currentSelection.isEmpty()) {
-         jtxtparty.setText("You Should choose 3 parties to Start the Game!");
-        return;
-        }
-
-        if(parties == 3)
-        {
-            
-            nextJframe.setVisible(true);
-            this.dispose();
-        }
+        // Pass the party to the next screen
+        BattleScreen nextJframe = new BattleScreen(partyMembers); 
+        nextJframe.setVisible(true);
+        this.dispose();
+    
     }//GEN-LAST:event_jbtnstartActionPerformed
 
     /**

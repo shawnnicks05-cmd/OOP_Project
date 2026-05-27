@@ -72,6 +72,13 @@ public abstract class GameCharacter {
     public String getBestStat() { return bestStat; }
     public String getRole() { return role; }
     public int getMaxHp() { return maxHp; }
+    public int getMorale()
+    {
+        return morale;
+    }
+     public void setMorale(int morale) {
+    this.morale = morale;
+}   
 
     public int getAttack() {
         return intelligence + knowledge / 2;
