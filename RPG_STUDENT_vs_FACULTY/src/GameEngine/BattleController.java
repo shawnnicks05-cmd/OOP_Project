@@ -44,6 +44,9 @@ public class BattleController {
 
     battleScreen.clearChatBox();
     battleScreen.setBossImage(next.getImagePath());
+    if (battleScreen instanceof Game_UI.BattleScreen) {
+            ((Game_UI.BattleScreen) battleScreen).updateBossVisuals();
+        }
     updateAllUI();
 
     appendChatMessage(engine.getLastBattleMessage());

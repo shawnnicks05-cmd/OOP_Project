@@ -74,7 +74,7 @@ public class Menu extends javax.swing.JFrame {
         Quit.addActionListener(this::QuitActionPerformed);
         jPanel1.add(Quit, java.awt.BorderLayout.PAGE_END);
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, 210, 100));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, -1, 80));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/MENU.png"))); // NOI18N
         jLabel3.setText("jLabel3");

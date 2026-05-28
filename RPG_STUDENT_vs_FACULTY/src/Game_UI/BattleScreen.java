@@ -158,7 +158,7 @@ public BattleScreen() {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlblBoss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Hydra1.png"))); // NOI18N
-        getContentPane().add(jlblBoss, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 90, 370, 230));
+        getContentPane().add(jlblBoss, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 20, 370, 360));
 
         jlblTop.setText("TOP");
         getContentPane().add(jlblTop, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 90, 80));
@@ -400,6 +400,7 @@ public BattleScreen() {
     HeroName1.setText(actor.getName());
 }
     
+    
     private String getImagePath(String characterName) {
     return switch (characterName.toLowerCase()) {
         case "shawn"    -> "/assets/Shawn.png";
@@ -503,6 +504,36 @@ public void updateBossSkillButtons(String[] skillNames, int[] cooldownRemaining)
             return new javax.swing.ImageIcon(out);
         } catch (Exception e) {
             return null;
+        }
+    }
+    public void updateBossVisuals() {
+        GameBoss activeBoss = controller.getEngine().getCurrentBoss();
+        if (activeBoss != null) {
+            // 1. Update the Boss name field dynamically
+            BossName.setText(activeBoss.getName());
+            
+            // 2. Clear out any old skill text on the buttons
+            controller.updateAllUI(); 
+
+            // 3. Update the Boss image dynamically based on its name
+            try {
+                String bossName = activeBoss.getName().toLowerCase();
+                String path = "/assets/" + bossName + ".png";
+                
+                // Special case for your Hydra image resource naming
+                if (bossName.equals("hydra")) {
+                    path = "/assets/Hydra1.png";
+                }
+                
+                java.net.URL imgURL = getClass().getResource(path);
+                if (imgURL != null) {
+                    jlblBoss.setIcon(new javax.swing.ImageIcon(imgURL));
+                } else {
+                    System.out.println("[UI Warning] Missing asset image path: " + path);
+                }
+            } catch (Exception e) {
+                logger.log(java.util.logging.Level.SEVERE, "Error loading boss image asset", e);
+            }
         }
     }
     @Override
