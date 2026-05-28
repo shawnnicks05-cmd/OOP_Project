@@ -2,6 +2,7 @@ package GameEngine;
 
 import Bosses.GameBoss;
 import Characters.GameCharacter;
+import Game_UI.Result;
 import java.util.ArrayList;
 import Inventory.EmptyInventoryException;
 /**
@@ -19,6 +20,10 @@ public class BattleController {
         this.engine = new GameEngine();
     }
 
+    public void setBattleScreen(IBattleScreenUI battleScreen) {
+        this.battleScreen = battleScreen;
+    }
+
     // --- INITIALIZATION ---
 
     public void initializeBattle(GameEngine.BossType bossType, ArrayList<GameCharacter> partyStudents) {
@@ -27,7 +32,7 @@ public class BattleController {
         updateAllUI();
     }
 
-    public void spawnNextBoss() {
+    public boolean spawnNextBoss() {
     GameBoss next = engine.spawnNextBoss();
     nextBossScheduled = false; // allow scheduling again after a new boss is spawned
     
@@ -35,11 +40,7 @@ public class BattleController {
     appendChatMessage("\n*** ALL BOSSES DEFEATED — CONGRATULATIONS! ***");
     appendChatMessage("Bosses Defeated: " + engine.getBossesDefeated()
         + " | Total Turns: " + engine.getTotalTurns());
-    javax.swing.JOptionPane.showMessageDialog(null,
-        "YOU WIN!\nBosses Defeated: " + engine.getBossesDefeated()
-        + "\nTotal Turns: " + engine.getTotalTurns(),
-        "VICTORY!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-    return;
+    return false; // No next boss available
 }
 
     battleScreen.clearChatBox();
@@ -47,6 +48,7 @@ public class BattleController {
     updateAllUI();
 
     appendChatMessage(engine.getLastBattleMessage());
+    return true; // Next boss spawned successfully
 }
 
     // --- TURN EXECUTION ---
@@ -72,14 +74,14 @@ public class BattleController {
     if (engine.getGameState() == GameEngine.GameState.GAME_OVER) return;
 
     nextBossScheduled = true;
-    // Disable actions while waiting for the next boss
+    // Disable actions while spawning next boss
     battleScreen.setActionButtonsEnabled(false);
     battleScreen.updatePotionButtons(engine.getHpPotions(), engine.getManaPotions(), engine.getRevivePotions(), false);
 
     new java.util.Timer().schedule(new java.util.TimerTask() {
         @Override
         public void run() {
-            javax.swing.SwingUtilities.invokeLater(() -> spawnNextBoss());
+            javax.swing.SwingUtilities.invokeLater(() -> autoSpawnNextBoss());
         }
     }, 2000);
         return;
@@ -132,6 +134,40 @@ public class BattleController {
     updateAllUI();
     return result;
 }
+
+    private void showResultScreen() {
+        GameBoss defeatedBoss = engine.getCurrentBoss();
+        String bossName = defeatedBoss != null ? defeatedBoss.getName() : "Unknown Boss";
+        
+        if (battleScreen instanceof Game_UI.BattleScreen) {
+            Game_UI.BattleScreen bs = (Game_UI.BattleScreen) battleScreen;
+            Result resultScreen = new Result(this, engine.getPartyStudents(), engine.getBossesDefeated(), 
+                                             engine.getTotalTurns(), bossName, false);
+            resultScreen.setVisible(true);
+            bs.dispose();
+        }
+    }
+
+    private void autoSpawnNextBoss() {
+        boolean bossSpawned = spawnNextBoss();
+        
+        if (bossSpawned) {
+            // Next boss spawned - re-enable controls and continue battle
+            appendChatMessage("Prepare for the next battle!");
+            battleScreen.setActionButtonsEnabled(true);
+            battleScreen.updatePotionButtons(engine.getHpPotions(), engine.getManaPotions(), engine.getRevivePotions(), true);
+        } else {
+            // All bosses defeated - show final result screen
+            if (battleScreen instanceof Game_UI.BattleScreen) {
+                Game_UI.BattleScreen bs = (Game_UI.BattleScreen) battleScreen;
+                Result resultScreen = new Result(engine.getPartyStudents(), engine.getBossesDefeated(), 
+                                                 engine.getTotalTurns());
+                resultScreen.setVisible(true);
+                bs.dispose();
+            }
+        }
+    }
+
     public void executeBossAction() {
         // Print boss name separator before the boss performs an action (as shown in your sample log)
         GameBoss boss = engine.getCurrentBoss();
@@ -146,10 +182,17 @@ public class BattleController {
     appendChatMessage("\n*** DEFEAT! ***");
     appendChatMessage("Bosses Defeated: " + engine.getBossesDefeated()
         + " | Total Turns: " + engine.getTotalTurns());
-    javax.swing.JOptionPane.showMessageDialog(null,
-        "GAME OVER!\nBosses Defeated: " + engine.getBossesDefeated()
-        + "\nTotal Turns: " + engine.getTotalTurns(),
-        "DEFEAT", javax.swing.JOptionPane.ERROR_MESSAGE);
+    
+    // Show defeat result screen
+    if (battleScreen instanceof Game_UI.BattleScreen) {
+        Game_UI.BattleScreen bs = (Game_UI.BattleScreen) battleScreen;
+        GameBoss currentBoss = engine.getCurrentBoss();
+        String bossName = currentBoss != null ? currentBoss.getName() : "Unknown Boss";
+        Result resultScreen = new Result(this, engine.getPartyStudents(), engine.getBossesDefeated(), 
+                                         engine.getTotalTurns(), bossName);
+        resultScreen.setVisible(true);
+        bs.dispose();
+    }
     return;
 }
 

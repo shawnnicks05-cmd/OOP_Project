@@ -65,6 +65,47 @@ public BattleScreen(ArrayList<GameCharacter> party) {
     refreshActorDisplay();
     controller.updateAllUI(); // ensure button states/text reflect cooldowns + potion counts
     }
+
+public BattleScreen(BattleController existingController) {
+    initComponents();
+    configureWindow();
+    this.controller = existingController;
+    this.controller.setBattleScreen(this);
+    this.party = this.controller.getPartyStudents();
+    // Narration box theme (dark background so default white text is visible)
+    NarrationBox.setBackground(new java.awt.Color(30, 30, 30));
+    NarrationBox.setForeground(java.awt.Color.WHITE);
+    NarrationBox.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
+    // Make hero/boss name text always visible
+    HeroName1.setOpaque(true);
+    HeroName1.setBackground(java.awt.Color.WHITE);
+    HeroName1.setForeground(java.awt.Color.BLACK);
+    JbtnTaunt.addActionListener(e -> {
+    String result = controller.executeTaunt(getActiveActor());
+    if (result != null && result.contains("draws its attention")) {
+        NarrationBox.setText(NarrationBox.getText() + result + "\n");
+    }
+    triggerBossTurn();
+});
+    BossName.setOpaque(true);
+    BossName.setBackground(java.awt.Color.WHITE);
+    BossName.setForeground(java.awt.Color.BLACK);
+    HPBarStudents.setStringPainted(true);
+    ManaBarStudents.setStringPainted(true);
+    MoraleMeter.setStringPainted(true);
+    MoraleMeter.setValue(100);
+    setupPartyImages();
+    GameBoss activeBoss = controller.getEngine().getCurrentBoss();
+    if (activeBoss != null) {
+    BossName.setText(activeBoss.getName());
+    } else {
+    BossName.setText("No Boss");
+    }
+    BossName.setEditable(false);
+    refreshActorDisplay();
+    controller.updateAllUI(); // ensure button states/text reflect cooldowns + potion counts
+}
+
 public BattleScreen() {
     initComponents();
     configureWindow();
