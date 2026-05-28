@@ -18,6 +18,7 @@ public class Ghuardio extends GameBoss {
         this.maxMana = 70;
         this.rage = 0;
         this.defence = 20;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class Ghuardio extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 20;
+        int baseDamage = scaledDamage(20);
         String result = attackPlayerWithRoll(target, baseDamage, "retaliates against", target.isTaunted());
         this.addRage(10);
 
@@ -65,16 +66,18 @@ public class Ghuardio extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Wall of Requirements
-                if (this.mana >= 50) {
-                    this.mana -= 50;
+                int cost = scaledManaCost(50);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(15);
                     return this.name + " erects a [Wall of Requirements]!\nMassive shield reduces all incoming damage!";
                 }
                 return this.name + " attempted [Wall of Requirements] but lacks Mana!";
             }
             case 2 -> { // Knowledge Lock
-                if (this.mana >= 45) {
-                    this.mana -= 45;
+                int cost = scaledManaCost(45);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(14);
                     return this.name + " activates [Knowledge Lock]!\nPrevents healing temporarily!";
                 }

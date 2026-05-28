@@ -38,6 +38,7 @@ public interface IBattleScreenUI {
     void setPartyDisplay(String[] studentNames);
     void updateBossSkillButtons(String[] skillNames, int[] cooldownRemaining);
     void updateMoraleBar(int percentage);
+    void updateGoldDisplay(int gold);
 
     // Active actor display (UI owns turn order, engine doesn't)
     GameCharacter getActiveActor();

@@ -11,6 +11,7 @@ public class CharacterFactory {
             case "dwight" -> new CharacterDwight();
             case "omar" -> new CharacterOmar();
             case "princess" -> new CharacterPrincess();
+            case "Ian"     -> new CharacterIan();
             default -> null;
         };
     }

@@ -19,6 +19,7 @@ public class Jenateh extends GameBoss {
         this.maxMana = 100;
         this.rage = 100;
         this.defence = 15; // Set a default starting defense value
+        applyDifficultyScaling();
     }
 
     @Override
@@ -81,7 +82,7 @@ public class Jenateh extends GameBoss {
 
         // --- EXECUTE THE ATTACK AND CONSTRUCT UI STRING ---
         if (chosenTarget != null) {
-            int baseDamage = 30; 
+            int baseDamage = scaledDamage(30); 
             chosenTarget.takeDamage(baseDamage);
             this.addRage(15);
             
@@ -104,25 +105,28 @@ public class Jenateh extends GameBoss {
         
         switch (skillNumber) {
             case 1 -> { // Project Revision
-                if (this.mana >= 40) {
-                    this.mana -= 40; this.addRage(15);
-                    int damage = 35; target.takeDamage(damage);
+                int cost = scaledManaCost(40);
+                if (this.mana >= cost) {
+                    this.mana -= cost; this.addRage(15);
+                    int damage = scaledDamage(35); target.takeDamage(damage);
                     return this.name + " casts [Project Revision] on " + target.getName() + "!\nDeals " + damage + " Piercing Damage.";
                 }
                 return this.name + " attempted [Project Revision] but has insufficient Mana!";
             }
             case 2 -> { // Critical Feedback
-                if (this.mana >= 50) {
-                    this.mana -= 50; this.addRage(20);
-                    int damage = 20; target.takeDamage(damage);
+                int cost = scaledManaCost(50);
+                if (this.mana >= cost) {
+                    this.mana -= cost; this.addRage(20);
+                    int damage = scaledDamage(20); target.takeDamage(damage);
                     return this.name + " unleashes [Critical Feedback] at " + target.getName() + "!\nDeals " + damage + " damage and breaks their defenses!";
                 }
                 return this.name + " attempted [Critical Feedback] but has insufficient Mana!";
             }
             case 3 -> { // Final Requirement
-                if (this.mana >= 80) {
-                    this.mana -= 80; this.addRage(30);
-                    int damage = 65; target.takeDamage(damage);
+                int cost = scaledManaCost(80);
+                if (this.mana >= cost) {
+                    this.mana -= cost; this.addRage(30);
+                    int damage = scaledDamage(65); target.takeDamage(damage);
                     return this.name + " drops the ultimate [Final Requirement] onto " + target.getName() + "!\nDeals a devastating " + damage + " Catastrophic Damage!";
                 }
                 return this.name + " attempted [Final Requirement] but has insufficient Mana!";

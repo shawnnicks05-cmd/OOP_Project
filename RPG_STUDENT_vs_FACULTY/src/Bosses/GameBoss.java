@@ -27,6 +27,12 @@ public abstract class GameBoss {
     protected int rage;
     protected int defence; // Matches Jenateh's spelling!
 
+    // --- Difficulty scaling (applied once per boss instance) ---
+    private boolean difficultyScalingApplied = false;
+    private double difficultyHpMultiplier = 1.0;
+    private double difficultyManaMultiplier = 1.0;
+    private double difficultyDamageMultiplier = 1.0;
+
     // --- Boss skill cooldown system (per-skill, in turns/rounds) ---
     // skillNumber is 1..3 externally; internally we map to index 0..2.
     protected final int[] skillCooldownMax = new int[] { 3, 3, 3 };
@@ -38,6 +44,112 @@ public abstract class GameBoss {
         this.difficulty = difficulty;
         this.damageType = damageType;
     }
+
+    /**
+     * Apply difficulty-based scaling to a boss AFTER its constructor has assigned base stats.
+     * This keeps all bosses balanced using their "difficulty" label consistently.
+     */
+    protected final void applyDifficultyScaling() {
+        if (difficultyScalingApplied) return;
+        difficultyScalingApplied = true;
+
+        // Snapshot "base" max values so we can detect whether this boss was initialized at full HP/Mana
+        // BEFORE scaling. Most constructors set hpBoss=maxHp and mana=maxMana; if so, keep it full after scaling.
+        final int baseMaxHp = this.maxHp;
+        final int baseMaxMana = this.maxMana;
+
+        String d = (this.difficulty == null ? "" : this.difficulty.trim()).toUpperCase();
+        // Normalize common variants
+        d = d.replace("_", " ");
+        d = d.replace("  ", " ");
+
+        // Multipliers tuned so Random bosses are baseline and higher difficulties ramp up smoothly.
+        // Note: These values intentionally affect HP/Mana and outgoing damage.
+        switch (d) {
+            case "EASY" -> {
+                difficultyHpMultiplier = 0.90;
+                difficultyManaMultiplier = 0.90;
+                difficultyDamageMultiplier = 0.90;
+            }
+            case "EASY-MEDIUM", "EASY MEDIUM" -> {
+                difficultyHpMultiplier = 1.05;
+                difficultyManaMultiplier = 1.00;
+                difficultyDamageMultiplier = 1.00;
+            }
+            case "MEDIUM" -> {
+                difficultyHpMultiplier = 1.15;
+                difficultyManaMultiplier = 1.10;
+                difficultyDamageMultiplier = 1.10;
+            }
+            case "MEDIUM-HARD", "MEDIUM HARD" -> {
+                difficultyHpMultiplier = 1.30;
+                difficultyManaMultiplier = 1.20;
+                difficultyDamageMultiplier = 1.20;
+            }
+            case "HARD" -> {
+                difficultyHpMultiplier = 1.45;
+                difficultyManaMultiplier = 1.30;
+                difficultyDamageMultiplier = 1.30;
+            }
+            case "VERY HARD", "VERYHARD" -> {
+                difficultyHpMultiplier = 1.65;
+                difficultyManaMultiplier = 1.45;
+                difficultyDamageMultiplier = 1.45;
+            }
+            case "EXTREME" -> {
+                difficultyHpMultiplier = 1.85;
+                difficultyManaMultiplier = 1.60;
+                difficultyDamageMultiplier = 1.60;
+            }
+            // "Random" or unknown -> baseline (no scaling)
+            default -> {
+                difficultyHpMultiplier = 1.0;
+                difficultyManaMultiplier = 1.0;
+                difficultyDamageMultiplier = 1.0;
+            }
+        }
+
+        // Apply HP/Mana scaling to the already-assigned base values.
+        // We clamp to reasonable minimums to prevent weird edge cases.
+        int newMaxHp = Math.max(1, (int) Math.round(this.maxHp * difficultyHpMultiplier));
+        int newMaxMana = Math.max(0, (int) Math.round(this.maxMana * difficultyManaMultiplier));
+
+        this.maxHp = newMaxHp;
+        // If constructor set the boss to full HP (hpBoss == baseMaxHp), keep it full after scaling.
+        if (this.hpBoss == baseMaxHp) {
+            this.hpBoss = newMaxHp;
+        } else {
+            this.hpBoss = Math.min(this.hpBoss, newMaxHp);
+            if (this.hpBoss <= 0) this.hpBoss = newMaxHp; // safety: fresh boss should start full HP
+        }
+
+        this.maxMana = newMaxMana;
+        // If constructor set the boss to full Mana (mana == baseMaxMana), keep it full after scaling.
+        if (this.mana == baseMaxMana) {
+            this.mana = newMaxMana;
+        } else {
+            this.mana = Math.min(this.mana, newMaxMana);
+        }
+        if (this.mana < 0) this.mana = 0;
+
+        // Defense scales mildly with HP so tankier bosses feel tankier.
+        this.defence = Math.max(0, (int) Math.round(this.defence * (1.0 + (difficultyHpMultiplier - 1.0) * 0.5)));
+    }
+
+    protected final int scaledDamage(int baseDamage) {
+        // Rage-based escalation:
+        // When Rage is high enough (>=80), bosses hit harder.
+        double rageMultiplier = isEnragedDoTActive() ? 1.25 : 1.0; // +25% damage while enraged
+        return Math.max(0, (int) Math.round(baseDamage * difficultyDamageMultiplier * rageMultiplier));
+    }
+
+    protected final int scaledManaCost(int baseManaCost) {
+        return Math.max(0, (int) Math.round(baseManaCost * difficultyManaMultiplier));
+    }
+
+    public final double getDifficultyDamageMultiplier() {
+        return difficultyDamageMultiplier;
+    }
     
     // --- GETTERS ---
     public String getName() { return name; }
@@ -45,6 +157,7 @@ public abstract class GameBoss {
     public String getDifficulty() { return this.difficulty; }
     public String getDamageType() { return this.damageType; }
     public int getMana() { return this.mana; }
+    public int getMaxMana() { return this.maxMana; }
     public int getDefence() { return this.defence; }
     public int getHp() { return this.hpBoss; }
     public int getMaxHp() { return this.maxHp; }
@@ -79,11 +192,45 @@ public abstract class GameBoss {
     
     // --- COMBAT STAT MODIFIERS ---
     public void setRage(int rage) {
-    this.rage = rage;
-}
+        this.rage = rage;
+    }
+
+    public void setHp(int hp) {
+        this.hpBoss = Math.max(0, Math.min(hp, this.maxHp));
+    }
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = Math.max(1, maxHp);
+        if (this.hpBoss > this.maxHp) {
+            this.hpBoss = this.maxHp;
+        }
+    }
+
+    public void setMana(int mana) {
+        this.mana = Math.max(0, Math.min(mana, this.maxMana));
+    }
+
+    public void setMaxMana(int maxMana) {
+        this.maxMana = Math.max(0, maxMana);
+        if (this.mana > this.maxMana) {
+            this.mana = this.maxMana;
+        }
+    }
+
+    public void setSkillCooldownRemaining(int cd1, int cd2, int cd3) {
+        this.skillCooldownRemaining[0] = Math.max(0, cd1);
+        this.skillCooldownRemaining[1] = Math.max(0, cd2);
+        this.skillCooldownRemaining[2] = Math.max(0, cd3);
+    }
+
     public String getImagePath() {
-    return "/assets/" + getName() + ".png";
-}
+        // Use the class name for assets so display-name changes don't break image loading.
+        String cls = this.getClass().getSimpleName();
+        if ("Hydra".equalsIgnoreCase(cls)) {
+            return "/assets/Hydra1.png";
+        }
+        return "/assets/" + cls + ".png";
+    }
 
     protected int rollDamage(int baseDamage, boolean tauntPenalty) {
         double roll = Math.random();

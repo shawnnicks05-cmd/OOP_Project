@@ -20,6 +20,7 @@ public class Alyzeh extends GameBoss {
         this.maxMana = 120;
         this.rage = 0;
         this.defence = 18;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -57,7 +58,7 @@ public class Alyzeh extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 28;
+        int baseDamage = scaledDamage(28);
         target.takeDamage(baseDamage);
         this.addRage(16);
 
@@ -75,28 +76,31 @@ public class Alyzeh extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Terror Recitation
-                if (this.mana >= 55) {
-                    this.mana -= 55;
+                int cost = scaledManaCost(55);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(22);
-                    int damage = 50;
+                    int damage = scaledDamage(50);
                     target.takeDamage(damage);
                     return this.name + " delivers [Terror Recitation] on " + target.getName() + "!\nMassive confidence damage! Deals " + damage + "!";
                 }
                 return this.name + " attempted [Terror Recitation] but lacks Mana!";
             }
             case 2 -> { // Impossible Standards
-                if (this.mana >= 60) {
-                    this.mana -= 60;
+                int cost = scaledManaCost(60);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(24);
                     return this.name + " sets [Impossible Standards]!\nReduces all healing effects for the team!";
                 }
                 return this.name + " attempted [Impossible Standards] but lacks Mana!";
             }
             case 3 -> { // Sharp Criticism
-                if (this.mana >= 50) {
-                    this.mana -= 50;
+                int cost = scaledManaCost(50);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(20);
-                    int damage = 45;
+                    int damage = scaledDamage(45);
                     target.takeDamage(damage);
                     return this.name + " unleashes [Sharp Criticism] on " + target.getName() + "!\nHeavy single-target damage! Deals " + damage + "!";
                 }

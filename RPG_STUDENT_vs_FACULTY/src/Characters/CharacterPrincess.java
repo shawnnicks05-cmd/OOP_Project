@@ -103,7 +103,8 @@ public class CharacterPrincess extends GameCharacter {
         
         // Select the active boss threat directly
         GameBoss target = activeBosses.get(0);
-        int baseDamage = Math.max(5, calculateAttackDamage(target) / 2);
+        // Basic attacks are intentionally weaker than skills (Princess is support, so even lower)
+        int baseDamage = Math.max(5, (int) Math.round((calculateAttackDamage(target) / 2.0) * 0.70));
         
         // Process character type matchups against the current boss target classification
         double modifier = calculateDamageModifier(target.getClassification());

@@ -4,6 +4,10 @@
  */
 package Game_UI;
 
+import GameEngine.GameEngine;
+import java.io.File;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Acer
@@ -11,6 +15,7 @@ package Game_UI;
 public class Menu extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Menu.class.getName());
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates new form Menu
@@ -78,7 +83,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/MENU.png"))); // NOI18N
         jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 0, 1280, 800));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1270, 720));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -95,7 +100,43 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_StartActionPerformed
 
     private void LoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadGameActionPerformed
-        // TODO add your handling code here:
+        // Load a previously saved battle state.
+        try {
+            String startDir = System.getProperty("user.dir");
+            File defaultSave = new File(startDir, "savegame.txt");
+            if (!defaultSave.exists()) {
+                JOptionPane.showMessageDialog(this, "Save file not found.", "Load Game", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            GameEngine loaded = GameEngine.loadStateFromFile(defaultSave.getAbsolutePath());
+            if (loaded == null) {
+                JOptionPane.showMessageDialog(this, "Failed to load save file.", "Load Game", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // If the save has no active boss, it's not a battle save
+            if (loaded.getCurrentBoss() == null) {
+                JOptionPane.showMessageDialog(this,
+                    "This save does not contain an active battle.\nStarting character selection instead.",
+                    "Load Game",
+                    JOptionPane.INFORMATION_MESSAGE);
+                CharacterSelections nextJframe = new CharacterSelections();
+                nextJframe.setVisible(true);
+                this.dispose();
+                return;
+            }
+
+            BattleScreen battleScreen = new BattleScreen(loaded);
+            battleScreen.setVisible(true);
+            this.dispose();
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Load game failed", ex);
+            JOptionPane.showMessageDialog(this,
+                "Load failed: " + ex.getMessage(),
+                "Load Game",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_LoadGameActionPerformed
 
     /**

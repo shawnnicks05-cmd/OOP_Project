@@ -18,6 +18,7 @@ public class Patzkhey extends GameBoss {
         this.maxMana = 78;
         this.rage = 0;
         this.defence = 11;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class Patzkhey extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 17;
+        int baseDamage = scaledDamage(17);
         target.takeDamage(baseDamage);
         this.addRage(11);
 
@@ -68,18 +69,20 @@ public class Patzkhey extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Correction Mark
-                if (this.mana >= 35) {
-                    this.mana -= 35;
+                int cost = scaledManaCost(35);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(15);
                     return this.name + " places a [Correction Mark] on " + target.getName() + "!\nReduces attack power!";
                 }
                 return this.name + " attempted [Correction Mark] but lacks Mana!";
             }
             case 2 -> { // Heavy Requirement
-                if (this.mana >= 40) {
-                    this.mana -= 40;
+                int cost = scaledManaCost(40);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(17);
-                    int damage = 28;
+                    int damage = scaledDamage(28);
                     target.takeDamage(damage);
                     return this.name + " imposes a [Heavy Requirement] on " + target.getName() + "!\nApplies stamina drain and deals " + damage + " damage!";
                 }

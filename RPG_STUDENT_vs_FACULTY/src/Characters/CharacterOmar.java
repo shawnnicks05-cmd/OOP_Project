@@ -43,7 +43,7 @@ public class CharacterOmar extends GameCharacter {
 
         switch(skillNumber) {
             case 1 -> { // 💥 Information Overflow (Massive single target / AOE nuke)
-                if (targetBoss == null) return getName() + " finds no active boss to attack.";
+                if (activeBosses.isEmpty()) return getName() + " finds no active boss to attack.";
 
                 if (isSkillOnCooldown(1)) {
                     return getSkillDisplayName(1) + " can't be used for " + getSkillCooldownRemaining(1) + " more rounds.";
@@ -53,15 +53,19 @@ public class CharacterOmar extends GameCharacter {
                 }
                 startSkillCooldown(1);
 
-                int baseDamage = calculateAttackDamage(targetBoss) + 5;
-                // Apply type multipliers based on the target boss classification (e.g., vs Exams)
-                double modifier = calculateDamageModifier(targetBoss.getClassification());
-                int finalDamage = (int) (baseDamage * modifier);
-
-                targetBoss.takeDamage(finalDamage);
-                String modifierAlert = modifier > 1.0 ? " [CRITICAL TYPE ADVANTAGE!]" : "";
-                return getName() + " deals a massive Information Overflow directly at " + targetBoss.getName() + "!" +
-                       "\nDeals " + finalDamage + " Knowledge Damage." + modifierAlert;
+                // AOE: apply to ALL active bosses (important for the Couple wave)
+                StringBuilder log = new StringBuilder();
+                for (GameBoss boss : activeBosses) {
+                    if (boss == null || boss.getHp() <= 0) continue;
+                    // Skills should be stronger than basic attacks
+                    int baseDamage = (int) Math.round(calculateAttackDamage(boss) * 1.6) + 5;
+                    double modifier = calculateDamageModifier(boss.getClassification());
+                    int finalDamage = (int) Math.round(baseDamage * modifier);
+                    boss.takeDamage(finalDamage);
+                    String modifierAlert = modifier > 1.0 ? " [CRITICAL TYPE ADVANTAGE!]" : "";
+                    log.append("\n- ").append(boss.getName()).append(" takes ").append(finalDamage).append(" Knowledge Damage.").append(modifierAlert);
+                }
+                return getName() + " unleashes [Information Overflow] across all enemies!" + log;
             }
             case 2 -> { // 🔁 Explain Again (Support restoration)
                 if (isSkillOnCooldown(2)) {
@@ -96,8 +100,8 @@ public class CharacterOmar extends GameCharacter {
         }
         
         GameBoss target = activeBosses.get(0);
-        int baseDamage = 53; // High base knowledge modifier attack
-        
+        // Basic attacks are intentionally weaker than skills
+        int baseDamage = (int) Math.round(calculateAttackDamage(target) * 0.70);
         double modifier = calculateDamageModifier(target.getClassification());
         String result = attackBossWithRoll(target, baseDamage, modifier, "drops structural factual counter-arguments onto");
         if (modifier > 1.0) {

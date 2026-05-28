@@ -18,6 +18,7 @@ public class Bhardian extends GameBoss {
         this.maxMana = 80;
         this.rage = 0;
         this.defence = 14;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class Bhardian extends GameBoss {
     public String basicAttack(ArrayList<GameCharacter> partyStudents) {
         if (partyStudents.isEmpty()) return this.name + " has no targets.";
 
-        int baseDamage = 23;
+        int baseDamage = scaledDamage(23);
         StringBuilder result = new StringBuilder();
         result.append(this.name + " charges forward menacingly!\n");
 
@@ -75,10 +76,11 @@ public class Bhardian extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Pressure Wave
-                if (this.mana >= 45) {
-                    this.mana -= 45;
+                int cost = scaledManaCost(45);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(19);
-                    int damage = 35;
+                    int damage = scaledDamage(35);
                     StringBuilder damageLog = new StringBuilder();
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {
@@ -90,8 +92,9 @@ public class Bhardian extends GameBoss {
                 return this.name + " attempted [Pressure Wave] but lacks Mana!";
             }
             case 2 -> { // Strict Grading
-                if (this.mana >= 40) {
-                    this.mana -= 40;
+                int cost = scaledManaCost(40);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(17);
                     // Target weakest
                     GameCharacter weakest = partyStudents.get(0);
@@ -100,7 +103,7 @@ public class Bhardian extends GameBoss {
                             weakest = student;
                         }
                     }
-                    int damage = 42;
+                    int damage = scaledDamage(42);
                     String attackResult = attackPlayerWithRoll(weakest, damage, "targets", weakest.isTaunted());
                     return this.name + " delivers [Strict Grading] to " + weakest.getName() + "!\n" + attackResult;
                 }

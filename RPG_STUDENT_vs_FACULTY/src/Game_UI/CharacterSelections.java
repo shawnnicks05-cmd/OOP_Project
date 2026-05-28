@@ -45,7 +45,9 @@ public class CharacterSelections extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jlabelImage = new javax.swing.JLabel();
+        Back = new javax.swing.JButton();
         jlblname = new javax.swing.JLabel();
+        jbtnIan = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jbtnEthan = new javax.swing.JButton();
         jbtnDwight = new javax.swing.JButton();
@@ -61,6 +63,9 @@ public class CharacterSelections extends javax.swing.JFrame {
         jbtnstart = new javax.swing.JButton();
         LeftBackground = new javax.swing.JLabel();
         RightBackground = new javax.swing.JLabel();
+        jbtnAdd1 = new javax.swing.JButton();
+        jbtnAdd2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -72,10 +77,18 @@ public class CharacterSelections extends javax.swing.JFrame {
         jlabelImage.setFocusable(false);
         jPanel1.add(jlabelImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 219, 168));
 
+        Back.setText("BACK");
+        Back.addActionListener(this::BackActionPerformed);
+        jPanel1.add(Back, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 520, 180, 80));
+
         jlblname.setFont(new java.awt.Font("Segoe Print", 0, 24)); // NOI18N
         jlblname.setForeground(new java.awt.Color(255, 0, 0));
         jlblname.setText("Choose 3 Characters!");
         jPanel1.add(jlblname, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 264, 267, 60));
+
+        jbtnIan.setFocusable(false);
+        jbtnIan.addActionListener(this::jbtnIanActionPerformed);
+        jPanel1.add(jbtnIan, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 360, 90, 70));
 
         jLabel3.setFont(new java.awt.Font("Segoe Script", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 0, 51));
@@ -100,7 +113,7 @@ public class CharacterSelections extends javax.swing.JFrame {
 
         jbtnOmar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/Omars.png"))); // NOI18N
         jbtnOmar.addActionListener(this::jbtnOmarActionPerformed);
-        jPanel1.add(jbtnOmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(738, 366, -1, 79));
+        jPanel1.add(jbtnOmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 350, -1, 79));
 
         jtxtrole.setEditable(false);
         jtxtrole.setFont(new java.awt.Font("HelveticaNeueLTW06-97BlkCnObl", 0, 24)); // NOI18N
@@ -146,6 +159,19 @@ public class CharacterSelections extends javax.swing.JFrame {
         RightBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/blackstar.png"))); // NOI18N
         jPanel1.add(RightBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, -50, 500, 820));
 
+        jbtnAdd1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jbtnAdd1.setText("ADD TO PARTY");
+        jbtnAdd1.addActionListener(this::jbtnAdd1ActionPerformed);
+        jPanel1.add(jbtnAdd1, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 567, 225, 63));
+
+        jbtnAdd2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jbtnAdd2.setText("ADD TO PARTY");
+        jbtnAdd2.addActionListener(this::jbtnAdd2ActionPerformed);
+        jPanel1.add(jbtnAdd2, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 567, 225, 63));
+
+        jButton1.setText("jButton1");
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 370, -1, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 1460, 680));
 
         pack();
@@ -161,8 +187,10 @@ public class CharacterSelections extends javax.swing.JFrame {
         jtxtDescription.setText(combined);
         jlabelImage.setIcon(new ImageIcon(getClass().getResource(imagePath)));
     }
-    private void jbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddActionPerformed
-     if (currentSelectedCharacter == null) {
+
+    // ---- Party building (shared by all "ADD TO PARTY" buttons) ----
+    private void addSelectedCharacterToParty() {
+        if (currentSelectedCharacter == null) {
             jtxtparty.setText("Please select a character first!");
             return;
         }
@@ -170,21 +198,27 @@ public class CharacterSelections extends javax.swing.JFrame {
             jtxtparty.setText("Character already in party!");
             return;
         }
-        if (parties < 3) {
-            partyMembers.add(currentSelectedCharacter);
-            String position = (parties == 0) ? "Front" : (parties == 1) ? "Above" : "Below";
-            currentSelectedCharacter.setPosition(position);
-            jtxtparty.append(currentSelectedCharacter.getName() + " [" + position + "]\n");
-            parties++;
+        if (parties >= 3) {
+            jtxtparty.append("\n(Party Full!)");
+            return;
         }
-        
+
+        partyMembers.add(currentSelectedCharacter);
+        String position = (parties == 0) ? "Front" : (parties == 1) ? "Above" : "Below";
+        currentSelectedCharacter.setPosition(position);
+        jtxtparty.append(currentSelectedCharacter.getName() + " [" + position + "]\n");
+        parties++;
+
         if (parties == 3) {
             jtxtparty.append("(Party Full!)");
         }
+    }
+    private void jbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddActionPerformed
+        addSelectedCharacterToParty();
     }//GEN-LAST:event_jbtnAddActionPerformed
 
     private void jtxtroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtroleActionPerformed
-        // TODO add your handling code here:
+        // Read-only field
     }//GEN-LAST:event_jtxtroleActionPerformed
 
     private void jbtnPrincessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPrincessActionPerformed
@@ -192,7 +226,6 @@ public class CharacterSelections extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnPrincessActionPerformed
 
     private void jbtnDwightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDwightActionPerformed
-        // TODO add your handling code here:
         updateDisplay(new CharacterDwight(), "/assets/Dwights.png");
 
     }//GEN-LAST:event_jbtnDwightActionPerformed
@@ -227,6 +260,26 @@ public class CharacterSelections extends javax.swing.JFrame {
     
     }//GEN-LAST:event_jbtnstartActionPerformed
 
+    private void jbtnAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAdd1ActionPerformed
+        // Duplicate NetBeans button - keep it wired to the same behavior.
+        addSelectedCharacterToParty();
+    }//GEN-LAST:event_jbtnAdd1ActionPerformed
+
+    private void jbtnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAdd2ActionPerformed
+        // Duplicate NetBeans button - keep it wired to the same behavior.
+        addSelectedCharacterToParty();
+    }//GEN-LAST:event_jbtnAdd2ActionPerformed
+
+    private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
+         Menu menu = new Menu();
+         menu.setVisible(true);
+         this.dispose();
+    }//GEN-LAST:event_BackActionPerformed
+
+    private void jbtnIanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnIanActionPerformed
+        updateDisplay(new CharacterIan(), "/assets/Ian.png");
+    }//GEN-LAST:event_jbtnIanActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -253,15 +306,20 @@ public class CharacterSelections extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Back;
     private javax.swing.JLabel LeftBackground;
     private javax.swing.JLabel RightBackground;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtnAdd;
+    private javax.swing.JButton jbtnAdd1;
+    private javax.swing.JButton jbtnAdd2;
     private javax.swing.JButton jbtnDwight;
     private javax.swing.JButton jbtnEthan;
+    private javax.swing.JButton jbtnIan;
     private javax.swing.JButton jbtnOmar;
     private javax.swing.JButton jbtnPrincess;
     private javax.swing.JButton jbtnShawn;

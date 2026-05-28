@@ -11,18 +11,20 @@ import java.util.Random;
 public class Maru extends GameBoss {
 
     public Maru () {
-        super("Maru ", "Tactical Faculty Boss", "Medium", "True Damage / Pure Evaluation");
+        // Display name changed per request (class name/file remains Maru.java)
+        super("Meruh", "Tactical Faculty Boss", "Medium", "True Damage / Pure Evaluation");
         this.hpBoss = 95;
         this.maxHp = 95;
         this.mana = 80;
         this.maxMana = 80;
         this.rage = 0;
         this.defence = 12;
+        applyDifficultyScaling();
     }
 
     @Override
     public String[] getSkillname() {
-        return new String[] {"Silent Pressure", "Focused Observation", "Strict Evaluation"};
+        return new String[] {"Silent Pressure", "Focused Observation", "Bursting 3.0"};
     }
 
     @Override
@@ -66,7 +68,7 @@ public class Maru extends GameBoss {
         }
 
         if (chosenTarget != null) {
-            int baseDamage = 18;
+            int baseDamage = scaledDamage(18);
             chosenTarget.takeDamage(baseDamage);
             this.addRage(12);
 
@@ -86,18 +88,20 @@ public class Maru extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Silent Pressure
-                if (this.mana >= 30) {
-                    this.mana -= 30;
+                int cost = scaledManaCost(30);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(14);
-                    int damage = 22;
+                    int damage = scaledDamage(22);
                     target.takeDamage(damage);
                     return this.name + " applies [Silent Pressure] to the team!\nConfidence lowered and " + damage + " damage dealt!";
                 }
                 return this.name + " attempted [Silent Pressure] but lacks Mana!";
             }
             case 2 -> { // Focused Observation
-                if (this.mana >= 35) {
-                    this.mana -= 35;
+                int cost = scaledManaCost(35);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(16);
                     // Find weakest target
                     GameCharacter weakest = partyStudents.get(0);
@@ -106,21 +110,27 @@ public class Maru extends GameBoss {
                             weakest = student;
                         }
                     }
-                    int damage = 35;
+                    int damage = scaledDamage(35);
                     weakest.takeDamage(damage);
                     return this.name + " uses [Focused Observation] to identify weakness in " + weakest.getName() + "!\nDeals " + damage + " bonus damage!";
                 }
                 return this.name + " attempted [Focused Observation] but lacks Mana!";
             }
-            case 3 -> { // Strict Evaluation
-                if (this.mana >= 45) {
-                    this.mana -= 45;
-                    this.addRage(18);
-                    int damage = 40;
-                    target.takeDamage(damage);
-                    return this.name + " delivers [Strict Evaluation] to " + target.getName() + "!\nDeals " + damage + " precise damage!";
+            case 3 -> { // Bursting 3.0
+                int cost = scaledManaCost(45);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
+                    this.addRage(20);
+                    int hitDamage = scaledDamage(16);
+                    int hits = 3;
+                    int total = hitDamage * hits;
+                    for (int i = 0; i < hits; i++) {
+                        target.takeDamage(hitDamage);
+                    }
+                    return this.name + " unleashes [Bursting 3.0] on " + target.getName() + "!"
+                        + "\nHits " + hits + " times for " + hitDamage + " damage each (" + total + " total)!";
                 }
-                return this.name + " attempted [Strict Evaluation] but lacks Mana!";
+                return this.name + " attempted [Bursting 3.0] but lacks Mana!";
             }
             default -> { return this.name + " remains silent and composed."; }
         }

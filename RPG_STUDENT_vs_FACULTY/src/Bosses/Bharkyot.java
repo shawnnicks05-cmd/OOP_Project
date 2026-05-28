@@ -20,6 +20,7 @@ public class Bharkyot extends GameBoss {
         this.maxMana = 120;
         this.rage = 0;
         this.defence = 18;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -57,7 +58,7 @@ public class Bharkyot extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 28;
+        int baseDamage = scaledDamage(28);
         String result = attackPlayerWithRoll(target, baseDamage, "strikes", target.isTaunted());
         this.addRage(16);
 
@@ -75,10 +76,11 @@ public class Bharkyot extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Surprise Practical Exam
-                if (this.mana >= 55) {
-                    this.mana -= 55;
+                int cost = scaledManaCost(55);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(22);
-                    int damage = 42;
+                    int damage = scaledDamage(42);
                     StringBuilder damageLog = new StringBuilder();
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {
@@ -90,10 +92,11 @@ public class Bharkyot extends GameBoss {
                 return this.name + " attempted [Surprise Practical Exam] but lacks Mana!";
             }
             case 2 -> { // Information Overload
-                if (this.mana >= 60) {
-                    this.mana -= 60;
+                int cost = scaledManaCost(60);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(24);
-                    int damage = 30;
+                    int damage = scaledDamage(30);
                     StringBuilder damageLog = new StringBuilder();
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {
@@ -105,8 +108,9 @@ public class Bharkyot extends GameBoss {
                 return this.name + " attempted [Information Overload] but lacks Mana!";
             }
             case 3 -> { // Group Pressure
-                if (this.mana >= 65) {
-                    this.mana -= 65;
+                int cost = scaledManaCost(65);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(26);
                     return this.name + " exerts [Group Pressure]!\nEntire team loses stamina!";
                 }

@@ -10,6 +10,15 @@
 <project name="RPG_STUDENT_vs_FACULTY" default="default" basedir=".">
     <description>Builds, tests, and runs the project RPG_STUDENT_vs_FACULTY.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <!--
+      Override NetBeans' default "run" so it runs the built JAR.
+      This avoids classpath issues where some compiled classes (e.g., Inventory/*)
+      may not be present in build/classes during Compile-on-Save runs.
+    -->
+    <target name="run" depends="jar">
+        <java jar="${dist.jar}" fork="true"/>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 

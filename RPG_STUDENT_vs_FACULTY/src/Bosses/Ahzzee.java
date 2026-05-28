@@ -19,6 +19,7 @@ public class Ahzzee extends GameBoss {
         this.maxMana = 80;
         this.rage = 0;
         this.defence = 12;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -52,7 +53,7 @@ public class Ahzzee extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 18;
+        int baseDamage = scaledDamage(18);
         String result = attackPlayerWithRoll(target, baseDamage, "corrupts", target.isTaunted());
         this.addRage(11);
 
@@ -66,18 +67,20 @@ public class Ahzzee extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // System Crash
-                if (this.mana >= 45) {
-                    this.mana -= 45;
+                int cost = scaledManaCost(45);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(18);
                     return this.name + " triggers [System Crash]!\nDisables all skills temporarily!";
                 }
                 return this.name + " attempted [System Crash] but lacks Mana!";
             }
             case 2 -> { // Lag Spike
-                if (this.mana >= 40) {
-                    this.mana -= 40;
+                int cost = scaledManaCost(40);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(16);
-                    int damage = 25;
+                    int damage = scaledDamage(25);
                     StringBuilder damageLog = new StringBuilder();
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {

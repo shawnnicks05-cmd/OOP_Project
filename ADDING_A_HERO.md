@@ -6,6 +6,7 @@ This project uses Java Swing + a simple battle engine. To add a new hero and mak
 2. Assets (the hero image)
 3. `CharacterSelections.java` (so the hero can be picked)
 4. `BattleScreen.java` (so the hero image can show during battle)
+5. `CharacterFactory.java` (so the hero can be restored when loading a saved battle)
 
 ---
 
@@ -118,6 +119,24 @@ Notes:
 
 ---
 
+## 5) Make the hero load correctly (Load Game / save file)
+
+When you load a previous battle, the game rebuilds characters by name using:
+
+`RPG_STUDENT_vs_FACULTY/src/GameEngine/CharacterFactory.java`
+
+Add your hero to the switch:
+
+```java
+case "yourhero" -> new CharacterYourHero();
+```
+
+Important:
+- The string key must match the character’s `getName()` value (lowercased).
+- Avoid trailing spaces in hero names (example: `"Meruh"` is good, `"Meruh "` is bad).
+
+---
+
 ## 5) Quick checklist (most common reasons a new hero “doesn’t show”)
 
 - ✅ You created the new `CharacterYourHero.java` inside `src/Characters/`
@@ -126,6 +145,7 @@ Notes:
 - ✅ You added a new button in `CharacterSelections.form` / `CharacterSelections.java`
 - ✅ The new button sets `currentSelectedCharacter = new CharacterYourHero();`
 - ✅ You updated `BattleScreen.getImagePath()` with your new hero name
+- ✅ You updated `CharacterFactory.createCharacter(...)` so Load Game can restore the hero
 - ✅ Your hero name has **no trailing spaces** (important!)
 
 ---

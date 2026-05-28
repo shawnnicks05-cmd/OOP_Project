@@ -26,59 +26,102 @@ public class BattleScreen extends javax.swing.JFrame implements IBattleScreenUI 
      */
 public BattleScreen(ArrayList<GameCharacter> party) {
         initComponents();
-    configureWindow();
-    this.party = party;
-    this.controller = new BattleController(this);
-    // Narration box theme (dark background so default white text is visible)
-    NarrationBox.setBackground(new java.awt.Color(30, 30, 30));
-    NarrationBox.setForeground(java.awt.Color.WHITE);
-    NarrationBox.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
-    // Make hero/boss name text always visible
-    HeroName1.setOpaque(true);
-    HeroName1.setBackground(java.awt.Color.WHITE);
-    HeroName1.setForeground(java.awt.Color.BLACK);
-    JbtnTaunt.addActionListener(e -> {
-    String result = controller.executeTaunt(getActiveActor());
-    if (result != null && result.contains("draws its attention")) {
-        NarrationBox.setText(NarrationBox.getText() + result + "\n");
+        configureWindow();
+        this.party = party;
+        this.controller = new BattleController(this);
+        setupBattleUI();
+        controller.getEngine().initializeParty(party);  // ← set party first
+        controller.spawnNextBoss();
+        controller.appendChatMessage("Battle started!");
+        initializeAfterBattleStart();
     }
-    triggerBossTurn();
-});
-    BossName.setOpaque(true);
-    BossName.setBackground(java.awt.Color.WHITE);
-    BossName.setForeground(java.awt.Color.BLACK);
-    HPBarStudents.setStringPainted(true);
-    ManaBarStudents.setStringPainted(true);
-    MoraleMeter.setStringPainted(true);
-    MoraleMeter.setValue(100);
-    setupPartyImages();
-    controller.getEngine().initializeParty(party);  // ← set party first
-    controller.spawnNextBoss();
-    controller.appendChatMessage("Battle started!");
-    GameBoss activeBoss = controller.getEngine().getCurrentBoss();
-    if (activeBoss != null) {
-    BossName.setText(activeBoss.getName());
-    } else {
-    BossName.setText("No Boss");
+
+    // Needed by Result screen to continue to next boss using this BattleScreen's controller
+    public BattleController getController() {
+        return controller;
     }
-    BossName.setEditable(false);
-    refreshActorDisplay();
-    controller.updateAllUI(); // ensure button states/text reflect cooldowns + potion counts
+
+    public BattleScreen(GameEngine engine) {
+        initComponents();
+        configureWindow();
+        this.controller = new BattleController(this, engine);
+        this.party = controller.getEngine().getPartyStudents();
+        setupBattleUI();
+        initializeAfterBattleStart();
     }
-public BattleScreen() {
-    initComponents();
-    configureWindow();
-    NarrationBox.setBackground(new java.awt.Color(30, 30, 30));
-    NarrationBox.setForeground(java.awt.Color.WHITE);
-    NarrationBox.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
-    // Make hero/boss name text always visible
-    HeroName1.setOpaque(true);
-    HeroName1.setBackground(java.awt.Color.WHITE);
-    HeroName1.setForeground(java.awt.Color.BLACK);
-    BossName.setOpaque(true);
-    BossName.setBackground(java.awt.Color.WHITE);
-    BossName.setForeground(java.awt.Color.BLACK);
-}
+
+    private void setupBattleUI() {
+        // Narration box theme (dark background so default white text is visible)
+        NarrationBox.setBackground(new java.awt.Color(30, 30, 30));
+        NarrationBox.setForeground(java.awt.Color.WHITE);
+        NarrationBox.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
+        // Make hero/boss name text always visible
+        HeroName1.setOpaque(true);
+        HeroName1.setBackground(java.awt.Color.WHITE);
+        HeroName1.setForeground(java.awt.Color.BLACK);
+        BossName.setOpaque(true);
+        BossName.setBackground(java.awt.Color.WHITE);
+        BossName.setForeground(java.awt.Color.BLACK);
+        HPBarStudents.setStringPainted(true);
+        ManaBarStudents.setStringPainted(true);
+        MoraleMeter.setStringPainted(true);
+        MoraleMeter.setValue(100);
+        setupPartyImages();
+
+        // Ensure boss sprites render ABOVE the background layers (NetBeans AbsoluteLayout z-order issue).
+        try {
+            java.awt.Container c = getContentPane();
+            if (BackGround != null) {
+                c.setComponentZOrder(BackGround, c.getComponentCount() - 1); // send to back
+            }
+            if (Backgroundright != null) {
+                c.setComponentZOrder(Backgroundright, c.getComponentCount() - 1); // send to back
+            }
+            if (jlblBoss != null) {
+                c.setComponentZOrder(jlblBoss, 0); // bring to front
+            }
+            c.revalidate();
+            c.repaint();
+        } catch (Exception ignored) { }
+
+        // Repurpose the Inventory button as a manual Save Game button.
+        // (Auto-save still happens after actions, but this gives the player control.)
+        try {
+            if (Inventory != null) {
+                Inventory.setText("Save Game");
+                for (java.awt.event.ActionListener l : Inventory.getActionListeners()) {
+                    Inventory.removeActionListener(l);
+                }
+                Inventory.addActionListener(e -> {
+                    if (controller == null) return;
+                    String msg = controller.saveNow();
+                    javax.swing.JOptionPane.showMessageDialog(this, msg, "Save Game", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                });
+            }
+        } catch (Exception ignored) { }
+    }
+
+    private void initializeAfterBattleStart() {
+        GameBoss activeBoss = controller.getEngine().getCurrentBoss();
+        if (activeBoss != null) {
+            setBossImage(activeBoss.getImagePath());
+        } else {
+            BossName.setText("No Boss");
+        }
+        BossName.setEditable(false);
+        refreshActorDisplay();
+        controller.updateAllUI(); // ensure button states/text reflect cooldowns + potion counts
+        updateGoldDisplay(controller.getEngine().getGold());
+    }
+
+    /**
+     * Default constructor (kept for NetBeans GUI builder). Does not auto-start a battle.
+     */
+    public BattleScreen() {
+        initComponents();
+        configureWindow();
+        setupBattleUI();
+    }
 
     private void configureWindow() {
         // Center the window and disable maximize/resize
@@ -114,7 +157,7 @@ public BattleScreen() {
         jbtnAllySkill1 = new javax.swing.JButton();
         jbtnAllySkill2 = new javax.swing.JButton();
         jbtnAllySkill3 = new javax.swing.JButton();
-        jbtnAttack = new javax.swing.JButton();
+        jbtnShop = new javax.swing.JButton();
         jbtnDefend = new javax.swing.JButton();
         jbtnBossSkill1 = new javax.swing.JButton();
         jbtnBossSkill2 = new javax.swing.JButton();
@@ -139,6 +182,7 @@ public BattleScreen() {
         HeroName1 = new javax.swing.JTextField();
         JbtnTaunt = new javax.swing.JButton();
         JbtnFlee1 = new javax.swing.JButton();
+        jbtnAttack1 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -241,7 +285,7 @@ public BattleScreen() {
                 .addComponent(jbtnAllySkill2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbtnAllySkill3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,13 +300,13 @@ public BattleScreen() {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 510, 500, 100));
 
-        jbtnAttack.setText("Attack");
-        jbtnAttack.addActionListener(this::jbtnAttackActionPerformed);
-        getContentPane().add(jbtnAttack, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 420, 100, 30));
+        jbtnShop.setText("SHOP");
+        jbtnShop.addActionListener(this::jbtnShopActionPerformed);
+        getContentPane().add(jbtnShop, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 420, 170, 30));
 
         jbtnDefend.setText("Defend");
         jbtnDefend.addActionListener(this::jbtnDefendActionPerformed);
-        getContentPane().add(jbtnDefend, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 460, 100, 30));
+        getContentPane().add(jbtnDefend, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 500, 100, 30));
 
         jbtnBossSkill1.setText("Skills1");
         jbtnBossSkill1.addActionListener(this::jbtnBossSkill1ActionPerformed);
@@ -281,7 +325,7 @@ public BattleScreen() {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 330, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,7 +350,7 @@ public BattleScreen() {
         jPanelInventoryLayout.setHorizontalGroup(
             jPanelInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInventoryLayout.createSequentialGroup()
-                .addGap(0, 20, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanelInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelInventoryLayout.createSequentialGroup()
                         .addGap(13, 13, 13)
@@ -329,7 +373,7 @@ public BattleScreen() {
                 .addComponent(jbtnPotionRevive))
         );
 
-        getContentPane().add(jPanelInventory, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 390, 100, 210));
+        getContentPane().add(jPanelInventory, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 390, 100, 210));
 
         jprogBarRage.setForeground(new java.awt.Color(255, 0, 0));
         jprogBarRage.setValue(35);
@@ -377,11 +421,15 @@ public BattleScreen() {
 
         JbtnTaunt.setText("TAUNT");
         JbtnTaunt.addActionListener(this::JbtnTauntActionPerformed);
-        getContentPane().add(JbtnTaunt, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 530, 100, -1));
+        getContentPane().add(JbtnTaunt, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 570, 100, -1));
 
         JbtnFlee1.setText("FLEE");
         JbtnFlee1.addActionListener(this::JbtnFlee1ActionPerformed);
-        getContentPane().add(JbtnFlee1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 500, 100, -1));
+        getContentPane().add(JbtnFlee1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 540, 100, -1));
+
+        jbtnAttack1.setText("Attack");
+        jbtnAttack1.addActionListener(this::jbtnAttack1ActionPerformed);
+        getContentPane().add(jbtnAttack1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 460, 100, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -408,6 +456,7 @@ public BattleScreen() {
         case "dwight"   -> "/assets/Dwights.png";  // ← check if this file exists
         case "omar"     -> "/assets/Omars.png";     // ← check if this file exists
         case "princess" -> "/assets/Camachos.png";  // ← check if this file exists
+        case "ian"      -> "/assets/Ian.png"; 
         default         -> "/assets/Shawn.png";
     };
 }
@@ -507,34 +556,13 @@ public void updateBossSkillButtons(String[] skillNames, int[] cooldownRemaining)
         }
     }
     public void updateBossVisuals() {
+        if (controller == null || controller.getEngine() == null) return;
         GameBoss activeBoss = controller.getEngine().getCurrentBoss();
-        if (activeBoss != null) {
-            // 1. Update the Boss name field dynamically
-            BossName.setText(activeBoss.getName());
-            
-            // 2. Clear out any old skill text on the buttons
-            controller.updateAllUI(); 
+        if (activeBoss == null) return;
 
-            // 3. Update the Boss image dynamically based on its name
-            try {
-                String bossName = activeBoss.getName().toLowerCase();
-                String path = "/assets/" + bossName + ".png";
-                
-                // Special case for your Hydra image resource naming
-                if (bossName.equals("hydra")) {
-                    path = "/assets/Hydra1.png";
-                }
-                
-                java.net.URL imgURL = getClass().getResource(path);
-                if (imgURL != null) {
-                    jlblBoss.setIcon(new javax.swing.ImageIcon(imgURL));
-                } else {
-                    System.out.println("[UI Warning] Missing asset image path: " + path);
-                }
-            } catch (Exception e) {
-                logger.log(java.util.logging.Level.SEVERE, "Error loading boss image asset", e);
-            }
-        }
+        // Let setBossImage() handle single vs couple rendering and the correct asset path logic.
+        setBossImage(activeBoss.getImagePath());
+        controller.updateAllUI();
     }
     @Override
     public GameCharacter getActiveActor() {
@@ -565,14 +593,18 @@ public void updateBossSkillButtons(String[] skillNames, int[] cooldownRemaining)
     controller.appendChatMessage("--- " + getActiveActor().getName() + "'s turn ---");
 }
     private void jbtnBossSkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBossSkill1ActionPerformed
-        // TODO add your handling code here:
+        // Boss actions are AI-controlled; these buttons are informational only.
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Boss skills are automatic.",
+            "Info",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jbtnBossSkill1ActionPerformed
 
-    private void jbtnAttackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAttackActionPerformed
-        controller.executePlayerAction(0, getActiveActor());
-        controller.updateAllUI(); // immediately show disabled buttons + any cooldown changes
-        triggerBossTurn();
-    }//GEN-LAST:event_jbtnAttackActionPerformed
+    private void jbtnShopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnShopActionPerformed
+        if (controller == null) return;
+        controller.openShopDialog();
+        controller.updateAllUI();
+    }//GEN-LAST:event_jbtnShopActionPerformed
 
     
     @Override
@@ -605,6 +637,13 @@ public void updateBossSkillButtons(String[] skillNames, int[] cooldownRemaining)
     @Override
     public void updateStatusDisplay(String text) {
         // Can display in status label if needed
+    }
+
+    @Override
+    public void updateGoldDisplay(int gold) {
+        // Simple UI: show gold directly on the SHOP button so we don't have to modify the GUI builder layout.
+        jbtnShop.setText("SHOP (" + gold + "g)");
+        jbtnShop.setToolTipText("Gold: " + gold);
     }
 
     @Override   
@@ -679,9 +718,11 @@ public void updateSkillButtons(String[] skillNames, int[] cooldownRemaining, boo
 
     @Override
 public void setActionButtonsEnabled(boolean enabled) {
-    jbtnAttack.setEnabled(enabled);
+    jbtnShop.setEnabled(enabled);
+    jbtnAttack1.setEnabled(enabled);
     jbtnDefend.setEnabled(enabled);
     JbtnTaunt.setEnabled(enabled);
+    JbtnFlee1.setEnabled(enabled);
 }
 
     @Override
@@ -716,15 +757,32 @@ private void triggerBossTurn() {
     @Override
     public void setBossImage(String imagePath) {
     try {
-        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(
-            getClass().getResource(imagePath));
+        java.net.URL singleUrl = null;
+        try {
+            // If called with a path, try it first
+            singleUrl = getClass().getResource(imagePath);
+        } catch (Exception ignored) { }
+        // If that fails, try resolving from the active boss
+        if (singleUrl == null) {
+            try {
+                Bosses.GameBoss boss = controller != null ? controller.getEngine().getCurrentBoss() : null;
+                singleUrl = resolveBossImageUrl(boss);
+            } catch (Exception ignored) { }
+        }
+        if (singleUrl == null) {
+            // As a last resort, keep whatever icon is currently there and show a readable name.
+            BossName.setText("Boss (image missing)");
+            return;
+        }
+
+        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(singleUrl);
         jlblBoss.setIcon(icon);
         jlblBoss.revalidate();
         jlblBoss.repaint();
 
         // Also update the boss name field whenever the boss changes
         try {
-            Bosses.GameBoss boss = controller.getEngine().getCurrentBoss();
+            Bosses.GameBoss boss = controller != null ? controller.getEngine().getCurrentBoss() : null;
             if (boss != null) {
                 BossName.setText(boss.getName());
             }
@@ -733,6 +791,33 @@ private void triggerBossTurn() {
         logger.log(java.util.logging.Level.WARNING, "Boss image not found: " + imagePath, e);
     }
 }
+
+    /**
+     * Best-effort boss image resolver.
+     * Tries the boss' getImagePath() first (class-based), then falls back to common name-based variants.
+     */
+    private java.net.URL resolveBossImageUrl(Bosses.GameBoss b) {
+        if (b == null) return null;
+        try {
+            // Primary (our standardized path)
+            java.net.URL url = getClass().getResource(b.getImagePath());
+            if (url != null) return url;
+
+            // Fallbacks (older naming patterns)
+            String cls = b.getClass().getSimpleName();
+            String[] candidates = new String[] {
+                "/assets/" + cls + ".png",
+                "/assets/" + b.getName() + ".png",
+                "/assets/" + cls.toLowerCase() + ".png",
+                "/assets/" + b.getName().toLowerCase() + ".png"
+            };
+            for (String p : candidates) {
+                url = getClass().getResource(p);
+                if (url != null) return url;
+            }
+        } catch (Exception ignored) { }
+        return null;
+    }
     @Override
     public void setPartyDisplay(String[] studentNames) {
         // Implementation for party display if needed
@@ -778,33 +863,53 @@ private void triggerBossTurn() {
     }//GEN-LAST:event_jbtnAllySkill3ActionPerformed
 
     private void jbtnBossSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBossSkill2ActionPerformed
-        // TODO add your handling code here:
+        // Boss actions are AI-controlled; these buttons are informational only.
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Boss skills are automatic.",
+            "Info",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jbtnBossSkill2ActionPerformed
 
     private void jbtnBossSkill3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBossSkill3ActionPerformed
-        // TODO add your handling code here:
+        // Boss actions are AI-controlled; these buttons are informational only.
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Boss skills are automatic.",
+            "Info",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jbtnBossSkill3ActionPerformed
 
     private void BossNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BossNameActionPerformed
-        // TODO add your handling code here:
+        // Read-only field
     }//GEN-LAST:event_BossNameActionPerformed
 
     private void HeroName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HeroName1ActionPerformed
-        // TODO add your handling code here:
+        // Read-only field
     }//GEN-LAST:event_HeroName1ActionPerformed
 
     private void JbtnFlee1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnFlee1ActionPerformed
-        // TODO add your handling code here:
-        Characters.GameCharacter activeCharacter = getActiveActor(); 
-    
-    // Calls the controller to execute the flee action
-    controller.executeFlee(activeCharacter);
+        Characters.GameCharacter activeCharacter = getActiveActor();
+        controller.executeFlee(activeCharacter);
+        controller.updateAllUI();
+        // If flee failed, the boss should still take its turn and the UI turn should advance.
+        if (controller.getEngine().getGameState() != GameEngine.GameState.ESCAPED) {
+            triggerBossTurn();
+        }
     
     }//GEN-LAST:event_JbtnFlee1ActionPerformed
 
     private void JbtnTauntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnTauntActionPerformed
-        // TODO add your handling code here:
+        if (controller == null) return;
+        controller.executeTaunt(getActiveActor());
+        controller.updateAllUI();
+        triggerBossTurn();
     }//GEN-LAST:event_JbtnTauntActionPerformed
+
+    private void jbtnAttack1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAttack1ActionPerformed
+        if (controller == null) return;
+        controller.executePlayerAction(0, getActiveActor()); // basic attack
+        controller.updateAllUI();
+        triggerBossTurn();
+    }//GEN-LAST:event_jbtnAttack1ActionPerformed
 
 
     /**
@@ -864,13 +969,14 @@ private void triggerBossTurn() {
     private javax.swing.JButton jbtnAllySkill1;
     private javax.swing.JButton jbtnAllySkill2;
     private javax.swing.JButton jbtnAllySkill3;
-    private javax.swing.JButton jbtnAttack;
+    private javax.swing.JButton jbtnAttack1;
     private javax.swing.JButton jbtnBossSkill1;
     private javax.swing.JButton jbtnBossSkill2;
     private javax.swing.JButton jbtnBossSkill3;
     private javax.swing.JButton jbtnDefend;
     private javax.swing.JButton jbtnPotionHp;
     private javax.swing.JButton jbtnPotionRevive;
+    private javax.swing.JButton jbtnShop;
     private javax.swing.JLabel jlblBoss;
     private javax.swing.JLabel jlblBottom;
     private javax.swing.JLabel jlblFront;

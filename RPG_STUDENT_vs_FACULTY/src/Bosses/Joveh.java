@@ -18,6 +18,7 @@ public class Joveh extends GameBoss {
         this.maxMana = 75;
         this.rage = 0;
         this.defence = 11;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -64,7 +65,7 @@ public class Joveh extends GameBoss {
             }
 
             if (target != null) {
-                int damage = 12;
+                int damage = scaledDamage(12);
                 target.takeDamage(damage);
                 totalDamage += damage;
                 result.append("- Hit ").append(i + 1).append(" on ").append(target.getName()).append(" for ").append(damage).append(" damage!\n");
@@ -87,29 +88,33 @@ public class Joveh extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Speed Quiz
-                if (this.mana >= 35) {
-                    this.mana -= 35;
+                int cost = scaledManaCost(35);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(16);
-                    int damage = 28;
+                    int damage = scaledDamage(28);
                     target.takeDamage(damage);
-                    target.takeDamage(15); // Second hit
-                    return this.name + " launches [Speed Quiz] - a multi-hit assault on " + target.getName() + "!\nDeals " + (damage + 15) + " total damage!";
+                    int second = scaledDamage(15);
+                    target.takeDamage(second); // Second hit
+                    return this.name + " launches [Speed Quiz] - a multi-hit assault on " + target.getName() + "!\nDeals " + (damage + second) + " total damage!";
                 }
                 return this.name + " attempted [Speed Quiz] but lacks Mana!";
             }
             case 2 -> { // Time Limit
-                if (this.mana >= 40) {
-                    this.mana -= 40;
+                int cost = scaledManaCost(40);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(17);
                     return this.name + " declares [Time Limit]!\nAll students' cooldown recovery is reduced!";
                 }
                 return this.name + " attempted [Time Limit] but lacks Mana!";
             }
             case 3 -> { // Unexpected Question
-                if (this.mana >= 45) {
-                    this.mana -= 45;
+                int cost = scaledManaCost(45);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(19);
-                    int damage = 38;
+                    int damage = scaledDamage(38);
                     target.takeDamage(damage);
                     return this.name + " springs an [Unexpected Question] on " + target.getName() + "!\nCritical strike! Deals " + damage + " damage!";
                 }

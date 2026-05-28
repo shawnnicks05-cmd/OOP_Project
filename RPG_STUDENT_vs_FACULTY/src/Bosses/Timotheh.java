@@ -18,6 +18,7 @@ public class Timotheh extends GameBoss {
         this.maxMana = 75;
         this.rage = 0;
         this.defence = 13;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class Timotheh extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 20;
+        int baseDamage = scaledDamage(20);
         target.takeDamage(baseDamage);
         this.addRage(12);
 
@@ -67,16 +68,18 @@ public class Timotheh extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Quick Reminder
-                if (this.mana >= 30) {
-                    this.mana -= 30;
+                int cost = scaledManaCost(30);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(14);
                     return this.name + " gives a [Quick Reminder]!\nInterrupts all charging attacks!";
                 }
                 return this.name + " attempted [Quick Reminder] but lacks Mana!";
             }
             case 2 -> { // Class Participation
-                if (this.mana >= 40) {
-                    this.mana -= 40;
+                int cost = scaledManaCost(40);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(16);
                     return this.name + " demands [Class Participation]!\nBuffs nearby enemies!";
                 }

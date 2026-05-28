@@ -33,14 +33,14 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="311" max="-2" attributes="0"/>
-                      <Component id="BossDefeated" min="-2" pref="107" max="-2" attributes="0"/>
+                      <Component id="jLabel1" min="-2" pref="107" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
-                      <Component id="Totalturns" min="-2" pref="129" max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" pref="129" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
-                              <Component id="PartiesSummary" min="-2" pref="129" max="-2" attributes="0"/>
+                              <Component id="jLabel3" min="-2" pref="129" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane4" alignment="0" min="-2" pref="169" max="-2" attributes="0"/>
                       </Group>
@@ -63,17 +63,17 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="BossDefeated" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jLabel1" min="-2" pref="32" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane2" min="-2" pref="93" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="Totalturns" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" pref="32" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane3" min="-2" pref="93" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="PartiesSummary" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jLabel3" min="-2" pref="32" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane4" min="-2" pref="93" max="-2" attributes="0"/>
                   </Group>
@@ -95,7 +95,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="BossDefeated">
+    <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="BOSS DEFEATED"/>
       </Properties>
@@ -111,7 +111,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="Totalturns">
+    <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
         <Property name="text" type="java.lang.String" value="TOTAL TURN&apos;S TAKEN"/>
       </Properties>
@@ -127,7 +127,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="PartiesSummary">
+    <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="text" type="java.lang.String" value="PARTIES SUMMARY"/>
       </Properties>

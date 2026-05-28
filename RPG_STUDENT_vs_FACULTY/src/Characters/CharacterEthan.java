@@ -49,10 +49,11 @@ public class CharacterEthan extends GameCharacter {
                 }
                 startSkillCooldown(1);
 
-                int baseDamage = Math.max(5, calculateAttackDamage(targetBoss) - 5);
+                // Skills should hit harder than basic attacks
+                int baseDamage = (int) Math.round(calculateAttackDamage(targetBoss) * 1.6);
                 // Processes system-wide counters (e.g., Precision Damage vs Quizzes)
                 double modifier = calculateDamageModifier(targetBoss.getClassification());
-                int finalDamage = (int) (baseDamage * modifier);
+                int finalDamage = (int) Math.round(baseDamage * modifier);
                 targetBoss.takeDamage(finalDamage);
 
                 String modifierAlert = modifier > 1.0 ? " [CRITICAL WEAKNESS EXPLOITED!]" : "";
@@ -96,7 +97,8 @@ public class CharacterEthan extends GameCharacter {
         }
         
         GameBoss target = activeBosses.get(0);
-        int baseDamage = calculateAttackDamage(target);
+        // Basic attacks are intentionally weaker than skills
+        int baseDamage = (int) Math.round(calculateAttackDamage(target) * 0.70);
         
         double modifier = calculateDamageModifier(target.getClassification());
         String result = attackBossWithRoll(target, baseDamage, modifier, "fires a calculated analytical point straight at");

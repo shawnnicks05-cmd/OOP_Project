@@ -29,6 +29,7 @@ public class Hydra extends GameBoss {
         this.maxMana = 100;
         this.rage = 0;
         this.defence = 12;
+        applyDifficultyScaling();
     }
 
     @Override

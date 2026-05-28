@@ -2,22 +2,35 @@ package GameEngine;
 
 import Bosses.GameBoss;
 import Characters.GameCharacter;
+import java.io.File;
 import java.util.ArrayList;
 import Inventory.EmptyInventoryException;
+import Inventory.Potions;
 
 /**
  * BattleController manages battle logic and connects to UI
  * @author user
  */
 public class BattleController {
+    // =========================================================
+    // GAME FLOW:
+    // BattleScreen input -> BattleController -> GameEngine
+    // Controller updates UI after each action + auto-saves
+    // =========================================================
 
     private GameEngine engine;
     private IBattleScreenUI battleScreen;
     private boolean nextBossScheduled = false;
+    private static final String DEFAULT_SAVE_FILE = "savegame.txt";
 
     public BattleController(IBattleScreenUI battleScreen) {
         this.battleScreen = battleScreen;
         this.engine = new GameEngine();
+    }
+
+    public BattleController(IBattleScreenUI battleScreen, GameEngine engine) {
+        this.battleScreen = battleScreen;
+        this.engine = engine != null ? engine : new GameEngine();
     }
 
     // --- INITIALIZATION ---
@@ -26,6 +39,7 @@ public class BattleController {
         engine.initializeParty(partyStudents);
         engine.spawnBoss(bossType);
         updateAllUI();
+        autoSave();
     }
 
    public void spawnNextBoss() {
@@ -40,20 +54,10 @@ public class BattleController {
             
             int totalTurns = engine.getTotalTurns();
             int bossesDefeated = engine.getBossesDefeated();
-            
-            StringBuilder partySummaryBuilder = new StringBuilder("<html>");
-            for (GameCharacter student : getPartyStudents()) {
-                partySummaryBuilder.append(student.getName())
-                                   .append(" (HP: ").append(student.getHp()).append("/")
-                                   .append(student.getMaxHp()).append(")")
-                                   .append(student.getHp() <= 0 ? " - DEFEATED<br>" : " - ALIVE<br>");
-            }
-            partySummaryBuilder.append("</html>");
-            String finalPartySummary = partySummaryBuilder.toString();
 
             javax.swing.SwingUtilities.invokeLater(() -> {
-                Game_UI.Result resultWindow = new Game_UI.Result();
-                resultWindow.displayGameSummary(bossesDefeated, totalTurns, finalPartySummary);
+                // Use the dedicated "game complete" Result constructor
+                Game_UI.Result resultWindow = new Game_UI.Result(getPartyStudents(), bossesDefeated, totalTurns);
                 resultWindow.setVisible(true);
             });
 
@@ -75,6 +79,108 @@ public class BattleController {
         updateAllUI();
 
         appendChatMessage(engine.getLastBattleMessage());
+        autoSave();
+    }
+
+    private void autoSave() {
+        try {
+            String dir = System.getProperty("user.dir");
+            String path = dir + File.separator + DEFAULT_SAVE_FILE;
+            engine.saveStateToFile(path);
+        } catch (Exception ignored) {
+            // Auto-save should never crash the game.
+        }
+    }
+
+    /**
+     * Manual save (for a dedicated "Save Game" button in the battle UI).
+     */
+    public String saveNow() {
+        try {
+            String dir = System.getProperty("user.dir");
+            String path = dir + File.separator + DEFAULT_SAVE_FILE;
+            engine.saveStateToFile(path);
+            return "Game saved!";
+        } catch (Exception e) {
+            return "Save failed: " + e.getMessage();
+        }
+    }
+
+    private void offerShopAndSpawnNextBoss() {
+        if (engine.getGameState() == GameEngine.GameState.BOSS_DEFEATED && engine.getBossRound() < 6) {
+            openShopDialog();
+        }
+        spawnNextBoss();
+    }
+
+    /**
+     * Opens the wave shop (JOptionPane). Safe to call from UI (e.g., Shop button).
+     * If you want to restrict shop usage, add state checks here.
+     */
+    public void openShopDialog() {
+        
+        if (!(battleScreen instanceof Game_UI.BattleScreen)) return;
+        String title = "Wave " + engine.getBossRound() + " Shop";
+        String[] options = {
+            "HP Potion (25g)",
+            "Mana Potion (20g)",
+            "Revive Potion (40g)",
+            "Leave Shop"
+        };
+        boolean keepShopping = true;
+
+        while (keepShopping) {
+            int choice = javax.swing.JOptionPane.showOptionDialog(
+                null,
+                "Gold: " + engine.getGold() + "\nChoose an item to purchase before the next wave.",
+                title,
+                javax.swing.JOptionPane.DEFAULT_OPTION,
+                javax.swing.JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]
+            );
+
+            if (choice < 0 || choice == 3) {
+                keepShopping = false;
+                break;
+            }
+
+            int cost = 0;
+            Potions potion = null;
+            switch (choice) {
+                case 0 -> {
+                    cost = 25;
+                    potion = new Potions("HP Potion", "HP", 40);
+                }
+                case 1 -> {
+                    cost = 20;
+                    potion = new Potions("Mana Potion", "MANA", 40);
+                }
+                case 2 -> {
+                    cost = 40;
+                    potion = new Potions("Revive Potion", "REVIVE", 50);
+                }
+            }
+
+            if (potion == null || cost <= 0) {
+                keepShopping = false;
+                break;
+            }
+
+            if (!engine.spendGold(cost)) {
+                javax.swing.JOptionPane.showMessageDialog(null,
+                    "Not enough gold for that purchase.",
+                    "Shop", javax.swing.JOptionPane.WARNING_MESSAGE);
+                continue;
+            }
+
+            engine.addItem(potion);
+            appendChatMessage("Purchased " + potion.getName() + " for " + cost + " gold.");
+            if (battleScreen instanceof Game_UI.BattleScreen screen) {
+                screen.updateGoldDisplay(engine.getGold());
+            }
+        }
     }
 
     // --- TURN EXECUTION ---
@@ -86,11 +192,13 @@ public class BattleController {
         }
         // Prevent spamming clicks after victory from scheduling multiple boss spawns (which skips rounds)
         if (engine.getGameState() == GameEngine.GameState.BOSS_DEFEATED || nextBossScheduled) {
+            appendChatMessage("Please wait... preparing the next wave.");
             return;
         }
 
         String result = engine.executePlayerTurn(skillChoice, actor);
         appendChatMessage(result);
+        autoSave();
 
         if (engine.getGameState() == GameEngine.GameState.BOSS_DEFEATED) {
             appendChatMessage("\n*** VICTORY! ***");
@@ -107,7 +215,7 @@ public class BattleController {
             new java.util.Timer().schedule(new java.util.TimerTask() {
                 @Override
                 public void run() {
-                    javax.swing.SwingUtilities.invokeLater(() -> spawnNextBoss());
+                    javax.swing.SwingUtilities.invokeLater(() -> offerShopAndSpawnNextBoss());
                 }
             }, 2000);
             return;
@@ -134,6 +242,7 @@ public class BattleController {
             return; // turn is NOT consumed
         }
         updateAllUI();
+        autoSave();
     }
 
     public String executeTaunt(GameCharacter actor) {
@@ -150,6 +259,7 @@ public class BattleController {
         engine.consumePlayerTurn();
         appendChatMessage(result);
         updateAllUI();
+        autoSave();
         return result;
     }
 
@@ -169,34 +279,29 @@ public class BattleController {
         String result = engine.attemptFlee(actor);
         appendChatMessage(result);
         updateAllUI();
+        autoSave();
 
-        // 2. CASE A: IF PLAYER FAILED TO FLEE -> LET THE BOSS ATTACK!
-        if (result.contains("failed to flee")) {
-            // Wait 1.5 seconds so the player can read "Ethan failed to flee!" before the boss acts
-            new javax.swing.Timer(1500, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    // This forces Ghuardio to take his turn
-                    executeBossAction();
-                    
-                    // Stop this one-time timer from looping
-                    ((javax.swing.Timer)e.getSource()).stop();
-                }
-            }).start();
-        }
-        
-        // 3. CASE B: IF PLAYER SUCCESSFULY FLED -> CLOSE THE BATTLE
-        else if (result.contains("successfully fled")) {
-            javax.swing.JOptionPane.showMessageDialog(null,
-                "You safely escaped the classroom!",
-                "ESCAPED", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                
+        // If the player successfully fled -> close battle and show the run summary (Result screen).
+        if (result.contains("successfully fled")) {
+            int totalTurns = engine.getTotalTurns();
+            int bossesDefeated = engine.getBossesDefeated();
+
             // Safely close the UI window
             if (battleScreen instanceof javax.swing.JFrame) {
                 ((javax.swing.JFrame) battleScreen).dispose();
             } else if (battleScreen instanceof javax.swing.JDialog) {
                 ((javax.swing.JDialog) battleScreen).dispose();
             }
+
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                Game_UI.Result resultWindow = new Game_UI.Result(
+                    getPartyStudents(),
+                    bossesDefeated,
+                    totalTurns,
+                    "You safely escaped the classroom."
+                );
+                resultWindow.setVisible(true);
+            });
         }
 
         return result;
@@ -211,12 +316,6 @@ public class BattleController {
     }
 
     public void executeBossAction() {
-        // Print boss name separator before the boss performs an action (as shown in your sample log)
-        GameBoss boss = engine.getCurrentBoss();
-        if (boss != null) {
-            appendChatMessage("-- " + boss.getName() + " --");
-        }
-
         String result = engine.executeBossTurn();
         appendChatMessage(result);
 
@@ -232,6 +331,7 @@ public class BattleController {
         }
 
         updateAllUI();
+        autoSave();
     }
 
     // --- UI UPDATES ---
@@ -244,20 +344,45 @@ public class BattleController {
     }
 
     private void updateBossStats() {
-        GameBoss boss = engine.getCurrentBoss();
-        if (boss == null) return;
+        ArrayList<GameBoss> bosses = engine.getActiveBosses();
+        if (bosses == null || bosses.isEmpty()) return;
 
-        int hpPercent = (int) ((boss.getHp() / (double) boss.getMaxHp()) * 100);
-        battleScreen.setHPBarBoss(Math.max(0, Math.min(100, hpPercent)));
-        battleScreen.setManaBarBoss(boss.getMana());
-        int skillSlots = Math.min(3, boss.getSkillname() != null ? boss.getSkillname().length : 0);
-        int[] cds = new int[] {0, 0, 0};
-        for (int i = 0; i < skillSlots; i++) {
-            cds[i] = boss.getSkillCooldownRemaining(i + 1);
+        int totalHp = 0, totalMaxHp = 0;
+        double manaRatioSum = 0.0;
+        int manaRatioCount = 0;
+        int maxRage = 0;
+
+        for (GameBoss b : bosses) {
+            if (b == null) continue;
+            totalHp += Math.max(0, b.getHp());
+            totalMaxHp += Math.max(1, b.getMaxHp());
+            if (b.getMaxMana() > 0) {
+                manaRatioSum += (b.getMana() / (double) b.getMaxMana());
+                manaRatioCount++;
+            }
+            maxRage = Math.max(maxRage, b.getRage());
         }
-        battleScreen.updateBossSkillButtons(boss.getSkillname(), cds);
-        // Show boss rage in the turn indicator area instead of the meter
-        battleScreen.setRageMeter(boss.getRage()); // still updates if you add a bar later
+
+        int hpPercent = (int) ((totalHp / (double) totalMaxHp) * 100);
+        battleScreen.setHPBarBoss(Math.max(0, Math.min(100, hpPercent)));
+
+        int manaPercent = 0;
+        if (manaRatioCount > 0) {
+            manaPercent = (int) Math.round((manaRatioSum / manaRatioCount) * 100);
+        }
+        battleScreen.setManaBarBoss(Math.max(0, Math.min(100, manaPercent)));
+
+        // Boss skill buttons: show the first alive boss (keeps UI simple for couple wave)
+        GameBoss primary = engine.getCurrentBoss();
+        if (primary != null) {
+            int skillSlots = Math.min(3, primary.getSkillname() != null ? primary.getSkillname().length : 0);
+            int[] cds = new int[] {0, 0, 0};
+            for (int i = 0; i < skillSlots; i++) {
+                cds[i] = primary.getSkillCooldownRemaining(i + 1);
+            }
+            battleScreen.updateBossSkillButtons(primary.getSkillname(), cds);
+            battleScreen.setRageMeter(maxRage);
+        }
     }
 
     private void updatePartyStats() {

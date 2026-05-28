@@ -212,6 +212,12 @@ public abstract class GameCharacter {
         skillCooldownMax[2] = Math.max(0, cd3);
     }
 
+    public void setSkillCooldownRemaining(int cd1, int cd2, int cd3) {
+        skillCooldownRemaining[0] = Math.max(0, cd1);
+        skillCooldownRemaining[1] = Math.max(0, cd2);
+        skillCooldownRemaining[2] = Math.max(0, cd3);
+    }
+
     public int getSkillCooldownRemaining(int skillNumber) {
         int idx = skillNumber - 1;
         if (idx < 0 || idx >= 3) return 0;

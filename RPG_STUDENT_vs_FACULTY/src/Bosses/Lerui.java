@@ -18,6 +18,7 @@ public class Lerui extends GameBoss {
         this.maxMana = 85;
         this.rage = 0;
         this.defence = 14;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class Lerui extends GameBoss {
     public String basicAttack(ArrayList<GameCharacter> partyStudents) {
         if (partyStudents.isEmpty()) return this.name + " has no targets.";
 
-        int baseDamage = 22;
+        int baseDamage = scaledDamage(22);
         StringBuilder result = new StringBuilder();
         result.append(this.name + " delivers a mighty strike!\n");
 
@@ -76,10 +77,11 @@ public class Lerui extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Power Lecture
-                if (this.mana >= 50) {
-                    this.mana -= 50;
+                int cost = scaledManaCost(50);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(20);
-                    int damage = 45;
+                    int damage = scaledDamage(45);
                     for (GameCharacter student : partyStudents) {
                         if (student.getHp() > 0) {
                             student.takeDamage(damage);
@@ -90,18 +92,20 @@ public class Lerui extends GameBoss {
                 return this.name + " attempted [Power Lecture] but lacks Mana!";
             }
             case 2 -> { // Attendance Check
-                if (this.mana >= 30) {
-                    this.mana -= 30;
+                int cost = scaledManaCost(30);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(12);
-                    int damage = 20;
+                    int damage = scaledDamage(20);
                     target.takeDamage(damage);
                     return this.name + " performs [Attendance Check] on " + target.getName() + "!\nStuns the target and deals " + damage + " damage!";
                 }
                 return this.name + " attempted [Attendance Check] but lacks Mana!";
             }
             case 3 -> { // Mental Exhaustion
-                if (this.mana >= 45) {
-                    this.mana -= 45;
+                int cost = scaledManaCost(45);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(18);
                     return this.name + " drains mental energy with [Mental Exhaustion]!\nAll students lose stamina over time!";
                 }

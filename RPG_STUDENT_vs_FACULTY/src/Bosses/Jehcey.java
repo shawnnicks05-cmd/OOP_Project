@@ -18,6 +18,7 @@ public class Jehcey extends GameBoss {
         this.maxMana = 85;
         this.rage = 0;
         this.defence = 15;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class Jehcey extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 22;
+        int baseDamage = scaledDamage(22);
         target.takeDamage(baseDamage);
         this.addRage(12);
 
@@ -68,18 +69,20 @@ public class Jehcey extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Advanced Question
-                if (this.mana >= 45) {
-                    this.mana -= 45;
+                int cost = scaledManaCost(45);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(18);
-                    int damage = 38;
+                    int damage = scaledDamage(38);
                     target.takeDamage(damage);
                     return this.name + " poses an [Advanced Question] to " + target.getName() + "!\nStrong single-target attack! Deals " + damage + " damage!";
                 }
                 return this.name + " attempted [Advanced Question] but lacks Mana!";
             }
             case 2 -> { // Reality Check
-                if (this.mana >= 50) {
-                    this.mana -= 50;
+                int cost = scaledManaCost(50);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(20);
                     return this.name + " delivers a [Reality Check]!\nRemoves all overpowered buffs from the team!";
                 }

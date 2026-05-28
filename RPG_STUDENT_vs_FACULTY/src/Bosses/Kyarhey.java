@@ -18,6 +18,7 @@ public class Kyarhey extends GameBoss {
         this.maxMana = 70;
         this.rage = 0;
         this.defence = 9;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class Kyarhey extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 15 + rand.nextInt(10);
+        int baseDamage = scaledDamage(15 + rand.nextInt(10));
         target.takeDamage(baseDamage);
         this.addRage(11);
 
@@ -68,18 +69,20 @@ public class Kyarhey extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Mood Shift
-                if (this.mana >= 35) {
-                    this.mana -= 35;
+                int cost = scaledManaCost(35);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(15);
                     return this.name + " shifts her mood with [Mood Shift]!\nBattle effects change randomly!";
                 }
                 return this.name + " attempted [Mood Shift] but lacks Mana!";
             }
             case 2 -> { // Confusing Question
-                if (this.mana >= 40) {
-                    this.mana -= 40;
+                int cost = scaledManaCost(40);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(17);
-                    int damage = 32;
+                    int damage = scaledDamage(32);
                     target.takeDamage(damage);
                     return this.name + " asks a [Confusing Question] to " + target.getName() + "!\nCauses confusion and deals " + damage + " damage!";
                 }

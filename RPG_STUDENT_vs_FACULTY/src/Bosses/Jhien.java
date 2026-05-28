@@ -18,6 +18,7 @@ public class Jhien extends GameBoss {
         this.maxMana = 70;
         this.rage = 0;
         this.defence = 10;
+        applyDifficultyScaling();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class Jhien extends GameBoss {
 
         Random rand = new Random();
         GameCharacter target = partyStudents.get(rand.nextInt(partyStudents.size()));
-        int baseDamage = 19;
+        int baseDamage = scaledDamage(19);
         target.takeDamage(baseDamage);
         this.addRage(12);
 
@@ -68,21 +69,24 @@ public class Jhien extends GameBoss {
 
         switch (skillNumber) {
             case 1 -> { // Speed Submission
-                if (this.mana >= 40) {
-                    this.mana -= 40;
+                int cost = scaledManaCost(40);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(16);
-                    int damage = 30;
+                    int damage = scaledDamage(30);
                     target.takeDamage(damage);
-                    target.takeDamage(15); // Combo
-                    return this.name + " executes [Speed Submission] on " + target.getName() + "!\nFast combo attacks! Total damage: " + (damage + 15) + "!";
+                    int combo = scaledDamage(15);
+                    target.takeDamage(combo); // Combo
+                    return this.name + " executes [Speed Submission] on " + target.getName() + "!\nFast combo attacks! Total damage: " + (damage + combo) + "!";
                 }
                 return this.name + " attempted [Speed Submission] but lacks Mana!";
             }
             case 2 -> { // Instant Deadline
-                if (this.mana >= 50) {
-                    this.mana -= 50;
+                int cost = scaledManaCost(50);
+                if (this.mana >= cost) {
+                    this.mana -= cost;
                     this.addRage(20);
-                    int damage = 48;
+                    int damage = scaledDamage(48);
                     target.takeDamage(damage);
                     return this.name + " delivers an [Instant Deadline] to " + target.getName() + "!\nImmediate burst damage! Deals " + damage + "!";
                 }

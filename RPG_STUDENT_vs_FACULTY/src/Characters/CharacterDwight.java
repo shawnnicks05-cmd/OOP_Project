@@ -60,10 +60,11 @@ public class CharacterDwight extends GameCharacter {
                 }
                 startSkillCooldown(1);
 
-                int baseDamage = calculateAttackDamage(targetBoss) + 10;
+                // Skills should be stronger than basic attacks
+                int baseDamage = (int) Math.round(calculateAttackDamage(targetBoss) * 1.6) + 10;
                 // Processes system multipliers (e.g., Tech Damage deals 1.5x damage against Projects classification!)
                 double modifier = calculateDamageModifier(targetBoss.getClassification());
-                int finalDamage = (int) (baseDamage * modifier);
+                int finalDamage = (int) Math.round(baseDamage * modifier);
 
                 targetBoss.takeDamage(finalDamage);
 
@@ -108,7 +109,8 @@ public class CharacterDwight extends GameCharacter {
         }
         
         GameBoss target = activeBosses.get(0);
-        int baseDamage = calculateAttackDamage(target);
+        // Basic attacks are intentionally weaker than skills
+        int baseDamage = (int) Math.round(calculateAttackDamage(target) * 0.70);
         
         double modifier = calculateDamageModifier(target.getClassification());
         String result = attackBossWithRoll(target, baseDamage, modifier, "throws a raw unoptimized script terminal at");

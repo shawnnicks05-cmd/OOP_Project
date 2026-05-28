@@ -1,0 +1,174 @@
+@startuml UML_CLASS
+' Best choice for Java projects: PlantUML (easy to render + version control friendly)
+hide circle
+skinparam classAttributeIconSize 0
+
+package Game_UI {
+  class Menu
+  class CharacterSelections
+  class BattleScreen
+  class Result
+}
+
+package GameEngine {
+  class GameEngine {
+    +getGold() : int
+    +addGold(amount:int)
+    +spendGold(amount:int) : boolean
+    +initializeParty(students: ArrayList<GameCharacter>)
+    +spawnBoss(bossType: BossType) : GameBoss
+    +spawnNextBoss() : GameBoss
+    +executePlayerTurn(skillChoice:int, actor: GameCharacter) : String
+    +executeBossTurn() : String
+    +attemptFlee(actor: GameCharacter) : String
+    +saveStateToFile(filePath:String) : String
+    +{static} loadStateFromFile(filePath:String) : GameEngine
+  }
+
+  interface IBattleScreenUI {
+    +appendToChatBox(message:String)
+    +clearChatBox()
+    +updateSkillButtons(skillNames:String[], cooldownRemaining:int[], enabled:boolean[])
+    +setActionButtonsEnabled(enabled:boolean)
+    +updatePotionButtons(hpCount:int, manaCount:int, reviveCount:int, enabled:boolean)
+    +setBossImage(imagePath:String)
+    +updateGoldDisplay(gold:int)
+    +getActiveActor() : GameCharacter
+  }
+
+  class BattleController {
+    +initializeBattle(bossType: GameEngine.BossType, partyStudents: ArrayList<GameCharacter>)
+    +spawnNextBoss()
+    +executePlayerAction(skillChoice:int, actor: GameCharacter)
+    +executePlayerPotion(potionType: GameEngine.PotionType, actor: GameCharacter)
+    +executeTaunt(actor: GameCharacter) : String
+    +executeFlee(actor: GameCharacter) : String
+    +executeBossAction()
+    +openShopDialog()
+    +updateAllUI()
+    +getEngine() : GameEngine
+    +getPartyStudents() : ArrayList<GameCharacter>
+  }
+
+  class CharacterFactory {
+    +{static} createCharacter(characterName:String) : GameCharacter
+  }
+
+  class GameLauncher
+}
+
+package Characters {
+  abstract class GameCharacter {
+    +getName() : String
+    +getHp() : int
+    +getMana() : int
+    +getMorale() : int
+    +setPosition(pos:String)
+    +getPosition() : String
+    +isSkillOnCooldown(skillNumber:int) : boolean
+    +getSkillCooldownRemaining(skillNumber:int) : int
+    +tickCooldowns()
+    +applyTaunt(turns:int)
+    +isTaunted() : boolean
+    +tickStatusEffects()
+    +basicAttack(activeBosses: ArrayList<GameBoss>) : String
+    +useSkills(skillNumber:int, activeBosses: ArrayList<GameBoss>) : String
+    +defend() : String
+  }
+
+  class CharacterShawn
+  class CharacterEthan
+  class CharacterDwight
+  class CharacterOmar
+  class CharacterPrincess
+}
+
+package Bosses {
+  abstract class GameBoss {
+    +getName() : String
+    +getHp() : int
+    +getMana() : int
+    +getRage() : int
+    +takeDamage(amount:int)
+    +basicAttack(partyStudents: ArrayList<GameCharacter>) : String
+    +useSkills(skillNumber:int, partyStudents: ArrayList<GameCharacter>) : String
+  }
+
+  class Hydra
+  class Maru <<display name: Meruh>>
+  class Alyzeh
+  class Bharkyot
+  class Ahzzee
+  class Bhardian
+  class Ghuardio
+  class Jehcey
+  class Jenateh
+  class Jhien
+  class Joveh
+  class Kyarhey
+  class LaPetralbey
+  class Lerui
+  class Patzkhey
+  class Timotheh
+}
+
+package Inventory {
+  abstract class Item {
+    +getName() : String
+    +getType() : String
+    +getValue() : int
+  }
+  class Potions
+  class EmptyInventoryException
+}
+
+' --- UI relationships ---
+BattleScreen ..|> IBattleScreenUI
+Menu --> CharacterSelections : "Start Game"
+Menu --> BattleScreen : "Load Game"
+CharacterSelections --> BattleScreen : "Start (partyMembers)"
+BattleController --> Result : "Game complete"
+
+' --- Controller/engine relationships ---
+BattleScreen o-- BattleController : controller
+BattleController o-- GameEngine : engine
+BattleController --> IBattleScreenUI : battleScreen
+BattleController ..> Potions : buys
+
+GameEngine o-- "0..1" GameBoss : currentBoss
+GameEngine o-- "0..*" GameCharacter : partyStudents
+GameEngine o-- "0..*" Item : inventory
+GameEngine ..> CharacterFactory : "load uses"
+
+' --- Inheritance ---
+GameCharacter <|-- CharacterShawn
+GameCharacter <|-- CharacterEthan
+GameCharacter <|-- CharacterDwight
+GameCharacter <|-- CharacterOmar
+GameCharacter <|-- CharacterPrincess
+
+GameBoss <|-- Hydra
+GameBoss <|-- Maru
+GameBoss <|-- Alyzeh
+GameBoss <|-- Bharkyot
+GameBoss <|-- Ahzzee
+GameBoss <|-- Bhardian
+GameBoss <|-- Ghuardio
+GameBoss <|-- Jehcey
+GameBoss <|-- Jenateh
+GameBoss <|-- Jhien
+GameBoss <|-- Joveh
+GameBoss <|-- Kyarhey
+GameBoss <|-- LaPetralbey
+GameBoss <|-- Lerui
+GameBoss <|-- Patzkhey
+GameBoss <|-- Timotheh
+
+Item <|-- Potions
+EmptyInventoryException -|> Exception
+
+' --- Cross-package usage ---
+GameCharacter ..> GameBoss : attacks
+GameBoss ..> GameCharacter : attacks
+
+@enduml

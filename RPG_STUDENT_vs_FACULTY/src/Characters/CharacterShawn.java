@@ -54,7 +54,7 @@ public class CharacterShawn extends GameCharacter {
 
         switch(skillNumber) {
             case 1 -> { // 🧠 BrainStorm Burst (Offensive Single-Target Skill)
-                if (targetBoss == null) return getName() + " finds no active boss to attack.";
+                if (activeBosses.isEmpty()) return getName() + " finds no active boss to attack.";
 
                 if (isSkillOnCooldown(1)) {
                     return getSkillDisplayName(1) + " can't be used for " + getSkillCooldownRemaining(1) + " more rounds.";
@@ -64,15 +64,19 @@ public class CharacterShawn extends GameCharacter {
                 }
                 startSkillCooldown(1);
 
-                int baseDamage = calculateAttackDamage(targetBoss);
-                // Apply class modifier multipliers based on your parent's type chart!
-                double modifier = calculateDamageModifier(targetBoss.getClassification());
-                int finalDamage = (int) (baseDamage * modifier);
-
-                targetBoss.takeDamage(finalDamage);
-                String modifierAlert = modifier > 1.0 ? " [COUNTER BONUS!]" : "";
-                return getName() + " unleashes a BrainStorm Burst directly at " + targetBoss.getName() + "!" +
-                       "\nDeals " + finalDamage + " Mental Damage." + modifierAlert;
+                // AOE: apply to ALL active bosses (important for the Couple wave)
+                StringBuilder log = new StringBuilder();
+                for (GameBoss boss : activeBosses) {
+                    if (boss == null || boss.getHp() <= 0) continue;
+                    // Skills should be stronger than basic attacks
+                    int baseDamage = (int) Math.round(calculateAttackDamage(boss) * 1.6);
+                    double modifier = calculateDamageModifier(boss.getClassification());
+                    int finalDamage = (int) Math.round(baseDamage * modifier);
+                    boss.takeDamage(finalDamage);
+                    String modifierAlert = modifier > 1.0 ? " [COUNTER BONUS!]" : "";
+                    log.append("\n- ").append(boss.getName()).append(" takes ").append(finalDamage).append(" damage.").append(modifierAlert);
+                }
+                return getName() + " unleashes [BrainStorm Burst] across all enemies!" + log;
             }
             case 2 -> { // 📚 Group Study (Team-wide Buff)
                 if (isSkillOnCooldown(2)) {
@@ -107,7 +111,8 @@ public class CharacterShawn extends GameCharacter {
         
         // Instantly grabs the front active boss entity
         GameBoss target = activeBosses.get(0);
-        int baseDamage = calculateAttackDamage(target);
+        // Basic attacks are intentionally weaker than skills
+        int baseDamage = (int) Math.round(calculateAttackDamage(target) * 0.70);
         
         String result = attackBossWithRoll(target, baseDamage, 1.0, "throws a crude piece of feedback notes at");
         return result;
