@@ -6,6 +6,7 @@ package Game_UI;
 import GameEngine.BattleController;
 import Characters.GameCharacter;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+=======
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
 
 /**
  *
@@ -73,6 +76,7 @@ public class Result extends javax.swing.JFrame {
         displayGameSummary(bossesDefeated, totalTurns);
     }
 
+<<<<<<< HEAD
     /**
      * Creates Result screen for escaping (FLEE).
      * Shows a game/session summary without forcing the player back to menu immediately.
@@ -86,10 +90,13 @@ public class Result extends javax.swing.JFrame {
         displayEscapeSummary(bossesDefeated, totalTurns, escapeMessage);
     }
 
+=======
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
     private void configureWindow() {
         setLocationRelativeTo(null);
         setResizable(false);
         setExtendedState(javax.swing.JFrame.NORMAL);
+<<<<<<< HEAD
         setTitle("Battle Result");
         // Rebuild the layout at runtime (cleaner than the NetBeans-generated GroupLayout)
         // while still reusing the same components.
@@ -281,10 +288,13 @@ public class Result extends javax.swing.JFrame {
         javax.swing.text.SimpleAttributeSet attrs = new javax.swing.text.SimpleAttributeSet();
         javax.swing.text.StyleConstants.setAlignment(attrs, javax.swing.text.StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), attrs, false);
+=======
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
     }
 
     public void displayGameSummary(int bossesDefeated, int totalTurns) {
         StringBuilder gameSummary = new StringBuilder();
+<<<<<<< HEAD
         gameSummary.append("GAME COMPLETE - VICTORY!\n");
         gameSummary.append("----------------------------------\n\n");
         gameSummary.append("All boss rounds have been cleared.\n");
@@ -292,33 +302,57 @@ public class Result extends javax.swing.JFrame {
 
         jtxtBattleResult.setText(gameSummary.toString());
         jtxtBattleResult.setCaretPosition(0);
+=======
+        gameSummary.append("🎮 ═══════════════════════════════ 🎮\n");
+        gameSummary.append("      GAME COMPLETE - VICTORY!\n");
+        gameSummary.append("🎮 ═══════════════════════════════ 🎮\n\n");
+        gameSummary.append("All boss rounds have been cleared!\n");
+        gameSummary.append("Your party emerged victorious!\n");
+
+        jtxtBattleResult.setText(gameSummary.toString());
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
         jtxtBossDefeated.setText("ALL BOSSES");
         jtxtTurnTaken.setText(String.valueOf(totalTurns));
 
         StringBuilder finalStats = new StringBuilder();
+<<<<<<< HEAD
         finalStats.append("FINAL PARTY STATUS\n");
         finalStats.append("------------------\n\n");
         if (party != null) {
             for (GameCharacter character : party) {
                 finalStats.append(character.getName()).append("\n");
+=======
+        finalStats.append("━━━ FINAL PARTY STATUS ━━━\n\n");
+        if (party != null) {
+            for (GameCharacter character : party) {
+                finalStats.append("⚔ ").append(character.getName()).append("\n");
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
                 finalStats.append("  HP: ").append(character.getHp()).append("/").append(character.getMaxHp()).append("\n");
                 finalStats.append("  Mana: ").append(character.getMana()).append("/").append(character.getMaxMana()).append("\n");
                 finalStats.append("  Morale: ").append(character.getMorale()).append("\n\n");
             }
         }
+<<<<<<< HEAD
         finalStats.append("\nSESSION STATS\n");
         finalStats.append("------------\n");
+=======
+        finalStats.append("\n━━━ SESSION STATS ━━━\n");
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
         finalStats.append("Bosses Defeated: ").append(bossesDefeated).append("\n");
         finalStats.append("Total Turns: ").append(totalTurns).append("\n");
 
         jtxtPartySummary.setText(finalStats.toString());
+<<<<<<< HEAD
         jtxtPartySummary.setCaretPosition(0);
+=======
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
 
         // Hide next boss button, show only menu
         jbtnContinue.setVisible(false);
         jbtnMenu.setText("RETURN TO MENU");
     }
 
+<<<<<<< HEAD
     public void displayEscapeSummary(int bossesDefeated, int totalTurns, String escapeMessage) {
         StringBuilder summary = new StringBuilder();
         summary.append("ESCAPED!\n");
@@ -356,20 +390,27 @@ public class Result extends javax.swing.JFrame {
         jbtnMenu.setText("RETURN TO MENU");
     }
 
+=======
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
     public void displayBattleResults(int bossesDefeated, int totalTurns, String bossName, boolean gameComplete, boolean isVictory) {
         String resultTitle = isVictory ? "BATTLE VICTORY!" : "BATTLE DEFEAT!";
         String resultMessage = isVictory 
             ? "You have successfully defeated " + bossName + "!"
             : "Your party has been defeated by " + bossName + ".";
         
+<<<<<<< HEAD
         jtxtBattleResult.setText(resultTitle + "\n----------------------------------\n\n" + resultMessage);
         jtxtBattleResult.setCaretPosition(0);
+=======
+        jtxtBattleResult.setText(resultTitle + "\n\n" + resultMessage);
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
         jtxtBossDefeated.setText(bossName);
         jtxtTurnTaken.setText(String.valueOf(totalTurns));
         
         StringBuilder partySummary = new StringBuilder();
         if (party != null) {
             for (GameCharacter character : party) {
+<<<<<<< HEAD
                 partySummary.append(character.getName()).append("\n")
                     .append("  HP: ").append(character.getHp()).append("/").append(character.getMaxHp()).append("\n")
                     .append("  Mana: ").append(character.getMana()).append("/").append(character.getMaxMana()).append("\n")
@@ -378,6 +419,15 @@ public class Result extends javax.swing.JFrame {
         }
         jtxtPartySummary.setText(partySummary.toString());
         jtxtPartySummary.setCaretPosition(0);
+=======
+                partySummary.append(character.getName())
+                    .append("\n  HP: ").append(character.getHp()).append("/").append(character.getMaxHp())
+                    .append("\n  Mana: ").append(character.getMana()).append("/").append(character.getMaxMana())
+                    .append("\n");
+            }
+        }
+        jtxtPartySummary.setText(partySummary.toString());
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
         
         // Update button text and visibility based on game state
         if (!isVictory) {
@@ -513,10 +563,27 @@ public class Result extends javax.swing.JFrame {
         } else {
             // Continue to next boss
             if (battleController != null) {
+<<<<<<< HEAD
                 // Create a fresh battle screen bound to the same engine state, then spawn the next boss.
                 BattleScreen battleScreen = new BattleScreen(battleController.getEngine());
                 battleScreen.setVisible(true);
                 battleScreen.getController().spawnNextBoss();
+=======
+                // Spawn the next boss and check if successful
+                boolean bossSpawned = battleController.spawnNextBoss();
+                
+                if (bossSpawned) {
+                    // Show the battle screen with the next boss
+                    BattleScreen battleScreen = new BattleScreen(battleController);
+                    battleScreen.setVisible(true);
+                } else {
+                    // All bosses defeated - show game summary
+                    Result gameSummary = new Result(battleController.getPartyStudents(), 
+                                                    battleController.getEngine().getBossesDefeated(), 
+                                                    battleController.getEngine().getTotalTurns());
+                    gameSummary.setVisible(true);
+                }
+>>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
                 this.dispose();
             }
         }
