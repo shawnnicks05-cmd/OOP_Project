@@ -4,12 +4,13 @@
  */
 package Game_UI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import GameEngine.IBattleScreenUI;
 import Characters.*;
 import GameEngine.*;
 import Bosses.*;
-import java.util.Arrays;
-/**
+/**import java.util.Arrays;
+
  *
  * @author Acer
  */
@@ -117,13 +118,12 @@ public BattleScreen(ArrayList<GameCharacter> party) {
     /**
      * Default constructor (kept for NetBeans GUI builder). Does not auto-start a battle.
      */
-    public BattleScreen() {
-        initComponents();
-        configureWindow();
-        setupBattleUI();
-    }
-<<<<<<< HEAD
-=======
+//    public BattleScreen() {
+//        initComponents();
+//        configureWindow();
+//        setupBattleUI();
+//    }
+
 
 public BattleScreen(BattleController existingController) {
     initComponents();
@@ -179,7 +179,6 @@ public BattleScreen() {
     BossName.setBackground(java.awt.Color.WHITE);
     BossName.setForeground(java.awt.Color.BLACK);
 }
->>>>>>> 1edc1a11529033349a2dfde7b66893e10f7a2679
 
     private void configureWindow() {
         // Center the window and disable maximize/resize
@@ -947,11 +946,14 @@ private void triggerBossTurn() {
     private void JbtnFlee1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnFlee1ActionPerformed
         Characters.GameCharacter activeCharacter = getActiveActor();
         controller.executeFlee(activeCharacter);
+        // If flee succeeded, the controller will close this window and open the Result summary.
+        // Do NOT try to update UI or trigger boss turn after ESCAPED.
+        if (controller.getEngine().getGameState() == GameEngine.GameState.ESCAPED) {
+            return;
+        }
         controller.updateAllUI();
         // If flee failed, the boss should still take its turn and the UI turn should advance.
-        if (controller.getEngine().getGameState() != GameEngine.GameState.ESCAPED) {
-            triggerBossTurn();
-        }
+        triggerBossTurn();
     
     }//GEN-LAST:event_JbtnFlee1ActionPerformed
 

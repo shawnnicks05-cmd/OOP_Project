@@ -24,8 +24,8 @@ public class GameLauncher {
      */
     public static void initializeRandomBossBattle(BattleController controller,
                                                   ArrayList<GameCharacter> partyStudents) {
-         controller.getEngine().initializeParty(partyStudents);  // ← set party first
-    controller.spawnNextBoss();
+        controller.getEngine().initializeParty(partyStudents);  
+        controller.spawnNextBoss();
     }
 
     /**
@@ -56,19 +56,19 @@ public class GameLauncher {
      * Integration with BattleScreen:
      *
      * 1. In BattleScreen constructor:
-     *    BattleController controller = new BattleController(this);
+     * BattleController controller = new BattleController(this);
      *
      * 2. When Start button is clicked:
-     *    ArrayList<GameCharacter> party = getPartyFromTeamSelection();
-     *    GameLauncher.initializeRandomBossBattle(controller, party);
+     * ArrayList<GameCharacter> party = getPartyFromTeamSelection();
+     * GameLauncher.initializeRandomBossBattle(controller, party);
      *
      * 3. When skill button is clicked:
-     *    GameCharacter actor = getCurrentActingStudent();
-     *    GameLauncher.playerAction(controller, actor, skillNumber);
+     * GameCharacter actor = getCurrentActingStudent();
+     * GameLauncher.playerAction(controller, actor, skillNumber);
      *
      * 4. Monitor battle progress:
-     *    if (!GameLauncher.isBattleActive(controller)) {
-     *        // Battle ended - check victory/defeat
-     *    }
+     * if (!GameLauncher.isBattleActive(controller)) {
+     * // Battle ended - check victory/defeat
+     * }
      */
 }
