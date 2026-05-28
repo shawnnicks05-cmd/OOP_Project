@@ -41,49 +41,49 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        jTitle = new javax.swing.JLabel();
+        j3btns = new javax.swing.JPanel();
         LoadGame = new javax.swing.JButton();
         Start = new javax.swing.JButton();
         Quit = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
+        jBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("a Awal Ramadhan", 0, 48)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel1.setText("STUDENTS VS FACULTY");
-        jLabel1.setFocusable(false);
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 630, 80));
+        jTitle.setBackground(new java.awt.Color(255, 255, 255));
+        jTitle.setFont(new java.awt.Font("a Awal Ramadhan", 0, 48)); // NOI18N
+        jTitle.setForeground(new java.awt.Color(255, 51, 51));
+        jTitle.setText("STUDENTS VS FACULTY");
+        jTitle.setFocusable(false);
+        jTitle.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        getContentPane().add(jTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 630, 80));
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        j3btns.setLayout(new java.awt.BorderLayout());
 
         LoadGame.setBackground(new java.awt.Color(255, 204, 204));
         LoadGame.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         LoadGame.setText("Load Game");
         LoadGame.addActionListener(this::LoadGameActionPerformed);
-        jPanel1.add(LoadGame, java.awt.BorderLayout.LINE_END);
+        j3btns.add(LoadGame, java.awt.BorderLayout.LINE_END);
 
         Start.setBackground(new java.awt.Color(255, 204, 204));
         Start.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         Start.setText("START GAME");
         Start.addActionListener(this::StartActionPerformed);
-        jPanel1.add(Start, java.awt.BorderLayout.CENTER);
+        j3btns.add(Start, java.awt.BorderLayout.CENTER);
 
         Quit.setBackground(new java.awt.Color(255, 204, 204));
         Quit.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         Quit.setText("Quit\n");
         Quit.addActionListener(this::QuitActionPerformed);
-        jPanel1.add(Quit, java.awt.BorderLayout.PAGE_END);
+        j3btns.add(Quit, java.awt.BorderLayout.PAGE_END);
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, -1, 80));
+        getContentPane().add(j3btns, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, -1, 80));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/MENU.png"))); // NOI18N
-        jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1270, 720));
+        jBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/MENU.png"))); // NOI18N
+        jBackground.setText("jLabel3");
+        getContentPane().add(jBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1270, 720));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -168,8 +168,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton LoadGame;
     private javax.swing.JButton Quit;
     private javax.swing.JButton Start;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel j3btns;
+    private javax.swing.JLabel jBackground;
+    private javax.swing.JLabel jTitle;
     // End of variables declaration//GEN-END:variables
 }

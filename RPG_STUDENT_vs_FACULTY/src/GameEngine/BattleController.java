@@ -342,8 +342,7 @@ public class BattleController {
                 String bossName = currentBoss != null ? currentBoss.getName() : "Unknown Boss";
                 
                 // Matched your Result window parameters (with false for gameComplete status)
-                Result resultScreen = new Result(this, engine.getPartyStudents(), engine.getBossesDefeated(), 
-                                                 engine.getTotalTurns(), bossName, false);
+                Result resultScreen = new Result(this, engine.getPartyStudents(), engine.getBossesDefeated(), engine.getTotalTurns(), bossName);
                 resultScreen.setVisible(true);
                 bs.dispose();
             }

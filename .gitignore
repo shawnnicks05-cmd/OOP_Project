@@ -1,3 +1,4 @@
 # (Optional) Ignore any one-off helper scripts created during asset fixing
 clean_assets_png.py
 
+/RPG_STUDENT_vs_FACULTY/dist/
