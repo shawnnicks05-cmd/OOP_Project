@@ -17,7 +17,14 @@ public class Result extends javax.swing.JFrame {
      */
     public Result() {
         initComponents();
+        
     }
+    public void displayGameSummary(int bossesDefeated, int totalTurns, String partySummary) {
+    // This updates your custom JLabels with the final battle stats
+    BossDefeated.setText("Bosses Defeated: " + bossesDefeated);
+    Totalturns.setText("Total Turns: " + totalTurns);
+    PartiesSummary.setText(partySummary); 
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,13 +37,13 @@ public class Result extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jtxtBattleResult = new javax.swing.JTextPane();
-        jLabel1 = new javax.swing.JLabel();
+        BossDefeated = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtxtBossDefeated = new javax.swing.JTextPane();
-        jLabel2 = new javax.swing.JLabel();
+        Totalturns = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtxtTurnTaken = new javax.swing.JTextPane();
-        jLabel3 = new javax.swing.JLabel();
+        PartiesSummary = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jtxtPartySummary = new javax.swing.JTextPane();
 
@@ -44,15 +51,15 @@ public class Result extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(jtxtBattleResult);
 
-        jLabel1.setText("BOSS DEFEATED");
+        BossDefeated.setText("BOSS DEFEATED");
 
         jScrollPane2.setViewportView(jtxtBossDefeated);
 
-        jLabel2.setText("TOTAL TURN'S TAKEN");
+        Totalturns.setText("TOTAL TURN'S TAKEN");
 
         jScrollPane3.setViewportView(jtxtTurnTaken);
 
-        jLabel3.setText("PARTIES SUMMARY");
+        PartiesSummary.setText("PARTIES SUMMARY");
 
         jScrollPane4.setViewportView(jtxtPartySummary);
 
@@ -69,14 +76,14 @@ public class Result extends javax.swing.JFrame {
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(311, 311, 311)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BossDefeated, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(99, 99, 99)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Totalturns, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(53, 53, 53)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(PartiesSummary, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
@@ -92,15 +99,15 @@ public class Result extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BossDefeated, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Totalturns, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(PartiesSummary, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(230, Short.MAX_VALUE))
@@ -135,9 +142,9 @@ public class Result extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel BossDefeated;
+    private javax.swing.JLabel PartiesSummary;
+    private javax.swing.JLabel Totalturns;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

@@ -795,6 +795,11 @@ private void triggerBossTurn() {
 
     private void JbtnFlee1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnFlee1ActionPerformed
         // TODO add your handling code here:
+        Characters.GameCharacter activeCharacter = getActiveActor(); 
+    
+    // Calls the controller to execute the flee action
+    controller.executeFlee(activeCharacter);
+    
     }//GEN-LAST:event_JbtnFlee1ActionPerformed
 
     private void JbtnTauntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnTauntActionPerformed
